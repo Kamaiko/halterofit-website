@@ -1,0 +1,52 @@
+{
+  "nav": {
+    "about": "About",
+    "projects": "Projects",
+    "skills": "Skills",
+    "contact": "Contact"
+  },
+  "hero": {
+    "greeting": "Hi, I'm",
+    "name": "Patrick Patenaude",
+    "title": "Full-Stack Developer",
+    "subtitle": "Passionate about mobile and web development. I build reliable applications with modern technologies.",
+    "cta_projects": "View my projects",
+    "cta_cv": "Download CV"
+  },
+  "about": {
+    "title": "About",
+    "p1": "Aspiring developer passionate about building performant mobile and web applications. Currently building Halterofit, a workout tracking app with React Native and Expo.",
+    "p2": "I enjoy solving complex problems and turning ideas into real products. My approach: reliability first, simplicity always."
+  },
+  "projects": {
+    "title": "Projects",
+    "halterofit": {
+      "name": "Halterofit",
+      "description": "Mobile workout tracking application. Fast logging, 1300+ exercise library, works offline with cloud sync.",
+      "tech": "React Native, Expo, TypeScript, WatermelonDB, Supabase, NativeWind"
+    },
+    "portfolio": {
+      "name": "Portfolio",
+      "description": "This website — built with React, Vite and Tailwind CSS. Bilingual, responsive, with subtle animations.",
+      "tech": "React, Vite, TypeScript, Tailwind CSS, Framer Motion, i18next"
+    },
+    "view_code": "View code",
+    "view_demo": "Demo"
+  },
+  "skills": {
+    "title": "Skills",
+    "languages": "Languages",
+    "frameworks": "Frameworks & Libraries",
+    "tools": "Tools & Services"
+  },
+  "contact": {
+    "title": "Contact",
+    "text": "Interested in my profile? Feel free to reach out.",
+    "email_btn": "Send me an email",
+    "cv_btn": "Download CV"
+  },
+  "footer": {
+    "made_with": "Built with React, Vite & Tailwind CSS",
+    "rights": "All rights reserved."
+  }
+}
