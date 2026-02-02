@@ -1,6 +1,6 @@
 # Claude Instructions - Halterofit Portfolio Website
 
-> **Last Updated**: 2026-01-31
+> **Last Updated**: 2026-02-01
 > **Purpose**: AI agent project briefing for the portfolio website
 
 ---
@@ -48,7 +48,7 @@ src/
 │   ├── fr.json           # French translations
 │   └── en.json           # English translations
 ├── components/
-│   ├── Navbar.tsx         # Fixed nav + FR/EN toggle + mobile menu
+│   ├── Navbar.tsx         # Fixed nav + FR/EN toggle + mobile menu + active section highlight
 │   ├── Hero.tsx           # Name, title, CTA buttons (fade-in animation)
 │   ├── Section.tsx        # Reusable wrapper (title + whileInView animation)
 │   ├── About.tsx          # Bio paragraphs
@@ -65,11 +65,12 @@ src/
 
 ## Deployment
 
-- **Hosting**: Cloudflare Pages (free tier)
-- **Domain**: halterofit.ca (Cloudflare registrar)
+- **Hosting**: Cloudflare Pages (free tier, 500 builds/month)
+- **Domain**: halterofit.ca (Cloudflare registrar, at-cost pricing)
 - **Auto-deploy**: Every `git push` to `main` triggers a build on Cloudflare
 - **Build settings on Cloudflare**: command = `npm run build`, output = `dist`
 - **Preview URLs**: Non-main branches deploy to `<branch>.halterofit-website.pages.dev`
+- **Git workflow**: Work on `dev` branch, merge into `main` when ready to deploy
 
 ---
 
@@ -104,12 +105,14 @@ src/
 ## Known TODOs
 
 - [ ] Add real CV PDF to `public/cv-patrick-patenaude.pdf`
-- [ ] Update LinkedIn link in `Contact.tsx` (currently placeholder)
 - [ ] Add project screenshots in `public/images/`
-- [ ] Add SEO meta tags (og:title, og:description, og:image)
 - [ ] Add custom favicon
-- [ ] Active section highlight in Navbar (Intersection Observer)
-- [ ] Accessibility improvements (aria-labels, focus states)
+- [ ] Configure Cloudflare Email Routing for contact@halterofit.ca
+- [ ] Submit site to Google Search Console for indexing
+- [x] Update LinkedIn link in `Contact.tsx`
+- [x] Add SEO meta tags (og:title, og:description, og:image)
+- [x] Active section highlight in Navbar (Intersection Observer)
+- [x] Accessibility improvements (aria-labels, contrast, main landmark) — score 100
 
 ---
 

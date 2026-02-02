@@ -1,69 +1,80 @@
 import { useTranslation } from "react-i18next";
-import { motion } from "framer-motion";
 import Section from "./Section";
 
-const skillGroups = [
-  {
-    key: "languages",
-    items: ["TypeScript", "JavaScript", "SQL", "HTML", "CSS"],
-  },
-  {
-    key: "frameworks",
-    items: [
-      "React",
-      "React Native",
-      "Expo",
-      "Vite",
-      "NativeWind",
-      "Tailwind CSS",
-      "Framer Motion",
-      "Jest",
-    ],
-  },
-  {
-    key: "tools",
-    items: [
-      "Git",
-      "GitHub",
-      "Supabase",
-      "WatermelonDB",
-      "MMKV",
-      "Cloudflare",
-      "EAS Build",
-      "VS Code",
-    ],
-  },
+const row1Skills = [
+  "TypeScript",
+  "JavaScript",
+  "SQL",
+  "HTML",
+  "CSS",
+  "React",
+  "React Native",
+  "Expo",
+  "Vite",
+  "NativeWind",
+  "Tailwind CSS",
 ];
+
+const row2Skills = [
+  "Framer Motion",
+  "Jest",
+  "Prolog",
+  "Git",
+  "GitHub",
+  "Supabase",
+  "WatermelonDB",
+  "MMKV",
+  "Cloudflare",
+  "EAS Build",
+  "VS Code",
+];
+
+interface MarqueeRowProps {
+  skills: string[];
+  reverse?: boolean;
+  duration?: number;
+}
+
+function MarqueeRow({
+  skills,
+  reverse = false,
+  duration = 30,
+}: MarqueeRowProps) {
+  const doubled = [...skills, ...skills];
+
+  return (
+    <div className="group relative overflow-hidden py-2">
+      {/* Fade edges */}
+      <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-16 bg-linear-to-r from-slate-950 to-transparent md:w-24" />
+      <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-16 bg-linear-to-l from-slate-950 to-transparent md:w-24" />
+
+      <div
+        className="flex w-max gap-4 group-hover:[animation-play-state:paused]"
+        style={{
+          animation: `${reverse ? "marquee-right" : "marquee-left"} ${duration}s linear infinite`,
+        }}
+      >
+        {doubled.map((skill, i) => (
+          <span
+            key={`${skill}-${i}`}
+            className="inline-flex items-center whitespace-nowrap rounded-lg border border-slate-800 bg-slate-900/50 px-4 py-2.5 text-sm text-slate-300"
+          >
+            {skill}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function Skills() {
   const { t } = useTranslation();
 
   return (
     <Section id="skills" title={t("skills.title")}>
-      <div className="grid gap-10 md:grid-cols-3">
-        {skillGroups.map((group, gi) => (
-          <motion.div
-            key={group.key}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.5, delay: gi * 0.1 }}
-          >
-            <h3 className="mb-4 text-sm font-semibold tracking-widest text-emerald-400 uppercase">
-              {t(`skills.${group.key}`)}
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {group.items.map((skill) => (
-                <span
-                  key={skill}
-                  className="rounded-lg border border-slate-800 bg-slate-900/50 px-3 py-2 text-sm text-slate-300 transition-colors hover:border-slate-600 hover:text-white"
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-        ))}
+      <div className="flex flex-col gap-4">
+        <MarqueeRow skills={row1Skills} duration={35} />
+        <MarqueeRow skills={row2Skills} reverse duration={40} />
       </div>
     </Section>
   );

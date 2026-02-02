@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
-import { ExternalLink, Github } from "lucide-react";
+import { ExternalLink, Github, Code2 } from "lucide-react";
 import type { Project } from "../data/projects";
 
 interface ProjectCardProps {
@@ -19,54 +19,71 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className={`group rounded-xl border border-slate-800 bg-slate-900/50 p-6 transition-colors hover:border-slate-700 ${project.featured ? "md:col-span-2" : ""}`}
+      className={`group overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 transition-all duration-300 hover:border-cyan-400/30 hover:shadow-[0_0_30px_rgba(34,211,238,0.06)] hover:scale-[1.01] ${project.featured ? "md:col-span-2" : ""}`}
     >
-      {project.featured && (
-        <span className="mb-3 inline-block rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400">
-          Featured
-        </span>
-      )}
-
-      <h3 className="mb-2 text-xl font-semibold text-white">
-        {t(`${project.translationKey}.name`)}
-      </h3>
-
-      <p className="mb-4 text-sm leading-relaxed text-slate-300">
-        {t(`${project.translationKey}.description`)}
-      </p>
-
-      <div className="mb-5 flex flex-wrap gap-2">
-        {techList.map((tech) => (
-          <span
-            key={tech}
-            className="rounded-full bg-slate-800 px-3 py-1 text-xs text-slate-300"
-          >
-            {tech}
-          </span>
-        ))}
+      {/* Image placeholder */}
+      <div className="relative h-48 w-full overflow-hidden bg-slate-800/30">
+        {project.image ? (
+          <img
+            src={project.image}
+            alt=""
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <div className="flex h-full items-center justify-center">
+            <Code2 size={48} className="text-slate-700" />
+          </div>
+        )}
       </div>
 
-      <div className="flex gap-4">
-        <a
-          href={project.github}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-1.5 text-sm text-slate-400 transition-colors hover:text-white"
-        >
-          <Github size={16} />
-          {t("projects.view_code")}
-        </a>
-        {project.demo && (
+      <div className="p-6">
+        {project.featured && (
+          <span className="mb-3 inline-block rounded-full bg-cyan-500/10 px-3 py-1 text-xs font-medium text-cyan-400">
+            {t("projects.featured_badge")}
+          </span>
+        )}
+
+        <h3 className="mb-2 text-xl font-semibold text-white">
+          {t(`${project.translationKey}.name`)}
+        </h3>
+
+        <p className="mb-4 text-sm leading-relaxed text-slate-300">
+          {t(`${project.translationKey}.description`)}
+        </p>
+
+        <div className="mb-5 flex flex-wrap gap-2">
+          {techList.map((tech) => (
+            <span
+              key={tech}
+              className="rounded-full bg-slate-800 px-3 py-1 text-xs text-slate-300"
+            >
+              {tech}
+            </span>
+          ))}
+        </div>
+
+        <div className="flex gap-4">
           <a
-            href={project.demo}
+            href={project.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-sm text-slate-400 transition-colors hover:text-white"
+            className="flex items-center gap-1.5 text-sm text-slate-400 transition-colors hover:text-cyan-400"
           >
-            <ExternalLink size={16} />
-            {t("projects.view_demo")}
+            <Github size={16} />
+            {t("projects.view_code")}
           </a>
-        )}
+          {project.demo && (
+            <a
+              href={project.demo}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-sm text-slate-400 transition-colors hover:text-cyan-400"
+            >
+              <ExternalLink size={16} />
+              {t("projects.view_demo")}
+            </a>
+          )}
+        </div>
       </div>
     </motion.div>
   );

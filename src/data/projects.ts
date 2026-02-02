@@ -15,6 +15,11 @@ export const projects: Project[] = [
     featured: true,
   },
   {
+    id: "blundermate",
+    translationKey: "projects.blundermate",
+    github: "https://github.com/Kamaiko/BlunderMate-Chessbot",
+  },
+  {
     id: "portfolio",
     translationKey: "projects.portfolio",
     github: "https://github.com/Kamaiko/halterofit-website",

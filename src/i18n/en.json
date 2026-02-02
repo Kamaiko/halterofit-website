@@ -8,15 +8,24 @@
   "hero": {
     "greeting": "Hi, I'm",
     "name": "Patrick Patenaude",
-    "title": "Full-Stack Developer",
-    "subtitle": "Passionate about mobile and web development. I build reliable applications with modern technologies.",
+    "title": "Mobile & Web Developer",
+    "subtitle": "Self-driven, detail-oriented, and passionate about modern technologies and quality code.",
     "cta_projects": "View my projects",
     "cta_cv": "Download CV"
   },
   "about": {
     "title": "About",
-    "p1": "Aspiring developer passionate about building performant mobile and web applications. Currently building Halterofit, a workout tracking app with React Native and Expo.",
-    "p2": "I enjoy solving complex problems and turning ideas into real products. My approach: reliability first, simplicity always."
+    "bio": "I love turning ideas into real applications — whether on mobile or the web. My approach: reliability first, clean code always.",
+    "stack_title": "Favorite stack",
+    "interests_title": "Interests",
+    "interests": {
+      "fitness": "Weightlifting",
+      "fitness_fact": "6x a week, rain or shine",
+      "chess": "Chess",
+      "chess_fact": "Gambit enthusiast, draw allergic",
+      "gaming": "Gaming",
+      "gaming_fact": "Competitive at heart, casual in practice"
+    }
   },
   "projects": {
     "title": "Projects",
@@ -25,19 +34,22 @@
       "description": "Mobile workout tracking application. Fast logging, 1300+ exercise library, works offline with cloud sync.",
       "tech": "React Native, Expo, TypeScript, WatermelonDB, Supabase, NativeWind"
     },
+    "blundermate": {
+      "name": "BlunderMate",
+      "description": "Chess engine in Prolog with ASCII terminal interface. Position evaluation, legal move generation and minimax search.",
+      "tech": "Prolog"
+    },
     "portfolio": {
       "name": "Portfolio",
       "description": "This website — built with React, Vite and Tailwind CSS. Bilingual, responsive, with subtle animations.",
       "tech": "React, Vite, TypeScript, Tailwind CSS, Framer Motion, i18next"
     },
     "view_code": "View code",
-    "view_demo": "Demo"
+    "view_demo": "Demo",
+    "featured_badge": "Featured"
   },
   "skills": {
-    "title": "Skills",
-    "languages": "Languages",
-    "frameworks": "Frameworks & Libraries",
-    "tools": "Tools & Services"
+    "title": "Skills"
   },
   "contact": {
     "title": "Contact",

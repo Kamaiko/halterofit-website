@@ -13,14 +13,14 @@ export default function Contact() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className="max-w-md"
+        className="max-w-lg rounded-2xl border border-slate-800 bg-slate-900/50 p-8"
       >
         <p className="mb-8 text-slate-300">{t("contact.text")}</p>
 
         <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap">
           <a
             href="mailto:contact@halterofit.ca"
-            className="flex items-center gap-2 rounded-lg bg-emerald-500 px-5 py-3 font-medium text-slate-950 transition-colors hover:bg-emerald-400"
+            className="flex items-center gap-2 rounded-lg bg-cyan-500 px-5 py-3 font-medium text-slate-950 transition-colors hover:bg-cyan-400"
           >
             <Mail size={18} />
             {t("contact.email_btn")}

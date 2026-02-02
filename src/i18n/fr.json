@@ -8,15 +8,24 @@
   "hero": {
     "greeting": "Salut, je suis",
     "name": "Patrick Patenaude",
-    "title": "Développeur Full-Stack",
-    "subtitle": "Passionné par le développement mobile et web. Je construis des applications fiables avec des technologies modernes.",
+    "title": "Développeur mobile & web",
+    "subtitle": "Autonome, rigoureux, et passionné par les technologies modernes et le code de qualité.",
     "cta_projects": "Voir mes projets",
     "cta_cv": "Télécharger CV"
   },
   "about": {
     "title": "À propos",
-    "p1": "Développeur en devenir passionné par la création d'applications mobiles et web performantes. Actuellement en train de construire Halterofit, une application de suivi d'entraînement avec React Native et Expo.",
-    "p2": "J'aime résoudre des problèmes complexes et transformer des idées en produits concrets. Mon approche : fiabilité d'abord, simplicité toujours."
+    "bio": "J'aime transformer des idées en applications concrètes — que ce soit sur mobile ou sur le web. Mon approche : fiabilité d'abord, code propre toujours.",
+    "stack_title": "Stack favori",
+    "interests_title": "Intérêts",
+    "interests": {
+      "fitness": "Musculation",
+      "fitness_fact": "6x par semaine, beau temps mauvais temps",
+      "chess": "Échecs",
+      "chess_fact": "Adepte du gambit, allergique aux nulles",
+      "gaming": "Gaming",
+      "gaming_fact": "Compétitif dans l'âme, casual dans la pratique"
+    }
   },
   "projects": {
     "title": "Projets",
@@ -25,19 +34,22 @@
       "description": "Application mobile de suivi d'entraînement musculaire. Logging rapide, bibliothèque de 1300+ exercices, fonctionne hors-ligne avec synchronisation cloud.",
       "tech": "React Native, Expo, TypeScript, WatermelonDB, Supabase, NativeWind"
     },
+    "blundermate": {
+      "name": "BlunderMate",
+      "description": "Moteur d'échecs en Prolog avec interface ASCII en terminal. Évaluation de positions, génération de coups légaux et recherche minimax.",
+      "tech": "Prolog"
+    },
     "portfolio": {
       "name": "Portfolio",
       "description": "Ce site web — construit avec React, Vite et Tailwind CSS. Bilingue, responsive, avec animations subtiles.",
       "tech": "React, Vite, TypeScript, Tailwind CSS, Framer Motion, i18next"
     },
     "view_code": "Voir le code",
-    "view_demo": "Démo"
+    "view_demo": "Démo",
+    "featured_badge": "En vedette"
   },
   "skills": {
-    "title": "Compétences",
-    "languages": "Langages",
-    "frameworks": "Frameworks & Librairies",
-    "tools": "Outils & Services"
+    "title": "Compétences"
   },
   "contact": {
     "title": "Contact",

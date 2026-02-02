@@ -59,7 +59,7 @@ export default function Navbar() {
             <button
               key={link}
               onClick={() => scrollTo(link)}
-              className={"text-sm transition-colors hover:text-white " + (activeSection === link ? "text-emerald-400" : "text-slate-400")}
+              className={"text-sm transition-colors hover:text-white " + (activeSection === link ? "text-cyan-400" : "text-slate-400")}
             >
               {t("nav." + link)}
             </button>
@@ -90,7 +90,7 @@ export default function Navbar() {
             <button
               key={link}
               onClick={() => scrollTo(link)}
-              className={"block w-full py-3 text-left transition-colors hover:text-white " + (activeSection === link ? "text-emerald-400" : "text-slate-400")}
+              className={"block w-full py-3 text-left transition-colors hover:text-white " + (activeSection === link ? "text-cyan-400" : "text-slate-400")}
             >
               {t("nav." + link)}
             </button>
