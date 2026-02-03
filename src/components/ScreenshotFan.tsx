@@ -13,15 +13,15 @@ interface ScreenshotFanProps {
   projectName: string;
 }
 
-const SPRING_TRANSITION = { type: "spring", stiffness: 260, damping: 22 } as const;
+const SPRING_TRANSITION = { type: "spring", stiffness: 200, damping: 28 } as const;
 
 const SIDE_CONFIG = {
   rotate: 10,
   x: 34,
   z: -30,
   scale: 0.88,
-  spreadX: 80,
-  spreadRotate: 18,
+  spreadX: 72,
+  spreadRotate: 16,
   spreadZ: -40,
   spreadScale: 0.92,
 } as const;
