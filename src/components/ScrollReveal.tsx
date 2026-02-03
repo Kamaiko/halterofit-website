@@ -15,7 +15,7 @@ export default function ScrollReveal({
   children,
   className,
   once = true,
-  yOffset = 20,
+  yOffset = 60,
 }: ScrollRevealProps) {
   const prefersReducedMotion = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
@@ -33,7 +33,7 @@ export default function ScrollReveal({
         transform: revealed ? undefined : `translateY(${yOffset}px)`,
         transition: revealed
           ? undefined // After reveal, remove inline transition so Tailwind classes work
-          : "opacity 0.5s ease-out, transform 0.5s ease-out",
+          : "opacity 0.8s ease-out, transform 0.8s ease-out",
       }}
     >
       {children}
