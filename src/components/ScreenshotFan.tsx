@@ -175,7 +175,7 @@ export default function ScreenshotFan({ screenshots, projectName }: ScreenshotFa
           return (
             <motion.div
               key={screenshot}
-              className="absolute w-[26%] max-w-[160px]"
+              className={`absolute ${isMobile ? "w-[34%] max-w-[200px]" : "w-[26%] max-w-[160px]"}`}
               style={{
                 transformStyle: "preserve-3d",
                 zIndex: config.zIndex,

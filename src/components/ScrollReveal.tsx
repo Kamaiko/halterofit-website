@@ -22,16 +22,17 @@ export default function ScrollReveal({
   const isInView = useInView(ref, { once, margin: "-80px" });
 
   const skip = prefersReducedMotion;
+  const revealed = skip || isInView;
 
   return (
     <div
       ref={ref}
       className={className}
       style={{
-        opacity: skip || isInView ? 1 : 0,
-        transform: `translateY(${skip || isInView ? 0 : yOffset}px)`,
-        transition: skip
-          ? "none"
+        opacity: revealed ? 1 : 0,
+        transform: revealed ? undefined : `translateY(${yOffset}px)`,
+        transition: revealed
+          ? undefined // After reveal, remove inline transition so Tailwind classes work
           : "opacity 0.5s ease-out, transform 0.5s ease-out",
       }}
     >
