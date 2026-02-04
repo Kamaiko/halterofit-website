@@ -1,6 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 
+const EASE_OUT_EXPO = [0.25, 0.46, 0.45, 0.94] as const;
+
 const wordVariants = {
   hidden: { opacity: 0, y: 30, filter: "blur(10px)" },
   visible: (i: number) => ({
@@ -10,7 +12,7 @@ const wordVariants = {
     transition: {
       duration: 0.8,
       delay: 0.3 + i * 0.12,
-      ease: [0.25, 0.46, 0.45, 0.94] as const,
+      ease: EASE_OUT_EXPO,
     },
   }),
 };
@@ -20,7 +22,7 @@ const lineVariants = {
   visible: (delay: number) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, delay, ease: [0.25, 0.46, 0.45, 0.94] as const },
+    transition: { duration: 0.7, delay, ease: EASE_OUT_EXPO },
   }),
 };
 

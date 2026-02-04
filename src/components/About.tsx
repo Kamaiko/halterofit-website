@@ -154,7 +154,7 @@ export default function About() {
         {/* ── Pixel landscape — decorative closing card ── */}
         <ScrollReveal
           delay={5 * STAGGER_MS}
-          className={`${cardClass} md:col-span-3 overflow-hidden p-0!`}
+          className={`${cardClass} md:col-span-3 overflow-hidden p-0`}
         >
           <CityScene className="h-28 w-full md:h-40" />
         </ScrollReveal>

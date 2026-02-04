@@ -29,9 +29,7 @@
       "chess_fact": "Blitz at 3am, no regrets",
       "gaming": "Gaming",
       "gaming_fact": "gg no re"
-    },
-    "fun_snippet": "while(alive) { code(); lift(); }",
-    "closing": "Understand people. Build solutions."
+    }
   },
   "projects": {
     "title": "Projects",
@@ -61,7 +59,6 @@
     "cv_btn": "Download CV"
   },
   "footer": {
-    "made_with": "Built with React, Vite & Tailwind CSS",
     "rights": "All rights reserved."
   }
 }

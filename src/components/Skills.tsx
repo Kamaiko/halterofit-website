@@ -71,7 +71,7 @@ export default function Skills() {
   const { t } = useTranslation();
 
   return (
-    <Section id="skills" title={t("skills.title")}>
+    <Section id="skills" title={t("skills.title")} className="pb-40">
       <div className="flex flex-col gap-4">
         <MarqueeRow skills={row1Skills} duration={35} />
         <MarqueeRow skills={row2Skills} reverse duration={40} />

@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import Lenis from "lenis";
+import { LenisContext } from "./contexts/LenisContext";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
@@ -12,6 +13,7 @@ import Footer from "./components/Footer";
 
 export default function App() {
   const { i18n } = useTranslation();
+  const [lenis, setLenis] = useState<Lenis | null>(null);
 
   // Sync <html lang=""> and persist language choice
   useEffect(() => {
@@ -23,15 +25,17 @@ export default function App() {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const lenis = new Lenis({
+    const instance = new Lenis({
       duration: 1.2,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     });
 
+    setLenis(instance);
+
     let rafId: number;
 
     function raf(time: number) {
-      lenis.raf(time);
+      instance.raf(time);
       rafId = requestAnimationFrame(raf);
     }
 
@@ -39,12 +43,14 @@ export default function App() {
 
     return () => {
       cancelAnimationFrame(rafId);
-      lenis.destroy();
+      instance.destroy();
+      setLenis(null);
     };
   }, []);
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-slate-950 text-slate-100">
+    <LenisContext.Provider value={lenis}>
+      <div className="relative min-h-screen overflow-x-hidden bg-slate-950 text-slate-100">
       {/* Animated ambient blobs — slow-moving background glow */}
       <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[200vh]">
         <motion.div
@@ -94,6 +100,7 @@ export default function App() {
         <Contact />
       </main>
       <Footer />
-    </div>
+      </div>
+    </LenisContext.Provider>
   );
 }

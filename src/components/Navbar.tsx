@@ -1,33 +1,44 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Menu, X, Globe } from "lucide-react";
+import { useLenis } from "../contexts/LenisContext";
 
 const navLinks = ["about", "projects", "skills", "contact"] as const;
 const NAV_HEIGHT = 72;
 
 export default function Navbar() {
   const { t, i18n } = useTranslation();
+  const lenis = useLenis();
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
+    const onScroll = () => {
+      const atBottom =
+        window.innerHeight + window.scrollY >=
+        document.body.scrollHeight - 2;
+      if (atBottom) {
+        setActiveSection("contact");
+        return;
+      }
+
+      let current = "";
+      let closest = -Infinity;
+      for (const id of navLinks) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const top = el.getBoundingClientRect().top - NAV_HEIGHT;
+        if (top <= 10 && top > closest) {
+          closest = top;
+          current = id;
         }
-      },
-      { rootMargin: "-50% 0px -50% 0px" }
-    );
+      }
+      if (current) setActiveSection(current);
+    };
 
-    for (const link of navLinks) {
-      const el = document.getElementById(link);
-      if (el) observer.observe(el);
-    }
-
-    return () => observer.disconnect();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   const toggleLang = () => {
@@ -37,8 +48,12 @@ export default function Navbar() {
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
-      const top = el.getBoundingClientRect().top + window.scrollY - NAV_HEIGHT;
-      window.scrollTo({ top, behavior: "smooth" });
+      if (lenis) {
+        lenis.scrollTo(el, { offset: -NAV_HEIGHT });
+      } else {
+        const top = el.getBoundingClientRect().top + window.scrollY - NAV_HEIGHT;
+        window.scrollTo({ top, behavior: "smooth" });
+      }
     }
     setMenuOpen(false);
   };
@@ -47,7 +62,7 @@ export default function Navbar() {
     <nav className="fixed top-0 z-50 w-full border-b border-slate-800 bg-slate-950/80 backdrop-blur-md">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
         <button
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          onClick={() => lenis ? lenis.scrollTo(0) : window.scrollTo({ top: 0, behavior: "smooth" })}
           aria-label="Scroll to top"
           className="text-lg font-bold text-white"
         >
