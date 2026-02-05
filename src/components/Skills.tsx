@@ -1,36 +1,9 @@
 import { useTranslation } from "react-i18next";
 import Section from "./Section";
-
-const row1Skills = [
-  "TypeScript",
-  "JavaScript",
-  "SQL",
-  "HTML",
-  "CSS",
-  "React",
-  "React Native",
-  "Expo",
-  "Vite",
-  "NativeWind",
-  "Tailwind CSS",
-];
-
-const row2Skills = [
-  "Framer Motion",
-  "Jest",
-  "Prolog",
-  "Git",
-  "GitHub",
-  "Supabase",
-  "WatermelonDB",
-  "MMKV",
-  "Cloudflare",
-  "EAS Build",
-  "VS Code",
-];
+import { row1Skills, row2Skills } from "../data/skills";
 
 interface MarqueeRowProps {
-  skills: string[];
+  skills: readonly string[];
   reverse?: boolean;
   duration?: number;
 }
