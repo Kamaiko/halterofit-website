@@ -35,7 +35,7 @@ export default function Hero() {
     <section
       className="relative flex min-h-screen items-center justify-center px-6"
     >
-      {/* Spotlight glow — blurred blobs, no overflow-hidden so they bleed naturally */}
+      {/* Spotlight glow */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-[48%] top-[42%] h-[350px] w-[450px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-500/[0.07] blur-[120px]" />
         <div className="absolute left-[68%] top-[58%] h-[280px] w-[350px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/5 blur-[100px]" />

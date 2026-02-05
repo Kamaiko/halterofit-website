@@ -13,27 +13,34 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
+    let ticking = false;
     const onScroll = () => {
-      const atBottom =
-        window.innerHeight + window.scrollY >=
-        document.body.scrollHeight - 2;
-      if (atBottom) {
-        setActiveSection("contact");
-        return;
-      }
-
-      let current = "";
-      let closest = -Infinity;
-      for (const id of navLinks) {
-        const el = document.getElementById(id);
-        if (!el) continue;
-        const top = el.getBoundingClientRect().top - NAV_HEIGHT;
-        if (top <= 10 && top > closest) {
-          closest = top;
-          current = id;
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const atBottom =
+          window.innerHeight + window.scrollY >=
+          document.body.scrollHeight - 2;
+        if (atBottom) {
+          setActiveSection("contact");
+          ticking = false;
+          return;
         }
-      }
-      if (current) setActiveSection(current);
+
+        let current = "";
+        let closest = -Infinity;
+        for (const id of navLinks) {
+          const el = document.getElementById(id);
+          if (!el) continue;
+          const top = el.getBoundingClientRect().top - NAV_HEIGHT;
+          if (top <= 10 && top > closest) {
+            closest = top;
+            current = id;
+          }
+        }
+        if (current) setActiveSection(current);
+        ticking = false;
+      });
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });

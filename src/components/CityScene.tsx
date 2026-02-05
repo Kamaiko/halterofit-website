@@ -74,7 +74,7 @@ const BACK_BUILDINGS: Bldg[] = [
   { x: 10, w: 12, h: 65 },
   { x: 55, w: 10, h: 52 },
   { x: 90, w: 50, h: 34 },
-  { x: 195, w: 14, h: 70 },
+  { x: 195, w: 14, h: 50 },
   { x: 240, w: 40, h: 18 },
   { x: 330, w: 11, h: 58 },
   { x: 355, w: 13, h: 38 },
@@ -420,13 +420,13 @@ interface CitySceneProps {
 
 export default function CityScene({ className }: CitySceneProps) {
   const ref = useRef<SVGSVGElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-40px" });
+  const hasFadedIn = useInView(ref, { once: true, margin: "-40px" });
 
   return (
     <svg
       ref={ref}
       viewBox={`0 0 ${W} ${H}`}
-      className={`city-scene${isInView ? " animate" : ""}${className ? ` ${className}` : ""}`}
+      className={`city-scene${hasFadedIn ? " faded-in" : ""}${className ? ` ${className}` : ""}`}
       preserveAspectRatio="xMidYMax slice"
       overflow="hidden"
       aria-hidden="true"
@@ -500,6 +500,19 @@ export default function CityScene({ className }: CitySceneProps) {
           <MidBuildingRects />
           <MidRoofEdges />
           <Antennas />
+          {/* Base ambient glow — static, no animation, visible on layer fade-in */}
+          {MID_WINDOWS.filter((_, i) => i % 2 === 0).map((win, i) => (
+            <rect
+              key={`base-${i}`}
+              x={win.x}
+              y={win.y}
+              width={WIN.mid.w}
+              height={WIN.mid.h}
+              rx={0.5}
+              fill={CYAN}
+              opacity={0.08}
+            />
+          ))}
           {MID_WINDOWS.map((win, i) =>
             win.pulse ? (
               <rect
@@ -512,8 +525,7 @@ export default function CityScene({ className }: CitySceneProps) {
                 fill={CYAN}
                 className="win-pulse"
                 style={{
-                  animation: `win-pulse ${2.5 + (i % 3) * 0.8}s ease-in-out infinite`,
-                  animationDelay: `${win.delay + 0.5}s`,
+                  animation: `win-fade-in 0.4s ease-out ${win.delay}s both, win-pulse ${2.5 + (i % 3) * 0.8}s ease-in-out ${win.delay + 0.5}s infinite`,
                 }}
               />
             ) : (
@@ -527,8 +539,7 @@ export default function CityScene({ className }: CitySceneProps) {
                 fill={CYAN}
                 className="win-fade"
                 style={{
-                  animation: `win-fade 0.4s ease-out forwards`,
-                  animationDelay: `${win.delay}s`,
+                  animation: `win-fade 0.4s ease-out ${win.delay}s both`,
                 }}
               />
             ),

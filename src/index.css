@@ -66,6 +66,11 @@ body {
   to { opacity: 0.6; }
 }
 
+@keyframes win-fade-in {
+  from { opacity: 0; }
+  to { opacity: 0.2; }
+}
+
 /* Layer & moon fade-in transitions */
 .city-layer {
   opacity: 0;
@@ -77,25 +82,25 @@ body {
   transition: opacity 1.2s ease-out 0.8s;
 }
 
-/* All animations paused by default */
+/* Animations paused until reveal */
 .city-scene .star-twinkle,
 .city-scene .win-pulse,
 .city-scene .win-fade,
 .city-scene .city-scroll-layer {
-  animation-play-state: paused;
+  animation-play-state: paused !important;
 }
 
-/* Trigger: isInView adds .animate */
-.city-scene.animate .star-twinkle,
-.city-scene.animate .win-pulse,
-.city-scene.animate .win-fade,
-.city-scene.animate .city-scroll-layer {
-  animation-play-state: running;
-}
-
-.city-scene.animate .city-layer,
-.city-scene.animate .city-moon {
+/* Fade-in: hasFadedIn adds .faded-in → permanent opacity + start animations */
+.city-scene.faded-in .city-layer,
+.city-scene.faded-in .city-moon {
   opacity: 1;
+}
+
+.city-scene.faded-in .star-twinkle,
+.city-scene.faded-in .win-pulse,
+.city-scene.faded-in .win-fade,
+.city-scene.faded-in .city-scroll-layer {
+  animation-play-state: running !important;
 }
 
 /* ─── Reduced motion ─── */

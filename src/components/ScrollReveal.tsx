@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useInView, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
 
@@ -23,9 +23,20 @@ export default function ScrollReveal({
   const prefersReducedMotion = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once, margin: "-80px" });
+  const [transitionDone, setTransitionDone] = useState(false);
 
   const skip = prefersReducedMotion;
   const revealed = skip || isInView;
+
+  useEffect(() => {
+    if (revealed && !transitionDone) {
+      const timer = setTimeout(
+        () => setTransitionDone(true),
+        (delay + 0.8) * 1000 + 100,
+      );
+      return () => clearTimeout(timer);
+    }
+  }, [revealed, transitionDone, delay]);
 
   return (
     <div
@@ -34,8 +45,8 @@ export default function ScrollReveal({
       style={{
         opacity: revealed ? 1 : 0,
         transform: revealed ? undefined : `translateY(${yOffset}px)`,
-        transition: revealed
-          ? undefined // After reveal, remove inline transition so Tailwind classes work
+        transition: transitionDone
+          ? undefined
           : `opacity 0.8s ease-out ${delay}s, transform 0.8s ease-out ${delay}s`,
       }}
     >
