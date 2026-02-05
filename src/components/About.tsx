@@ -3,6 +3,7 @@ import Section from "./Section";
 import ScrollReveal from "./ScrollReveal";
 import CityScene from "./CityScene";
 import { stackItems, interests, journeySteps } from "../data/about";
+import { cn } from "../utils/cn";
 
 const STAGGER_MS = 0.1;
 
@@ -27,7 +28,7 @@ export default function About() {
         {/* ── Tagline card — 2 cols ── */}
         <ScrollReveal
           delay={0 * STAGGER_MS}
-          className={`${cardClass} flex items-center md:col-span-2`}
+          className={cn(cardClass, "flex items-center md:col-span-2")}
         >
           <p className="text-xl leading-relaxed text-slate-300 md:text-2xl">
             <Trans i18nKey="about.tagline" components={{ hl: <Highlight /> }} />
@@ -45,21 +46,23 @@ export default function About() {
                 {/* Dot + connector line */}
                 <div className="flex flex-col items-center">
                   <div
-                    className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${
+                    className={cn(
+                      "flex h-7 w-7 shrink-0 items-center justify-center rounded-full",
                       i === journeySteps.length - 1
                         ? "bg-cyan-400/20 text-cyan-400"
-                        : "bg-slate-800 text-slate-400"
-                    }`}
+                        : "bg-slate-800 text-slate-400",
+                    )}
                   >
                     <Icon size={14} />
                   </div>
                 </div>
                 <span
-                  className={`text-sm ${
+                  className={cn(
+                    "text-sm",
                     i === journeySteps.length - 1
                       ? "font-semibold text-cyan-400"
-                      : "text-slate-300"
-                  }`}
+                      : "text-slate-300",
+                  )}
                 >
                   {t(`about.journey.${key}`)}
                 </span>
@@ -133,7 +136,7 @@ export default function About() {
         {/* ── Pixel landscape — decorative closing card ── */}
         <ScrollReveal
           delay={5 * STAGGER_MS}
-          className={`${cardClass} md:col-span-3 overflow-hidden p-0`}
+          className={cn(cardClass, "md:col-span-3 overflow-hidden p-0")}
         >
           <CityScene className="h-28 w-full md:h-40" />
         </ScrollReveal>

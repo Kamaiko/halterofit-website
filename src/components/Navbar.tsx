@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Menu, X, Globe } from "lucide-react";
 import { useLenis } from "lenis/react";
 import { NAV_HEIGHT, SECTION_PROXIMITY_PX, SCROLL_BOTTOM_MARGIN_PX } from "../constants/layout";
+import { cn } from "../utils/cn";
 
 const navLinks = ["about", "projects", "skills", "contact"] as const;
 
@@ -82,7 +83,10 @@ export default function Navbar() {
             <button
               key={link}
               onClick={() => scrollTo(link)}
-              className={`text-sm transition-colors hover:text-white ${activeSection === link ? "text-cyan-400" : "text-slate-400"}`}
+              className={cn(
+                "text-sm transition-colors hover:text-white",
+                activeSection === link ? "text-cyan-400" : "text-slate-400",
+              )}
             >
               {t(`nav.${link}`)}
             </button>
@@ -113,7 +117,10 @@ export default function Navbar() {
             <button
               key={link}
               onClick={() => scrollTo(link)}
-              className={`block w-full py-3 text-left transition-colors hover:text-white ${activeSection === link ? "text-cyan-400" : "text-slate-400"}`}
+              className={cn(
+                "block w-full py-3 text-left transition-colors hover:text-white",
+                activeSection === link ? "text-cyan-400" : "text-slate-400",
+              )}
             >
               {t(`nav.${link}`)}
             </button>

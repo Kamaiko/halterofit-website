@@ -1,5 +1,6 @@
 import { type ReactNode, useRef } from "react";
 import { useInView } from "framer-motion";
+import { cn } from "../utils/cn";
 
 /* ═══════════════════════════════════════════════════════════════════
    CityScene — Animated pixel-art city skyline
@@ -50,7 +51,9 @@ const MOON = { cx: 590, cy: 54, r: 7, cutCx: 593.5, cutCy: 52.5, cutR: 6 } as co
 interface Bldg {
   x: number;
   w: number;
-  h: number;
+  h: number;     // window-grid height (habitable zone, not visual height)
+  path?: string;     // full SVG path (replaces rect when present)
+  roofEdge?: string; // roof-edge SVG path (stroke only, replaces flat 1px rect)
 }
 
 interface MidWin {
@@ -101,18 +104,27 @@ const MID_BUILDINGS: Bldg[] = [
   { x: 30, w: 40, h: 80 },
   { x: 95, w: 48, h: 100 },
   { x: 168, w: 36, h: 70 },
-  { x: 228, w: 44, h: 105 },
+  { x: 228, w: 44, h: 105,
+    path:     "M228,160 V68 H234 V62 H240 V57 H245 V52 H255 V57 H260 V62 H266 V68 H272 V160 Z",
+    roofEdge: "M228,68 H234 V62 H240 V57 H245 V52 H255 V57 H260 V62 H266 V68 H272",
+  }, // Art Deco setback (3 tiers)
   { x: 300, w: 40, h: 82 },
-  { x: 370, w: 52, h: 115 },
+  { x: 370, w: 52, h: 115,
+    path:     "M370,160 V55 H376 V50 H385 L396,38 L407,50 H416 V55 H422 V160 Z",
+    roofEdge: "M370,55 H376 V50 H385 L396,38 L407,50 H416 V55 H422",
+  }, // stepped crown + spire
   { x: 450, w: 42, h: 90 },
   { x: 520, w: 50, h: 108 },
-  { x: 600, w: 38, h: 75 },
+  { x: 600, w: 38, h: 75,
+    path:     "M600,160 V79 H605 V85 H611 V79 H616 V85 H622 V79 H627 V85 H633 V79 H638 V160 Z",
+    roofEdge: "M600,79 H605 V85 H611 V79 H616 V85 H622 V79 H627 V85 H633 V79 H638",
+  }, // battlements
   { x: 660, w: 48, h: 95 },
   { x: 735, w: 44, h: 68 },
 ];
 
 /** Indices into MID_BUILDINGS that get rooftop antennas */
-const ANTENNA_INDICES = [1, 3, 5, 7, 9];
+const ANTENNA_INDICES = [1, 7, 9];
 
 /* ─── FRONT layer — low silhouettes with varied rooflines (55s scroll) ─── */
 const FRONT_PATHS: string[] = [
@@ -273,9 +285,13 @@ const BACK_THIN_WINDOWS = generateBackThinWindows();
 function MidBuildingRects() {
   return (
     <>
-      {MID_BUILDINGS.map((b, i) => (
-        <rect key={i} x={b.x} y={H - b.h} width={b.w} height={b.h} fill={MID_GRADS[i % 3]} />
-      ))}
+      {MID_BUILDINGS.map((b, i) =>
+        b.path ? (
+          <path key={i} d={b.path} fill={MID_GRADS[i % 3]} />
+        ) : (
+          <rect key={i} x={b.x} y={H - b.h} width={b.w} height={b.h} fill={MID_GRADS[i % 3]} />
+        ),
+      )}
     </>
   );
 }
@@ -284,9 +300,13 @@ function MidBuildingRects() {
 function MidRoofEdges() {
   return (
     <>
-      {MID_BUILDINGS.map((b, i) => (
-        <rect key={i} x={b.x} y={H - b.h} width={b.w} height={1} fill={MID_EDGE_CLR} opacity={0.6} />
-      ))}
+      {MID_BUILDINGS.map((b, i) =>
+        b.roofEdge ? (
+          <path key={i} d={b.roofEdge} stroke={MID_EDGE_CLR} strokeWidth={1} fill="none" opacity={0.6} />
+        ) : (
+          <rect key={i} x={b.x} y={H - b.h} width={b.w} height={1} fill={MID_EDGE_CLR} opacity={0.6} />
+        ),
+      )}
     </>
   );
 }
@@ -430,7 +450,7 @@ export default function CityScene({ className }: CitySceneProps) {
     <svg
       ref={ref}
       viewBox={`0 0 ${W} ${H}`}
-      className={`city-scene${hasFadedIn ? " faded-in" : ""}${className ? ` ${className}` : ""}`}
+      className={cn("city-scene", hasFadedIn && "faded-in", className)}
       preserveAspectRatio="xMidYMax slice"
       overflow="hidden"
       aria-hidden="true"

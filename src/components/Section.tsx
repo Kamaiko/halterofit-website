@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import ScrollReveal from "./ScrollReveal";
+import { cn } from "../utils/cn";
 
 interface SectionProps {
   id: string;
@@ -10,7 +11,7 @@ interface SectionProps {
 
 export default function Section({ id, title, children, className }: SectionProps) {
   return (
-    <section id={id} className={`pt-24 pb-24 px-6${className ? ` ${className}` : ""}`}>
+    <section id={id} className={cn("pt-24 pb-24 px-6", className)}>
       <div className="mx-auto max-w-5xl">
         <ScrollReveal>
           <h2 className="mb-12 text-3xl font-bold text-white">

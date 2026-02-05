@@ -3,6 +3,7 @@ import { ExternalLink, Github, Code2 } from "lucide-react";
 import type { Project } from "../data/projects";
 import ScreenshotFan from "./ScreenshotFan";
 import ScrollReveal from "./ScrollReveal";
+import { cn } from "../utils/cn";
 
 interface ProjectCardProps {
   project: Project;
@@ -15,7 +16,10 @@ export default function ProjectCard({ project }: ProjectCardProps) {
 
   return (
     <ScrollReveal
-      className={`group overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 transition-all duration-300 hover:border-cyan-400/30 hover:shadow-[0_0_30px_rgba(34,211,238,0.06)] hover:scale-[1.01] ${project.featured ? "md:col-span-2" : ""}`}
+      className={cn(
+        "group overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 transition-all duration-300 hover:border-cyan-400/30 hover:shadow-[0_0_30px_rgba(34,211,238,0.06)] hover:scale-[1.01]",
+        project.featured && "md:col-span-2",
+      )}
     >
       {/* Screenshot fan or placeholder */}
       {project.screenshots && project.screenshots.length === 3 ? (
