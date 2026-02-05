@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { motion } from "framer-motion";
 import { ReactLenis } from "lenis/react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
@@ -27,33 +26,19 @@ export default function App() {
 
   const content = (
       <div className="relative min-h-screen overflow-x-hidden bg-slate-950 text-slate-100">
-      {/* Animated ambient blobs — slow-moving background glow */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[200vh]">
-        <motion.div
-          animate={{
-            x: [0, 30, -20, 0],
-            y: [0, -25, 15, 0],
-            scale: [1, 1.1, 0.95, 1],
-          }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="absolute left-1/4 top-[12%] h-[600px] w-[600px] rounded-full bg-cyan-500/[0.07] blur-[120px]"
+      {/* Ambient background glow — static radial gradients (no blur filters) */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-screen">
+        <div
+          className="absolute left-1/4 top-[12%] h-[600px] w-[600px] rounded-full"
+          style={{ background: "radial-gradient(circle, rgba(6,182,212,0.07) 0%, rgba(6,182,212,0.02) 45%, transparent 70%)" }}
         />
-        <motion.div
-          animate={{
-            x: [0, -40, 20, 0],
-            y: [0, 20, -30, 0],
-            scale: [1, 0.9, 1.15, 1],
-          }}
-          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          className="absolute right-1/4 top-[35%] h-[500px] w-[500px] rounded-full bg-blue-500/6 blur-[100px]"
+        <div
+          className="absolute right-1/4 top-[35%] h-[500px] w-[500px] rounded-full"
+          style={{ background: "radial-gradient(circle, rgba(59,130,246,0.06) 0%, rgba(59,130,246,0.018) 45%, transparent 70%)" }}
         />
-        <motion.div
-          animate={{
-            x: [0, 25, -15, 0],
-            y: [0, -20, 25, 0],
-          }}
-          transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-          className="absolute left-1/2 top-1/4 h-[400px] w-[400px] -translate-x-1/2 rounded-full bg-cyan-400/4 blur-[80px]"
+        <div
+          className="absolute left-1/2 top-1/4 h-[400px] w-[400px] -translate-x-1/2 rounded-full"
+          style={{ background: "radial-gradient(circle, rgba(34,211,238,0.04) 0%, rgba(34,211,238,0.012) 45%, transparent 70%)" }}
         />
       </div>
 

@@ -73,16 +73,20 @@ interface BackWin {
 const BACK_BUILDINGS: Bldg[] = [
   { x: 10, w: 12, h: 65 },
   { x: 55, w: 10, h: 52 },
-  { x: 90, w: 50, h: 34 },
+  { x: 90, w: 26, h: 30 },
+  { x: 148, w: 10, h: 70 },  // new tall thin tower
   { x: 195, w: 14, h: 50 },
-  { x: 240, w: 40, h: 18 },
+  { x: 240, w: 22, h: 16 },
   { x: 330, w: 11, h: 58 },
   { x: 355, w: 13, h: 38 },
-  { x: 400, w: 45, h: 30 },
+  { x: 400, w: 28, h: 26 },
+  { x: 458, w: 13, h: 58 },  // new tall thin tower
   { x: 500, w: 12, h: 62 },
-  { x: 545, w: 42, h: 15 },
+  { x: 545, w: 24, h: 14 },
+  { x: 580, w: 11, h: 75 },  // new tall thin tower
   { x: 640, w: 14, h: 55 },
-  { x: 685, w: 38, h: 26 },
+  { x: 685, w: 25, h: 22 },
+  { x: 725, w: 12, h: 63 },  // new tall thin tower
   { x: 760, w: 11, h: 60 },
 ];
 
@@ -179,7 +183,7 @@ function generateMidWindows(): MidWin[] {
     const cols = Math.floor((b.w - g.pad) / g.gap);
     const rows = Math.floor((b.h - g.pad) / g.rowGap);
     const order = MID_BLDG_DELAY.get(bIdx) ?? bIdx;
-    const baseDelay = 0.5 + order * 0.15;
+    const baseDelay = 1.5 + order * 0.25;
     const startIdx = wins.length;
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
@@ -190,7 +194,7 @@ function generateMidWindows(): MidWin[] {
           x: b.x + 6 + c * g.gap,
           y: H - b.h + 8 + r * g.rowGap,
           pulse: roll < 12, // ~12% of slots → ~40% of windows pulse
-          delay: baseDelay + r * 0.05,
+          delay: baseDelay + r * 0.08,
         });
       }
     }
@@ -478,7 +482,7 @@ export default function CityScene({ className }: CitySceneProps) {
       <CrescentMoon />
 
       {/* ─── BACK layer — 300s scroll ─── */}
-      <g className="city-layer" style={{ transitionDelay: "0.2s" }}>
+      <g className="city-layer" style={{ transitionDelay: "0.5s" }}>
         <ScrollLayer speed={SPEED_BACK}>
           <Rects items={BACK_WIDE} fill={BACK_WIDE_CLR} />
           <Rects items={BACK_THIN} fill={BACK_CLR} />
@@ -491,7 +495,7 @@ export default function CityScene({ className }: CitySceneProps) {
       <rect x={0} y={85} width={W} height={50} fill="url(#back-fog)" />
 
       {/* ─── MID layer — 240s scroll, buildings + windows + antennas ─── */}
-      <g className="city-layer" style={{ transitionDelay: "0.4s" }}>
+      <g className="city-layer" style={{ transitionDelay: "0.9s" }}>
         <g
           className="city-scroll-layer"
           style={{ animation: `city-scroll ${SPEED_MID}s linear infinite` }}
@@ -525,7 +529,7 @@ export default function CityScene({ className }: CitySceneProps) {
                 fill={CYAN}
                 className="win-pulse"
                 style={{
-                  animation: `win-fade-in 0.4s ease-out ${win.delay}s both, win-pulse ${2.5 + (i % 3) * 0.8}s ease-in-out ${win.delay + 0.5}s infinite`,
+                  animation: `win-fade-in 0.8s ease-out ${win.delay}s both, win-pulse ${3.5 + (i % 3) * 0.8}s ease-in-out ${win.delay + 0.8}s infinite`,
                 }}
               />
             ) : (
@@ -539,7 +543,7 @@ export default function CityScene({ className }: CitySceneProps) {
                 fill={CYAN}
                 className="win-fade"
                 style={{
-                  animation: `win-fade 0.4s ease-out ${win.delay}s both`,
+                  animation: `win-fade 0.8s ease-out ${win.delay}s both`,
                 }}
               />
             ),

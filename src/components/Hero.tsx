@@ -35,11 +35,20 @@ export default function Hero() {
     <section
       className="relative flex min-h-screen items-center justify-center px-6"
     >
-      {/* Spotlight glow */}
+      {/* Spotlight glow — radial gradients (performant replacement for blur filters) */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-[48%] top-[42%] h-[350px] w-[450px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-500/[0.07] blur-[120px]" />
-        <div className="absolute left-[68%] top-[58%] h-[280px] w-[350px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/5 blur-[100px]" />
-        <div className="absolute left-[28%] top-[30%] h-[250px] w-[320px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-400/4 blur-[90px]" />
+        <div
+          className="absolute left-[48%] top-[42%] h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full"
+          style={{ background: "radial-gradient(circle, rgba(6,182,212,0.07) 0%, rgba(6,182,212,0.02) 45%, transparent 70%)" }}
+        />
+        <div
+          className="absolute left-[68%] top-[58%] h-[480px] w-[480px] -translate-x-1/2 -translate-y-1/2 rounded-full"
+          style={{ background: "radial-gradient(circle, rgba(59,130,246,0.05) 0%, rgba(59,130,246,0.015) 45%, transparent 70%)" }}
+        />
+        <div
+          className="absolute left-[28%] top-[30%] h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full"
+          style={{ background: "radial-gradient(circle, rgba(34,211,238,0.04) 0%, rgba(34,211,238,0.012) 45%, transparent 70%)" }}
+        />
       </div>
 
       <div className="relative max-w-4xl text-center">
