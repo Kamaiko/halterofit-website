@@ -11,6 +11,8 @@ export interface Bldg {
   h: number;
   path?: string;
   roofEdge?: string;
+  /** Extra top padding for buildings with custom roof geometry */
+  roofOffset?: number;
 }
 
 export interface MidWin {
@@ -64,6 +66,38 @@ export const WIN = {
   backThin: { rowGap: 10, w: 3, h: 4 },
 } as const;
 
+/** Window animation timing configuration */
+export const WIN_ANIM = {
+  /** Fade-in duration for initial window reveal */
+  fadeIn_S: 0.8,
+  /** Pulsing window configuration */
+  pulse: {
+    /** Base animation cycle (includes pause + fade phases) */
+    baseCycle_S: 8.0,
+    /** Number of timing variants for desynchronization */
+    variants: 7,
+    /** Time offset between consecutive variants */
+    variantStep_S: 0.6,
+  },
+  /** Static (non-pulsing) window opacity */
+  static: { opacity: 0.6 },
+  /** Staggered reveal timing */
+  delay: {
+    base_S: 1.0,
+    perBuilding_S: 0.2,
+    perRow_S: 0.08,
+  },
+  /** Roll thresholds for window generation (0-100 scale) */
+  roll: {
+    /** Windows with roll > skip are not rendered */
+    skip: 30,
+    /** Windows with roll < pulse are pulsing; otherwise static */
+    pulse: 12,
+  },
+  /** Base glow windows (every 2nd window, very faint) */
+  baseGlow: { opacity: 0.08 },
+} as const;
+
 /* ─── Moon position ─── */
 
 export const MOON = { cx: 590, cy: 54, r: 7, cutCx: 593.5, cutCy: 52.5, cutR: 6 } as const;
@@ -106,18 +140,18 @@ export const MID_BUILDINGS: Bldg[] = [
   { x: 30, w: 40, h: 80 },
   { x: 95, w: 48, h: 100 },
   { x: 168, w: 36, h: 70 },
-  { x: 228, w: 44, h: 105,
+  { x: 228, w: 44, h: 105, roofOffset: 20,
     path:     "M228,160 V68 H234 V62 H240 V57 H245 V52 H255 V57 H260 V62 H266 V68 H272 V160 Z",
     roofEdge: "M228,68 H234 V62 H240 V57 H245 V52 H255 V57 H260 V62 H266 V68 H272",
   },
   { x: 300, w: 40, h: 82 },
-  { x: 370, w: 52, h: 115,
+  { x: 370, w: 52, h: 115, roofOffset: 18,
     path:     "M370,160 V55 H376 V50 H385 L396,38 L407,50 H416 V55 H422 V160 Z",
     roofEdge: "M370,55 H376 V50 H385 L396,38 L407,50 H416 V55 H422",
   },
   { x: 450, w: 42, h: 90 },
   { x: 520, w: 50, h: 108 },
-  { x: 600, w: 38, h: 75,
+  { x: 600, w: 38, h: 75, roofOffset: 10,
     path:     "M600,160 V79 H605 V85 H611 V79 H616 V85 H622 V79 H627 V85 H633 V79 H638 V160 Z",
     roofEdge: "M600,79 H605 V85 H611 V79 H616 V85 H622 V79 H627 V85 H633 V79 H638",
   },

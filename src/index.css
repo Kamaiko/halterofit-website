@@ -57,8 +57,16 @@ body {
 }
 
 @keyframes win-pulse {
-  0%, 100% { opacity: 0.2; }
-  50% { opacity: 0.85; }
+  /* Pause at dim */
+  0%, 20% { opacity: 0.2; }
+  /* Fade to bright */
+  35% { opacity: 0.85; }
+  /* Pause at bright */
+  55% { opacity: 0.85; }
+  /* Fade to dim */
+  70% { opacity: 0.2; }
+  /* Rest at dim until next cycle */
+  100% { opacity: 0.2; }
 }
 
 @keyframes win-fade {

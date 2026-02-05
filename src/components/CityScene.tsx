@@ -8,7 +8,7 @@ import {
   W, H, GROUND_Y,
   SPEED_BACK, SPEED_MID, SPEED_FRONT,
   HASH_A, HASH_B, HASH_C,
-  WIN, MOON,
+  WIN, WIN_ANIM, MOON,
   BACK_WIDE, BACK_THIN,
   MID_BUILDINGS, ANTENNA_INDICES,
   FRONT_PATHS, STARS,
@@ -48,20 +48,21 @@ function generateMidWindows(): MidWin[] {
   const wins: MidWin[] = [];
   MID_BUILDINGS.forEach((b, bIdx) => {
     const cols = Math.floor((b.w - g.pad) / g.gap);
-    const rows = Math.floor((b.h - g.pad) / g.rowGap);
+    const topPad = b.roofOffset ?? g.pad;
+    const rows = Math.floor((b.h - topPad) / g.rowGap);
     const order = MID_BLDG_DELAY.get(bIdx) ?? bIdx;
-    const baseDelay = 1.0 + order * 0.2;
+    const baseDelay = WIN_ANIM.delay.base_S + order * WIN_ANIM.delay.perBuilding_S;
     const startIdx = wins.length;
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
         const seed = (bIdx * 100 + r * 10 + c) * HASH_A;
         const roll = (seed >>> 0) % 100;
-        if (roll > 30) continue;
+        if (roll > WIN_ANIM.roll.skip) continue;
         wins.push({
           x: b.x + 6 + c * g.gap,
-          y: H - b.h + 8 + r * g.rowGap,
-          pulse: roll < 12,
-          delay: baseDelay + r * 0.08,
+          y: H - b.h + topPad + r * g.rowGap,
+          pulse: roll < WIN_ANIM.roll.pulse,
+          delay: baseDelay + r * WIN_ANIM.delay.perRow_S,
         });
       }
     }
@@ -71,18 +72,26 @@ function generateMidWindows(): MidWin[] {
       wins[startIdx + p].pulse = true;
     }
     if (bWins.length < 4) {
-      wins.push({
-        x: b.x + Math.floor(b.w / 2) - 2,
-        y: H - b.h + Math.floor(b.h / 3),
-        pulse: true,
-        delay: baseDelay,
-      });
-      wins.push({
-        x: b.x + Math.floor(b.w / 2) + 3,
-        y: H - b.h + Math.floor((b.h * 2) / 3),
-        pulse: false,
-        delay: baseDelay + 0.1,
-      });
+      const fallbackX1 = b.x + Math.floor(b.w / 2) - 2;
+      const fallbackX2 = b.x + Math.floor(b.w / 2) + 3;
+      const hasOverlap = (fx: number) => bWins.some((w) => Math.abs(w.x - fx) < 4);
+
+      if (!hasOverlap(fallbackX1)) {
+        wins.push({
+          x: fallbackX1,
+          y: H - b.h + topPad + Math.floor((b.h - topPad) / 3),
+          pulse: true,
+          delay: baseDelay,
+        });
+      }
+      if (!hasOverlap(fallbackX2)) {
+        wins.push({
+          x: fallbackX2,
+          y: H - b.h + topPad + Math.floor(((b.h - topPad) * 2) / 3),
+          pulse: false,
+          delay: baseDelay + 0.1,
+        });
+      }
     }
   });
   return wins;
@@ -269,6 +278,61 @@ function Antennas() {
   );
 }
 
+/** Renders animated mid-layer windows — called twice for seamless scroll */
+function MidWindowLayer() {
+  return (
+    <>
+      {/* Base glow windows (every 2nd, very faint) */}
+      {MID_WINDOWS.filter((_, i) => i % 2 === 0).map((win, i) => (
+        <rect
+          key={`base-${i}`}
+          x={win.x}
+          y={win.y}
+          width={WIN.mid.w}
+          height={WIN.mid.h}
+          rx={0.5}
+          fill={CYAN}
+          opacity={WIN_ANIM.baseGlow.opacity}
+        />
+      ))}
+      {/* Animated windows (pulse or static) */}
+      {MID_WINDOWS.map((win, i) =>
+        win.pulse ? (
+          <rect
+            key={i}
+            x={win.x}
+            y={win.y}
+            width={WIN.mid.w}
+            height={WIN.mid.h}
+            rx={0.5}
+            fill={CYAN}
+            className="win-pulse"
+            style={{
+              animation: `win-fade-in ${WIN_ANIM.fadeIn_S}s ease-out ${win.delay}s both, win-pulse ${
+                WIN_ANIM.pulse.baseCycle_S + (i % WIN_ANIM.pulse.variants) * WIN_ANIM.pulse.variantStep_S
+              }s ease-in-out ${win.delay + WIN_ANIM.fadeIn_S}s infinite`,
+            }}
+          />
+        ) : (
+          <rect
+            key={i}
+            x={win.x}
+            y={win.y}
+            width={WIN.mid.w}
+            height={WIN.mid.h}
+            rx={0.5}
+            fill={CYAN}
+            className="win-fade"
+            style={{
+              animation: `win-fade ${WIN_ANIM.fadeIn_S}s ease-out ${win.delay}s both`,
+            }}
+          />
+        ),
+      )}
+    </>
+  );
+}
+
 /* ═══════════════════════════════════════════════════════════════════
    Main component
    ═══════════════════════════════════════════════════════════════════ */
@@ -356,67 +420,14 @@ export default function CityScene({ className }: CitySceneProps) {
           <MidBuildingRects />
           <MidRoofEdges />
           <Antennas />
-          {MID_WINDOWS.filter((_, i) => i % 2 === 0).map((win, i) => (
-            <rect
-              key={`base-${i}`}
-              x={win.x}
-              y={win.y}
-              width={WIN.mid.w}
-              height={WIN.mid.h}
-              rx={0.5}
-              fill={CYAN}
-              opacity={0.08}
-            />
-          ))}
-          {MID_WINDOWS.map((win, i) =>
-            win.pulse ? (
-              <rect
-                key={i}
-                x={win.x}
-                y={win.y}
-                width={WIN.mid.w}
-                height={WIN.mid.h}
-                rx={0.5}
-                fill={CYAN}
-                className="win-pulse"
-                style={{
-                  animation: `win-fade-in 0.8s ease-out ${win.delay}s both, win-pulse ${2.5 + (i % 3) * 0.5}s ease-in-out ${win.delay + 0.8}s infinite`,
-                }}
-              />
-            ) : (
-              <rect
-                key={i}
-                x={win.x}
-                y={win.y}
-                width={WIN.mid.w}
-                height={WIN.mid.h}
-                rx={0.5}
-                fill={CYAN}
-                className="win-fade"
-                style={{
-                  animation: `win-fade 0.8s ease-out ${win.delay}s both`,
-                }}
-              />
-            ),
-          )}
+          <MidWindowLayer />
 
-          {/* Duplicate set — static windows for seamless loop */}
+          {/* Duplicate set — animated windows for seamless loop */}
           <g transform={`translate(${W}, 0)`}>
             <MidBuildingRects />
             <MidRoofEdges />
             <Antennas />
-            {MID_WINDOWS.map((win, i) => (
-              <rect
-                key={i}
-                x={win.x}
-                y={win.y}
-                width={WIN.mid.w}
-                height={WIN.mid.h}
-                rx={0.5}
-                fill={CYAN}
-                opacity={0.6}
-              />
-            ))}
+            <MidWindowLayer />
           </g>
         </g>
       </g>
