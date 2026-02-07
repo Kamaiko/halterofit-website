@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useIsMobile } from "../../hooks/useIsMobile";
 
@@ -8,22 +8,25 @@ const REDUCED_MOTION = window.matchMedia(
 
 export default function CursorTrail() {
   const isMobile = useIsMobile();
+  const dotRef = useRef<HTMLDivElement>(null);
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
 
-  // Dot: near-snapped to cursor
-  const dotX = useSpring(mouseX, { stiffness: 6000, damping: 150 });
-  const dotY = useSpring(mouseY, { stiffness: 6000, damping: 150 });
-
-  // Ring: micro trail — barely perceptible
-  const ringX = useSpring(mouseX, { stiffness: 2500, damping: 100 });
-  const ringY = useSpring(mouseY, { stiffness: 2500, damping: 100 });
+  // Ring: micro trail via spring
+  const ringX = useSpring(mouseX, { stiffness: 4000, damping: 120 });
+  const ringY = useSpring(mouseY, { stiffness: 4000, damping: 120 });
 
   useEffect(() => {
     if (isMobile || REDUCED_MOTION) return;
     const onMove = (e: MouseEvent) => {
+      // Feed FM spring for the ring
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
+      // Direct DOM update for the dot — zero latency
+      if (dotRef.current) {
+        dotRef.current.style.transform =
+          `translate(${e.clientX - 3}px, ${e.clientY - 3}px)`;
+      }
     };
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
@@ -33,7 +36,7 @@ export default function CursorTrail() {
 
   return (
     <>
-      {/* Outer ring */}
+      {/* Ring: FM spring for trailing effect */}
       <motion.div
         className="pointer-events-none fixed z-40 rounded-full border border-cyan-400/50"
         style={{
@@ -43,19 +46,14 @@ export default function CursorTrail() {
           height: 28,
           translateX: "-50%",
           translateY: "-50%",
+          willChange: "transform",
         }}
       />
-      {/* Inner dot */}
-      <motion.div
-        className="pointer-events-none fixed z-40 rounded-full bg-cyan-400"
-        style={{
-          x: dotX,
-          y: dotY,
-          width: 6,
-          height: 6,
-          translateX: "-50%",
-          translateY: "-50%",
-        }}
+      {/* Dot: raw DOM — zero lag */}
+      <div
+        ref={dotRef}
+        className="pointer-events-none fixed left-0 top-0 z-40 h-1.5 w-1.5 rounded-full bg-cyan-400"
+        style={{ willChange: "transform" }}
       />
     </>
   );
