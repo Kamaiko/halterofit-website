@@ -1,8 +1,10 @@
 import { lazy, Suspense, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { motion, useScroll, useTransform, useReducedMotion, useMotionValueEvent } from "framer-motion";
+import { useLenis } from "lenis/react";
 import { GRADIENT } from "../../constants/visual-effects";
 import { EASE_OUT_EXPO } from "../../constants/animation";
+import { NAV_HEIGHT } from "../../constants/layout";
 import ErrorBoundary from "../ui/ErrorBoundary";
 import { cn } from "../../utils/cn";
 
@@ -37,6 +39,7 @@ const lineVariants = {
 export default function Hero() {
   const { t } = useTranslation();
   const prefersReducedMotion = useReducedMotion();
+  const lenis = useLenis();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const nameWords = t("hero.name").split(" ");
   const nameDelay = 0.3 + nameWords.length * 0.12 + 0.3;
@@ -75,6 +78,18 @@ export default function Hero() {
   });
 
   const skip = !!prefersReducedMotion;
+
+  const scrollToAbout = () => {
+    const el = document.getElementById("about");
+    if (el) {
+      if (lenis) {
+        lenis.scrollTo(el, { offset: -NAV_HEIGHT });
+      } else {
+        const top = el.getBoundingClientRect().top + window.scrollY - NAV_HEIGHT;
+        window.scrollTo({ top, behavior: "smooth" });
+      }
+    }
+  };
 
   return (
     <div ref={wrapperRef} style={skip ? undefined : { height: HERO_SCROLL_HEIGHT }}>
@@ -165,26 +180,28 @@ export default function Hero() {
             {t("hero.subtitle")}
           </motion.p>
 
-          {/* Scroll indicator — mouse icon */}
-          <motion.div
+          {/* Scroll indicator — clickable, scrolls to About */}
+          <motion.button
+            onClick={scrollToAbout}
+            aria-label="Scroll to content"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
+            whileHover={{ scale: 1.15 }}
             transition={{ delay: nameDelay + 1, duration: 1 }}
             style={skip ? undefined : { opacity: indicatorOpacity }}
-            className="mt-20 flex flex-col items-center gap-2"
+            className="mx-auto mt-20 flex cursor-pointer flex-col items-center gap-2 p-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-400"
           >
-            <div className="relative flex flex-col items-center gap-1" aria-hidden="true">
-              {/* Animated chevrons */}
+            <div className="relative flex flex-col items-center gap-1.5" aria-hidden="true">
               {[0, 1, 2].map((i) => (
                 <motion.svg
                   key={i}
-                  width="16"
-                  height="8"
-                  viewBox="0 0 16 8"
+                  width="24"
+                  height="12"
+                  viewBox="0 0 24 12"
                   fill="none"
                   animate={{
-                    opacity: [0, 0.8, 0],
-                    y: [0, 6, 12],
+                    opacity: [0, 1, 0],
+                    y: [0, 8, 16],
                   }}
                   transition={{
                     duration: 1.8,
@@ -194,16 +211,16 @@ export default function Hero() {
                   }}
                 >
                   <path
-                    d="M1 1L8 6L15 1"
-                    stroke="rgba(34,211,238,0.7)"
-                    strokeWidth="1.5"
+                    d="M1 1L12 10L23 1"
+                    stroke="rgba(34,211,238,0.9)"
+                    strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   />
                 </motion.svg>
               ))}
             </div>
-          </motion.div>
+          </motion.button>
         </motion.div>
       </section>
     </div>
