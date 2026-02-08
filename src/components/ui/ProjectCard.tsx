@@ -4,6 +4,7 @@ import Github from "lucide-react/dist/esm/icons/github";
 import Code2 from "lucide-react/dist/esm/icons/code-2";
 import type { Project } from "../../data/projects";
 import ScreenshotFan from "./ScreenshotFan";
+import TerminalMockup from "./TerminalMockup";
 import ScrollReveal from "./ScrollReveal";
 import { CARD_BASE, CARD_SHADOW } from "../../constants/styles";
 import { cn } from "../../utils/cn";
@@ -26,11 +27,17 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         project.featured && "md:col-span-2",
       )}
     >
-      {/* Screenshot fan, single image, or placeholder */}
+      {/* Screenshot fan, terminal mockup, single image, or placeholder */}
       {project.screenshots && project.screenshots.length === 3 ? (
         <div className="bg-slate-800/30">
           <ScreenshotFan screenshots={project.screenshots} projectName={projectName} />
         </div>
+      ) : project.mockupStyle === "terminal" && project.screenshots && project.screenshots.length > 0 ? (
+        <TerminalMockup
+          imageUrl={project.screenshots[0]}
+          alt={projectName}
+          title={`${projectName} — ${project.tech[0]}`}
+        />
       ) : project.screenshots && project.screenshots.length > 0 ? (
         <div className="relative h-48 w-full overflow-hidden bg-slate-800/30">
           <img

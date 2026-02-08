@@ -110,16 +110,22 @@ body {
 
 @keyframes glow-pulse {
   0%, 100% {
-    filter: drop-shadow(0 0 6px rgba(34, 211, 238, 0.3));
+    filter: drop-shadow(0 0 4px rgba(34, 211, 238, 0.4))
+            drop-shadow(0 0 12px rgba(34, 211, 238, 0.2))
+            drop-shadow(0 0 24px rgba(34, 211, 238, 0.1));
   }
   50% {
-    filter: drop-shadow(0 0 12px rgba(34, 211, 238, 0.6));
+    filter: drop-shadow(0 0 6px rgba(34, 211, 238, 0.6))
+            drop-shadow(0 0 16px rgba(34, 211, 238, 0.35))
+            drop-shadow(0 0 32px rgba(34, 211, 238, 0.15));
   }
 }
 
 .glow-pulse {
   animation: glow-pulse 4s ease-in-out infinite;
-  filter: drop-shadow(0 0 6px rgba(34, 211, 238, 0.3));
+  filter: drop-shadow(0 0 4px rgba(34, 211, 238, 0.4))
+          drop-shadow(0 0 12px rgba(34, 211, 238, 0.2))
+          drop-shadow(0 0 24px rgba(34, 211, 238, 0.1));
 }
 
 /* ─── Reduced motion ─── */

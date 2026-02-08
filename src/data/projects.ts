@@ -6,6 +6,7 @@ export interface Project {
   demo?: string;
   screenshots?: string[];
   featured?: boolean;
+  mockupStyle?: "terminal";
 }
 
 export const projects: Project[] = [
@@ -27,12 +28,13 @@ export const projects: Project[] = [
     github: "https://github.com/Kamaiko/BlunderMate-Chessbot",
     tech: ["Prolog"],
     screenshots: ["/images/projects/PARTIE_IVH.png"],
+    mockupStyle: "terminal",
   },
   {
     id: "portfolio",
     translationKey: "projects.portfolio",
     github: "https://github.com/Kamaiko/halterofit-website",
-    tech: ["React", "Vite", "TypeScript", "Tailwind CSS", "Framer Motion", "i18next"],
+    tech: ["React", "Vite", "TypeScript", "Tailwind CSS", "Framer Motion", "Three.js"],
     demo: "https://halterofit.ca",
   },
 ];

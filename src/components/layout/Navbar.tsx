@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import Menu from "lucide-react/dist/esm/icons/menu";
 import X from "lucide-react/dist/esm/icons/x";
@@ -9,16 +9,20 @@ import { cn } from "../../utils/cn";
 
 const navLinks = ["about", "projects", "skills", "contact"] as const;
 
+/** How long (ms) to lock the active section after a nav click */
+const NAV_CLICK_COOLDOWN_MS = 1200;
+
 export default function Navbar() {
   const { t, i18n } = useTranslation();
   const lenis = useLenis();
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
+  const cooldownRef = useRef(false);
 
   useEffect(() => {
     let ticking = false;
     const onScroll = () => {
-      if (ticking) return;
+      if (ticking || cooldownRef.current) return;
       ticking = true;
       requestAnimationFrame(() => {
         const atBottom =
@@ -58,6 +62,10 @@ export default function Navbar() {
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
+      setActiveSection(id);
+      cooldownRef.current = true;
+      setTimeout(() => { cooldownRef.current = false; }, NAV_CLICK_COOLDOWN_MS);
+
       if (lenis) {
         lenis.scrollTo(el, { offset: -NAV_HEIGHT });
       } else {

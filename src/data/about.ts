@@ -13,6 +13,8 @@ export const stackItems = [
   { name: "Tailwind CSS", color: "bg-sky-400" },
   { name: "Expo", color: "bg-slate-300" },
   { name: "Supabase", color: "bg-emerald-500" },
+  { name: "Vite", color: "bg-violet-400" },
+  { name: "TanStack Start", color: "bg-orange-400" },
 ] as const;
 
 /** Personal interests with i18n keys and Lucide icons */
