@@ -10,7 +10,7 @@
 | Groupe | Statut | Commit |
 |--------|--------|--------|
 | **Groupe 2 — Performance** | DONE | `46ebd61` |
-| **Groupe 3 — Tests** | **A FAIRE** | — |
+| **Groupe 3 — Tests** | DONE | `pending` |
 | **Groupe 1 — Accessibilite** | A faire | — |
 | **Groupe 4 — Polish** | A faire | — |
 
@@ -53,59 +53,24 @@ Les findings suivants ont ete corriges dans le commit `46ebd61` :
 
 ---
 
-## Groupe 3 — Tests : A FAIRE (prochain)
+## Groupe 3 — Tests : DONE
 
-### H8. Couverture tests < 5%
-**Fichier** : `src/__tests__/app.test.tsx`
-3 smoke tests seulement. ~25 tests prioritaires recommandes (voir plan ci-dessous).
+Les findings suivants ont ete corriges :
 
-### H9. Navbar non testee
-**Fichier** : `Navbar.tsx:22-56`
-Logique critique : scroll spy, cooldown 1200ms, detection bottom, toggle langue.
-**Tests proposes** :
-- Scroll spy : mocker `getBoundingClientRect`, simuler scroll, verifier `activeSection`
-- Language toggle : cliquer Globe, verifier `i18n.changeLanguage` appele
-- Mobile menu : toggle open/close, verifier className et aria-label
-- Cooldown : cliquer nav link, verifier scroll spy desactive pendant 1200ms
-- Bottom detection : scroll at bottom, verifier activeSection = "contact"
+| Finding | Correction |
+|---------|------------|
+| **H8** Couverture < 5% | 24 tests (3 existants + 21 nouveaux), coverage 77% stmts / 80% branches |
+| **H9** Navbar non testee | 5 tests : nav links, lang toggle, mobile menu, bottom detection, cooldown |
+| **H10** ErrorBoundary non teste | 3 tests : children render, fallback on throw, error state persistence |
+| **H11** Pas de coverage reporter | `@vitest/coverage-v8` + config coverage (v8, text+html, exclusions) |
+| **H12** useIsMobile non teste | 3 tests : default false, reactive update, cleanup listener |
+| **M8** ScrollReveal non teste | 4 tests : reduced motion, in view, hidden, transition cleanup |
+| **M9** SpotlightCard non teste | 3 tests : mobile no spotlight, desktop layers, mouseMove |
+| **M10** CursorTrail non teste | 3 tests : null mobile, null reduced motion, renders cursor |
 
-### H10. ErrorBoundary non teste
-**Fichier** : `ErrorBoundary.tsx:16-18`
-**Tests proposes** :
-- Catch error : render un composant qui throw, verifier fallback affiche
-- No error : render normal, verifier children affiches
-- Multiple errors : throw 2 fois, verifier fallback stable
-
-### H11. Pas de coverage reporter
-**Fichier** : `vitest.config.ts`
-**Fix** : Ajouter `coverage.provider: "v8"`, reporters `["text", "html"]`, exclusions (playground, types, constants).
-
-### H12. useIsMobile non teste
-**Fichier** : `useIsMobile.ts:13-17`
-**Tests proposes** :
-- SSR safety : `typeof window === "undefined"` retourne false
-- Reactive update : changer matchMedia 1024px → 600px, verifier isMobile = true
-- Cleanup : unmount hook, verifier removeEventListener appele
-- Breakpoint edge case : tester exactement 767px
-
-### M8. ScrollReveal non teste
-**Fichier** : `ScrollReveal.tsx:32-39`
-**Tests proposes** :
-- Reduced motion : mocker `useReducedMotion() = true`, verifier opacity=1 immediatement
-- IntersectionObserver trigger : mocker `isInView = true`, verifier opacity:1
-- Transition cleanup : attendre timer, verifier style.transition = undefined
-
-### M9. SpotlightCard non teste
-**Fichier** : `SpotlightCard.tsx:30-40`
-**Tests proposes** :
-- Mobile mode : mocker isMobile=true, verifier spotlight layers absents
-- Mouse move : simuler mousemove, verifier motionValue.set appele
-
-### M10. CursorTrail non teste
-**Fichier** : `CursorTrail.tsx:54-63`
-**Tests proposes** :
-- Mobile / no fine pointer : mocker isMobile=true, verifier null
-- Reduced motion : mocker REDUCED_MOTION=true, verifier null
+**Infrastructure** :
+- Auto-cleanup DOM ajoutee dans `setup.ts` (vitest sans `globals: true`)
+- Coverage scoped a `src/` avec exclusions (playground, types, constants, data, tests)
 
 ---
 

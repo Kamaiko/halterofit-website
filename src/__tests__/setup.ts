@@ -1,4 +1,11 @@
 import "@testing-library/jest-dom/vitest";
+import { cleanup } from "@testing-library/react";
+import { afterEach } from "vitest";
+
+// Auto-cleanup DOM between tests (vitest without globals: true)
+afterEach(() => {
+  cleanup();
+});
 
 // jsdom doesn't implement matchMedia — polyfill for useIsMobile + REDUCED_MOTION
 Object.defineProperty(window, "matchMedia", {
