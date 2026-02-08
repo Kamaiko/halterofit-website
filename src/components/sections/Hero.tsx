@@ -2,12 +2,11 @@ import { lazy, Suspense, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { motion, useScroll, useTransform, useReducedMotion, useMotionValueEvent } from "framer-motion";
 import { GRADIENT } from "../../constants/visual-effects";
+import { EASE_OUT_EXPO } from "../../constants/animation";
 import ErrorBoundary from "../ui/ErrorBoundary";
 import { cn } from "../../utils/cn";
 
 const HeroParticles = lazy(() => import("../effects/HeroParticles"));
-
-const EASE_OUT_EXPO = [0.25, 0.46, 0.45, 0.94] as const;
 
 /** Extra scroll height for the pinned transition (100vh hero + 150vh animation) */
 const HERO_SCROLL_HEIGHT = "250vh";

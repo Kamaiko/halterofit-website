@@ -1,6 +1,6 @@
 # Claude Instructions — Halterofit Portfolio
 
-> **Updated**: 2026-02-07
+> **Updated**: 2026-02-08
 
 ## Overview
 
@@ -8,7 +8,7 @@ Portfolio for Patrick Patenaude at **halterofit.ca**. Single-page React app, bil
 
 ## Tech Stack
 
-TypeScript 5.9 (strict) · React 19 · Vite 7 · Tailwind CSS 4 · Framer Motion 12 · react-i18next 16 · Three.js + R3F · Lenis (smooth scroll) · Lucide React (icons) · clsx (via `cn()`)
+TypeScript 5.9 (strict) · React 19 · Vite 7 · Tailwind CSS 4 · Framer Motion 12 · react-i18next 16 · Three.js + R3F + drei · Lenis (smooth scroll) · Lucide React (icons) · clsx (via `cn()`)
 
 ## Commands
 
@@ -30,6 +30,7 @@ src/
 ├── constants/
 │   ├── accessibility.ts             # REDUCED_MOTION (static matchMedia check)
 │   ├── layout.ts                    # NAV_HEIGHT, SECTION_PROXIMITY_PX, REVEAL_DURATION_S…
+│   ├── animation.ts                 # EASE_OUT_EXPO (shared entrance easing)
 │   ├── styles.ts                    # CARD_BASE, CARD_SHADOW, CARD_SHADOW_LIGHT
 │   └── visual-effects.ts            # GRADIENT.* (radial gradients) + NOISE_SVG
 ├── data/                            # ALL static data lives here (never inline in components)
@@ -49,7 +50,8 @@ src/
 │   │   ├── Navbar.tsx               # Fixed nav + scroll spy + FR/EN toggle
 │   │   ├── Footer.tsx               # Copyright
 │   │   ├── Section.tsx              # Reusable section wrapper (title parallax)
-│   │   └── NotFound.tsx             # 404 page
+│   │   ├── NotFound.tsx             # 404 page (crossfade flat → 3D)
+│   │   └── NotFound3D.tsx           # 3D "404" text (drei Text3D, lazy-loaded)
 │   ├── sections/                    # Full-page content sections
 │   │   ├── Hero.tsx                 # Sticky pinned hero + blur recession + camera dive
 │   │   ├── About.tsx                # Bento grid (tagline, journey, stack, interests, code, city)
@@ -60,7 +62,8 @@ src/
 │   │   ├── ProjectCard.tsx          # Individual project card
 │   │   ├── ScreenshotFan.tsx        # 3-image fan hover/scroll effect
 │   │   ├── ScrollReveal.tsx         # IntersectionObserver fade-in
-│   │   ├── ErrorBoundary.tsx        # Class component — wraps HeroParticles
+│   │   ├── SpotlightCard.tsx        # Radial-gradient hover spotlight for cards
+│   │   ├── ErrorBoundary.tsx        # Class component — wraps R3F/WebGL scenes
 │   │   └── CityScene.tsx            # Animated SVG city (pure CSS, 3 scroll layers)
 │   ├── effects/                     # Visual effect layers
 │   │   ├── CursorTrail.tsx          # Dual-element cursor (dot=direct DOM, ring=FM spring)
@@ -107,10 +110,11 @@ src/
 |---|---|---|---|
 | CursorTrail | Direct DOM + FM spring | `effects/CursorTrail.tsx` | Returns `null` |
 | HeroParticles | Three.js / R3F (lazy) | `effects/HeroParticles.tsx` | Returns `null` |
-| ScrollReveal | Inline styles + IntersectionObserver | `ScrollReveal.tsx` | FM `useReducedMotion()` |
-| CityScene | Pure CSS keyframes | `CityScene.tsx` + `index.css` | CSS `@media` rules |
-| ScreenshotFan | FM variants + scroll | `ScreenshotFan.tsx` | FM `useReducedMotion()` |
-| Skills marquee | CSS keyframes | `Skills.tsx` + `index.css` | CSS `@media` rules |
+| NotFound3D | drei Text3D + Float (lazy) | `layout/NotFound3D.tsx` | Flat "404" fallback |
+| ScrollReveal | Inline styles + IntersectionObserver | `ui/ScrollReveal.tsx` | FM `useReducedMotion()` |
+| CityScene | Pure CSS keyframes | `ui/CityScene.tsx` + `index.css` | CSS `@media` rules |
+| ScreenshotFan | FM variants + scroll | `ui/ScreenshotFan.tsx` | FM `useReducedMotion()` |
+| Skills marquee | CSS keyframes | `sections/Skills.tsx` + `index.css` | CSS `@media` rules |
 | Lenis smooth scroll | Library wrapper | `App.tsx` | Disabled via `REDUCED_MOTION` |
 
 ### Reduced-motion: EVERY animation must respect `prefers-reduced-motion`.
@@ -131,10 +135,11 @@ src/
 
 ## Code Splitting
 
-- Three.js chunk (~874KB) is lazy-loaded via `React.lazy()` in `Hero.tsx`
+- Three.js chunk (~874KB) is lazy-loaded via `React.lazy()` in `Hero.tsx` and `NotFound.tsx`
+- NotFound3D chunk (~8.5KB) is lazy-loaded separately (drei Text3D)
 - Playground is lazy-loaded in `App.tsx`
-- ErrorBoundary wraps HeroParticles to prevent WebGL crashes from breaking the app
-- Main bundle: ~439KB (gzipped: ~142KB)
+- ErrorBoundary wraps all R3F scenes to prevent WebGL crashes from breaking the app
+- Main bundle: ~443KB (gzipped: ~143KB)
 
 ## Testing
 
