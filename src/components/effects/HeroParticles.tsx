@@ -23,46 +23,42 @@ const _euler = new THREE.Euler();
 const _invMatrix = new THREE.Matrix4();
 const _mouseLocal = new THREE.Vector3();
 
-/** Programmatic circle texture with soft glow */
-function useCircleTexture() {
+/** Radial gradient texture — parameterized by color stops */
+const TEXTURE_SIZE = 32;
+const TEXTURE_HALF = TEXTURE_SIZE / 2;
+
+function useRadialTexture(stops: readonly (readonly [number, string])[]) {
   const texture = useMemo(() => {
     const canvas = document.createElement("canvas");
-    canvas.width = 32;
-    canvas.height = 32;
+    canvas.width = TEXTURE_SIZE;
+    canvas.height = TEXTURE_SIZE;
     const ctx = canvas.getContext("2d")!;
-    const gradient = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
-    gradient.addColorStop(0, "rgba(255,255,255,1)");
-    gradient.addColorStop(0.4, "rgba(255,255,255,0.4)");
-    gradient.addColorStop(1, "rgba(255,255,255,0)");
+    const gradient = ctx.createRadialGradient(
+      TEXTURE_HALF, TEXTURE_HALF, 0,
+      TEXTURE_HALF, TEXTURE_HALF, TEXTURE_HALF,
+    );
+    for (const [offset, color] of stops) gradient.addColorStop(offset, color);
     ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, 32, 32);
+    ctx.fillRect(0, 0, TEXTURE_SIZE, TEXTURE_SIZE);
     return new THREE.CanvasTexture(canvas);
-  }, []);
+  }, [stops]);
 
   useEffect(() => () => texture.dispose(), [texture]);
   return texture;
 }
 
-/** Brighter texture for star layer — broader white core */
-function useBrightStarTexture() {
-  const texture = useMemo(() => {
-    const canvas = document.createElement("canvas");
-    canvas.width = 32;
-    canvas.height = 32;
-    const ctx = canvas.getContext("2d")!;
-    const gradient = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
-    gradient.addColorStop(0, "rgba(255,255,255,1)");
-    gradient.addColorStop(0.5, "rgba(255,255,255,0.8)");
-    gradient.addColorStop(0.8, "rgba(255,255,255,0.2)");
-    gradient.addColorStop(1, "rgba(255,255,255,0)");
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, 32, 32);
-    return new THREE.CanvasTexture(canvas);
-  }, []);
+const PARTICLE_GLOW_STOPS = [
+  [0, "rgba(255,255,255,1)"],
+  [0.4, "rgba(255,255,255,0.4)"],
+  [1, "rgba(255,255,255,0)"],
+] as const;
 
-  useEffect(() => () => texture.dispose(), [texture]);
-  return texture;
-}
+const STAR_GLOW_STOPS = [
+  [0, "rgba(255,255,255,1)"],
+  [0.5, "rgba(255,255,255,0.8)"],
+  [0.8, "rgba(255,255,255,0.2)"],
+  [1, "rgba(255,255,255,0)"],
+] as const;
 
 /** Subtle center bias — pow(0.7) */
 function randomRadius() {
@@ -136,7 +132,7 @@ function computeRepulsion(
 function ParticleConstellation({ mouseRef }: { mouseRef: MouseRef }) {
   const pointsRef = useRef<THREE.Points>(null);
   const positionsRef = useRef<THREE.BufferAttribute>(null);
-  const texture = useCircleTexture();
+  const texture = useRadialTexture(PARTICLE_GLOW_STOPS);
 
   const { positions, colors, basePositions } = useMemo(() => {
     const pos = new Float32Array(PARTICLE_COUNT * 3);
@@ -232,7 +228,7 @@ function ParticleConstellation({ mouseRef }: { mouseRef: MouseRef }) {
 function BrightStars({ mouseRef }: { mouseRef: MouseRef }) {
   const pointsRef = useRef<THREE.Points>(null);
   const positionsRef = useRef<THREE.BufferAttribute>(null);
-  const texture = useBrightStarTexture();
+  const texture = useRadialTexture(STAR_GLOW_STOPS);
 
   const { positions, basePositions } = useMemo(() => {
     const pos = new Float32Array(STAR_COUNT * 3);

@@ -40,7 +40,7 @@ body {
     transform: translateX(0);
   }
   to {
-    transform: translateX(-800px); /* W from src/data/city-scene.ts */
+    transform: translateX(calc(-1 * var(--city-width, 800px)));
   }
 }
 
@@ -145,6 +145,10 @@ body {
   }
 
   .glow-pulse {
+    animation: none !important;
+  }
+
+  .marquee-track {
     animation: none !important;
   }
 }

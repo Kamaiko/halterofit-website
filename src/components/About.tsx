@@ -83,7 +83,7 @@ export default function About() {
                 className="flex items-center gap-1.5 text-xs text-slate-300"
               >
                 <span
-                  className={`h-1.5 w-1.5 shrink-0 rounded-full ${tech.color}`}
+                  className={cn("h-1.5 w-1.5 shrink-0 rounded-full", tech.color)}
                 />
                 {tech.name}
               </span>

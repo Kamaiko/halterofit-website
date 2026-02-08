@@ -1,162 +1,145 @@
-# Claude Instructions - Halterofit Portfolio Website
+# Claude Instructions — Halterofit Portfolio
 
-> **Last Updated**: 2026-02-05
-> **Purpose**: AI agent project briefing for the portfolio website
+> **Updated**: 2026-02-07
 
----
+## Overview
 
-## What This Is
-
-Personal portfolio website for Patrick Patenaude, hosted on **halterofit.ca** via Cloudflare Pages. Single-page React app with bilingual FR/EN support.
-
----
+Portfolio for Patrick Patenaude at **halterofit.ca**. Single-page React app, bilingual FR/EN, dark theme, deployed on Cloudflare Pages via `main` branch. Dev work on `dev`.
 
 ## Tech Stack
 
-| Techno | Version | Role |
-|---|---|---|
-| **TypeScript** | 5.9 | Language (strict mode) |
-| **React** | 19.2 | UI framework |
-| **Vite** | 7.x | Build tool + dev server |
-| **Tailwind CSS** | 4.x | Styling (utility classes, CSS-first config) |
-| **Framer Motion** | 12.x | Scroll animations, transitions |
-| **react-i18next** | 16.x | Bilingual FR/EN |
-| **Lucide React** | 0.563 | Icons |
-| **clsx** | 2.x | className concatenation (via `cn()` utility) |
-| **Lenis** | latest | Smooth scrolling |
+TypeScript 5.9 (strict) · React 19 · Vite 7 · Tailwind CSS 4 · Framer Motion 12 · react-i18next 16 · Three.js + R3F · Lenis (smooth scroll) · Lucide React (icons) · clsx (via `cn()`)
 
----
-
-## Quick Commands
+## Commands
 
 ```bash
-npm run dev       # Start dev server (localhost:5173)
-npm run build     # TypeScript check + production build (outputs to dist/)
-npm run preview   # Preview production build locally
-npm run lint      # Run ESLint
+npm run dev       # localhost:5173
+npm run build     # tsc + vite build → dist/
+npm run lint      # ESLint
+npx vitest run    # Tests (jsdom)
 ```
-
----
 
 ## Project Structure
 
 ```
 src/
-├── main.tsx                    # Entry point
-├── App.tsx                     # Root component, assembles all sections
-├── index.css                   # Tailwind import + CityScene CSS animations
-├── utils/
-│   └── cn.ts                   # Re-exports clsx as cn() — use for all className logic
+├── App.tsx                          # Root — routing (playground, 404, main), Lenis wrapper
+├── main.tsx                         # Entry point
+├── index.css                        # Tailwind import + CSS keyframes + reduced-motion rules
+├── utils/cn.ts                      # Re-exports clsx → use for ALL className logic
 ├── constants/
-│   ├── layout.ts               # Named constants (NAV_HEIGHT, thresholds, timings)
-│   ├── styles.ts               # Shared card styles (CARD_BASE, CARD_SHADOW)
-│   └── visual-effects.ts       # Radial gradients (GRADIENT.*) + NOISE_SVG data URI
-├── data/
-│   ├── about.ts                # stackItems, interests, journeySteps
-│   ├── city-scene.ts           # CityScene palette, dimensions, buildings, stars
-│   ├── contact.ts              # socialLinks[], CONTACT_EMAIL, CV_PATH
-│   ├── projects.ts             # Project interface + project list
-│   └── skills.ts               # row1Skills, row2Skills
-├── hooks/
-│   └── useIsMobile.ts          # Media query hook
+│   ├── accessibility.ts             # REDUCED_MOTION (static matchMedia check)
+│   ├── layout.ts                    # NAV_HEIGHT, SECTION_PROXIMITY_PX, REVEAL_DURATION_S…
+│   ├── styles.ts                    # CARD_BASE, CARD_SHADOW, CARD_SHADOW_LIGHT
+│   └── visual-effects.ts            # GRADIENT.* (radial gradients) + NOISE_SVG
+├── data/                            # ALL static data lives here (never inline in components)
+│   ├── about.ts                     # stackItems, interests, journeySteps
+│   ├── city-scene.ts                # Palette, dimensions (W, H), buildings, stars
+│   ├── contact.ts                   # socialLinks[], CV_PATH
+│   ├── projects.ts                  # Project[] + project data
+│   └── skills.ts                    # row1Skills, row2Skills
+├── hooks/useIsMobile.ts             # Reactive media query hook (reactive, SSR-safe)
+├── types/lucide-react-icons.d.ts    # Module declarations for deep Lucide imports
 ├── i18n/
-│   ├── index.ts                # i18next config (default: FR)
-│   ├── fr.json                 # French translations
-│   └── en.json                 # English translations
-└── components/
-    ├── Navbar.tsx               # Fixed nav + FR/EN toggle + mobile menu + scroll spy
-    ├── Hero.tsx                 # Name, title, scroll indicator (word-by-word reveal)
-    ├── Section.tsx              # Reusable section wrapper (title + scroll reveal)
-    ├── About.tsx                # Bio, journey, stack, interests (card grid)
-    ├── Projects.tsx             # Project card grid layout
-    ├── ProjectCard.tsx          # Individual project card (screenshots, tech, links)
-    ├── ScreenshotFan.tsx        # 3-image fan hover effect for project cards
-    ├── ScrollReveal.tsx         # IntersectionObserver fade-in wrapper
-    ├── Skills.tsx               # Dual marquee rows of skill badges
-    ├── CityScene.tsx            # Animated SVG city skyline (pure CSS animations)
-    ├── Contact.tsx              # Email, CV download, social links
-    └── Footer.tsx               # Copyright
+│   ├── index.ts                     # i18next config (default: FR, persisted to localStorage)
+│   ├── fr.json                      # French translations
+│   └── en.json                      # English — MUST mirror fr.json key structure
+├── components/
+│   ├── effects/
+│   │   ├── CursorTrail.tsx          # Dual-element cursor (dot=direct DOM, ring=FM spring)
+│   │   └── HeroParticles.tsx        # Three.js galaxy (2050 particles, lazy-loaded)
+│   ├── ErrorBoundary.tsx            # Class component — wraps HeroParticles in Hero.tsx
+│   ├── NotFound.tsx                 # 404 page
+│   ├── Navbar.tsx                   # Fixed nav + scroll spy + FR/EN toggle
+│   ├── Hero.tsx                     # Word-by-word blur reveal + lazy HeroParticles
+│   ├── Section.tsx                  # Reusable section wrapper
+│   ├── About.tsx                    # Bento grid (tagline, journey, stack, interests, code, city)
+│   ├── Projects.tsx / ProjectCard.tsx / ScreenshotFan.tsx
+│   ├── ScrollReveal.tsx             # IntersectionObserver fade-in (cleans up inline styles)
+│   ├── Skills.tsx                   # Dual marquee rows (CSS animation)
+│   ├── CityScene.tsx                # Animated SVG city (pure CSS, 3 scroll layers)
+│   ├── Contact.tsx / Footer.tsx
+│   └── playground/                  # Dev-only demos (?playground=true), lazy-loaded
+└── __tests__/
+    ├── setup.ts                     # jsdom polyfills (matchMedia, IntersectionObserver, ResizeObserver)
+    └── app.test.tsx                 # Smoke tests (i18n, useIsMobile, App render)
 ```
 
----
+## Conventions (MUST follow)
 
-## Architecture Conventions
+### Naming
+- **Components**: PascalCase files + exports (`Hero.tsx`, `CursorTrail.tsx`)
+- **Constants**: SCREAMING_SNAKE (`NAV_HEIGHT`, `PARTICLE_COUNT`, `CARD_BASE`)
+- **Hooks**: `use` prefix, camelCase (`useIsMobile`, `useRadialTexture`)
+- **Data files**: camelCase arrays/objects (`stackItems`, `row1Skills`)
+- **CSS classes**: kebab-case (Tailwind utilities)
+- **i18n keys**: `section.key` pattern (`hero.title`, `about.journey.psych`)
+
+### className
+- **ALWAYS** use `cn()` from `src/utils/cn.ts` for conditional or concatenated classNames
+- **NEVER** use template literals (`\`foo ${bar}\``) for className
 
 ### Data separation
-- **Components** contain only rendering logic — no inline data arrays
-- **`src/data/`** holds all static data (arrays, configs, coordinates)
-- **`src/constants/`** holds shared tokens (layout values, style classes, gradient strings)
+- Components = rendering logic ONLY. No inline data arrays.
+- Static data → `src/data/`. Shared tokens → `src/constants/`.
 
-### className handling
-- Always use `cn()` from `src/utils/cn.ts` for conditional or concatenated classNames
-- Never use template literals for className concatenation
+### Icons
+- Import Lucide icons from deep ESM path (tree-shaking):
+  ```tsx
+  import Mail from "lucide-react/dist/esm/icons/mail";
+  ```
 
-### Shared styles
-- Card styles use `CARD_BASE`, `CARD_SHADOW`, `CARD_SHADOW_LIGHT` from `src/constants/styles.ts`
-- Gradient values use `GRADIENT.*` from `src/constants/visual-effects.ts`
-- Magic numbers use named constants from `src/constants/layout.ts`
+### Internationalization
+- ALL user-facing text in `fr.json` + `en.json`. No hardcoded strings.
+- When adding text: add to BOTH files with matching keys.
+- Use `<Trans>` for inline formatting: `<Trans i18nKey="..." components={{ hl: <Highlight /> }} />`
 
-### CityScene
-- All building coordinates, palette, dimensions live in `src/data/city-scene.ts`
-- CSS animations (scroll, twinkle, pulse) live in `src/index.css`
-- The `-800px` keyframe value in CSS must stay in sync with `W` from `city-scene.ts`
+## Animation Architecture
 
----
+### Layers
+| Layer | Tech | File | Reduced-motion |
+|---|---|---|---|
+| CursorTrail | Direct DOM + FM spring | `effects/CursorTrail.tsx` | Returns `null` |
+| HeroParticles | Three.js / R3F (lazy) | `effects/HeroParticles.tsx` | Returns `null` |
+| ScrollReveal | Inline styles + IntersectionObserver | `ScrollReveal.tsx` | FM `useReducedMotion()` |
+| CityScene | Pure CSS keyframes | `CityScene.tsx` + `index.css` | CSS `@media` rules |
+| ScreenshotFan | FM variants + scroll | `ScreenshotFan.tsx` | FM `useReducedMotion()` |
+| Skills marquee | CSS keyframes | `Skills.tsx` + `index.css` | CSS `@media` rules |
+| Lenis smooth scroll | Library wrapper | `App.tsx` | Disabled via `REDUCED_MOTION` |
 
-## Deployment
+### Reduced-motion: EVERY animation must respect `prefers-reduced-motion`.
+- JS: use `REDUCED_MOTION` from `constants/accessibility.ts` or FM's `useReducedMotion()`
+- CSS: add rules inside `@media (prefers-reduced-motion: reduce)` block in `index.css`
 
-- **Hosting**: Cloudflare Pages
-- **Domain**: halterofit.ca
-- **Auto-deploy**: `git push` to `main` triggers build
-- **Build settings**: command = `npm run build`, output = `dist`
-- **Preview URLs**: Non-main branches deploy to `<branch>.halterofit-website.pages.dev`
-- **Git workflow**: Work on `dev`, merge into `main` to deploy
+### CityScene CSS sync
+- CSS keyframe `city-scroll` uses `var(--city-width)` — set as CSS custom property on `<svg>` from `W` constant in `city-scene.ts`.
 
----
+## Three.js / R3F Rules
 
-## Design System
+- `bufferAttribute`: ALWAYS use `args={[array, itemSize]}`, never separate props
+- NEVER use `useState` inside `useFrame` — causes 60fps re-renders. Use `useRef` only.
+- Pre-allocate `THREE.Color`, `Euler`, `Matrix4`, `Vector3` at module scope for per-frame math (zero GC)
+- `pointsMaterial` renders squares — use `CanvasTexture` with radial gradient for round particles
+- `pointer-events-none` on Canvas wrapper blocks R3F mouse tracking — use `window.pointermove` + `useRef`
+- `Math.random()` in `useMemo` needs `// eslint-disable-next-line react-hooks/purity` (or file-level disable for playground demos)
 
-- **Theme**: Dark mode (slate-950 background, slate-100 text)
-- **Accent**: cyan-400 / cyan-500
-- **Font**: Inter (Google Fonts, loaded in index.html)
-- **Animations**: Framer Motion for scroll reveals + hover; pure CSS for CityScene
-- **Layout**: Max-width 5xl (1024px), centered
+## Code Splitting
 
----
+- Three.js chunk (~874KB) is lazy-loaded via `React.lazy()` in `Hero.tsx`
+- Playground is lazy-loaded in `App.tsx`
+- ErrorBoundary wraps HeroParticles to prevent WebGL crashes from breaking the app
+- Main bundle: ~439KB (gzipped: ~142KB)
 
-## Internationalization
+## Testing
 
-- Default language: French (FR)
-- Toggle in Navbar switches FR/EN
-- All user-facing text lives in `src/i18n/fr.json` and `src/i18n/en.json`
-- Keys follow `section.key` pattern (e.g. `hero.title`, `projects.halterofit.description`)
-- When adding new text: add to BOTH json files
-
----
-
-## Adding a New Project
-
-1. Add translation keys in `fr.json` and `en.json` under `projects.<slug>`
-2. Add entry in `src/data/projects.ts`
-3. Optionally add 3 screenshots in `public/images/` for the fan effect
-
----
-
-## Known TODOs
-
-- [ ] Add real CV PDF to `public/cv-patrick-patenaude.pdf`
-- [ ] Add project screenshots in `public/images/`
-- [ ] Add custom favicon
-- [ ] Configure Cloudflare Email Routing for contact@halterofit.ca
-- [ ] Submit site to Google Search Console for indexing
-
----
+- Vitest 4 + @testing-library/react + jsdom
+- Three.js mocked in tests (`vi.mock("three", () => ({}))`)
+- Setup polyfills: matchMedia, IntersectionObserver, ResizeObserver
 
 ## Development Standards
 
-- TypeScript strict mode, no `any` types
+- TypeScript strict mode, zero `any` types, zero `@ts-ignore`
+- Zero `console.log` in production code
 - Tailwind utility classes for all styling (no CSS files beyond `index.css`)
-- All user-facing text must be internationalized (no hardcoded strings in components)
-- Use `cn()` for all className logic — no template literals
-- Data arrays belong in `src/data/`, not inline in components
-- Keep dependencies minimal
+- Named constants for ALL magic numbers (extract to `constants/`)
+- Keep dependencies minimal — no GSAP, no react-spring (FM v12 covers all needs)

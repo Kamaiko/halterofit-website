@@ -22,7 +22,7 @@ function MarqueeRow({
       <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-32 bg-linear-to-l from-slate-950 to-transparent md:w-48" />
 
       <div
-        className="flex w-max gap-4 group-hover:[animation-play-state:paused]"
+        className="marquee-track flex w-max gap-4 group-hover:[animation-play-state:paused]"
         style={{
           animation: `${reverse ? "marquee-right" : "marquee-left"} ${duration}s linear infinite`,
         }}

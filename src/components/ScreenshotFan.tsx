@@ -8,6 +8,7 @@ import {
 } from "framer-motion";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { GRADIENT } from "../constants/visual-effects";
+import { cn } from "../utils/cn";
 
 interface ScreenshotFanProps {
   screenshots: string[];
@@ -176,7 +177,10 @@ export default function ScreenshotFan({ screenshots, projectName }: ScreenshotFa
           return (
             <motion.div
               key={screenshot}
-              className={`absolute ${isMobile ? "w-[34%] max-w-[200px]" : "w-[26%] max-w-[160px]"}`}
+              className={cn(
+                "absolute",
+                isMobile ? "w-[34%] max-w-[200px]" : "w-[26%] max-w-[160px]",
+              )}
               style={{
                 transformStyle: "preserve-3d",
                 zIndex: config.zIndex,
@@ -224,11 +228,12 @@ export default function ScreenshotFan({ screenshots, projectName }: ScreenshotFa
                 {/* Edge fade overlay for side phones */}
                 {config.fadeDirection !== "none" && (
                   <motion.div
-                    className={`pointer-events-none absolute inset-0 rounded-[1.6rem] ${
+                    className={cn(
+                      "pointer-events-none absolute inset-0 rounded-[1.6rem]",
                       config.fadeDirection === "left"
                         ? "bg-linear-to-l from-transparent via-transparent to-slate-900/70"
-                        : "bg-linear-to-r from-transparent via-transparent to-slate-900/70"
-                    }`}
+                        : "bg-linear-to-r from-transparent via-transparent to-slate-900/70",
+                    )}
                     style={isMobile ? { opacity: fadeOpacity } : undefined}
                     variants={
                       isMobile

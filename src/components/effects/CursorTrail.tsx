@@ -8,11 +8,13 @@ const DOT_OFFSET = DOT_SIZE_PX / 2;
 const DOT_HOVER_SCALE = 2.5;
 const DOT_HOVER_OPACITY = 0.6;
 const CLICKABLE_SELECTOR = "a, button, [role='button'], input[type='submit']";
+const HOVER_CHECK_INTERVAL_MS = 100;
 
 export default function CursorTrail() {
   const isMobile = useIsMobile();
   const dotRef = useRef<HTMLDivElement>(null);
   const isHoveringRef = useRef(false);
+  const lastHoverCheckRef = useRef(0);
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
 
@@ -31,14 +33,18 @@ export default function CursorTrail() {
         dotRef.current.style.translate =
           `${e.clientX - DOT_OFFSET}px ${e.clientY - DOT_OFFSET}px`;
 
-        // Detect hover on clickable elements
-        const target = document.elementFromPoint(e.clientX, e.clientY);
-        const isClickable = target?.closest(CLICKABLE_SELECTOR) != null;
+        // Throttled hover detection — elementFromPoint is expensive
+        const now = performance.now();
+        if (now - lastHoverCheckRef.current >= HOVER_CHECK_INTERVAL_MS) {
+          lastHoverCheckRef.current = now;
+          const target = document.elementFromPoint(e.clientX, e.clientY);
+          const isClickable = target?.closest(CLICKABLE_SELECTOR) != null;
 
-        if (isClickable !== isHoveringRef.current) {
-          isHoveringRef.current = isClickable;
-          dotRef.current.style.scale = isClickable ? String(DOT_HOVER_SCALE) : "1";
-          dotRef.current.style.opacity = isClickable ? String(DOT_HOVER_OPACITY) : "1";
+          if (isClickable !== isHoveringRef.current) {
+            isHoveringRef.current = isClickable;
+            dotRef.current.style.scale = isClickable ? String(DOT_HOVER_SCALE) : "1";
+            dotRef.current.style.opacity = isClickable ? String(DOT_HOVER_OPACITY) : "1";
+          }
         }
       }
     };
