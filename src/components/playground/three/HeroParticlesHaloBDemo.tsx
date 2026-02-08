@@ -18,7 +18,8 @@ const STAR_COUNT = 50;
 const SPHERE_RADIUS = 6;
 const INTERACTION_RADIUS = 4;
 const REPULSION_STRENGTH = 0.25;
-const ROTATION_RAD_PER_S = 0.03;
+const ROTATION_RAD_PER_S = 0.08;
+const DELTA_CAP_S = 1 / 30;
 const TILT_X = Math.PI * 0.083;
 const TILT_Z = -Math.PI / 6;
 const CORE_FRACTION = 0.7;
@@ -186,17 +187,17 @@ function ParticleConstellation({ mouseRef }: { mouseRef: MouseRef }) {
       const bx = basePositions[i3];
       const by = basePositions[i3 + 1];
       const bz = basePositions[i3 + 2];
-      const driftX = Math.sin(t * 0.3 + i * 0.01) * 0.06;
-      const driftY = Math.cos(t * 0.4 + i * 0.02) * 0.06;
-      const driftZ = Math.sin(t * 0.5 + i * 0.015) * 0.02;
-      const twinkle = Math.sin(t * (0.8 + (i % 7) * 0.3) + i * 1.7) * 0.2;
+      const driftX = Math.sin(t * 0.3 + i * 0.01) * 0.02;
+      const driftY = Math.cos(t * 0.25 + i * 0.02) * 0.05;
+      const driftZ = Math.sin(t * 0.35 + i * 0.015) * 0.015;
+      const twinkle = Math.sin(t * (0.8 + (i % 7) * 0.3) + i * 1.7) * 0.03;
       const { rx, ry, rz } = computeRepulsion(bx, by, bz, mouse);
       arr[i3] = bx + driftX + rx;
-      arr[i3 + 1] = by + driftY + ry;
-      arr[i3 + 2] = bz + driftZ + rz + twinkle;
+      arr[i3 + 1] = by + driftY + twinkle + ry;
+      arr[i3 + 2] = bz + driftZ + rz;
     }
     positionsRef.current.needsUpdate = true;
-    pointsRef.current.rotation.y += ROTATION_RAD_PER_S * delta;
+    pointsRef.current.rotation.y += ROTATION_RAD_PER_S * Math.min(delta, DELTA_CAP_S);
   });
 
   return (
@@ -246,16 +247,16 @@ function BrightStars({ mouseRef }: { mouseRef: MouseRef }) {
       const bx = basePositions[i3];
       const by = basePositions[i3 + 1];
       const bz = basePositions[i3 + 2];
-      const driftX = Math.sin(t * 0.2 + i * 0.05) * 0.04;
-      const driftY = Math.cos(t * 0.3 + i * 0.04) * 0.04;
-      const twinkle = Math.sin(t * (0.4 + (i % 7) * 0.25) + i * 2.1) * 0.5;
+      const driftX = Math.sin(t * 0.2 + i * 0.05) * 0.015;
+      const driftY = Math.cos(t * 0.2 + i * 0.04) * 0.04;
+      const twinkle = Math.sin(t * (0.4 + (i % 7) * 0.25) + i * 2.1) * 0.06;
       const { rx, ry, rz } = computeRepulsion(bx, by, bz, mouse);
       arr[i3] = bx + driftX + rx;
-      arr[i3 + 1] = by + driftY + ry;
-      arr[i3 + 2] = bz + twinkle + rz;
+      arr[i3 + 1] = by + driftY + twinkle + ry;
+      arr[i3 + 2] = bz + rz;
     }
     positionsRef.current.needsUpdate = true;
-    pointsRef.current.rotation.y += ROTATION_RAD_PER_S * delta;
+    pointsRef.current.rotation.y += ROTATION_RAD_PER_S * Math.min(delta, DELTA_CAP_S);
   });
 
   return (
