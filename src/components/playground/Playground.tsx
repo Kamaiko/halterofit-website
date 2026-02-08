@@ -6,11 +6,11 @@ import CursorTrail from "../effects/CursorTrail";
    Access: ?playground=true
    ═══════════════════════════════════════════════════════════════════ */
 
-// Framer Motion demos (1-4)
-import TypingEffectDemo from "./framer/TypingEffectDemo";
-import MicroAnimationsDemo from "./framer/MicroAnimationsDemo";
-import ExpandCollapseDemo from "./framer/ExpandCollapseDemo";
-import TerminalDemo from "./framer/TerminalDemo";
+// Framer Motion demos — lazy loaded (1-4)
+const TypingEffectDemo = lazy(() => import("./framer/TypingEffectDemo"));
+const MicroAnimationsDemo = lazy(() => import("./framer/MicroAnimationsDemo"));
+const ExpandCollapseDemo = lazy(() => import("./framer/ExpandCollapseDemo"));
+const TerminalDemo = lazy(() => import("./framer/TerminalDemo"));
 
 // Three.js demos — lazy loaded (5-8)
 const ChessBoardDemo = lazy(() => import("./three/ChessBoardDemo"));
@@ -68,10 +68,10 @@ export default function Playground() {
       {/* Demos */}
       <div className="mx-auto max-w-4xl px-6 py-12">
         {/* ─── Framer Motion Demos (1-4) ─── */}
-        <TypingEffectDemo />
-        <MicroAnimationsDemo />
-        <ExpandCollapseDemo />
-        <TerminalDemo />
+        <LazyDemo><TypingEffectDemo /></LazyDemo>
+        <LazyDemo><MicroAnimationsDemo /></LazyDemo>
+        <LazyDemo><ExpandCollapseDemo /></LazyDemo>
+        <LazyDemo><TerminalDemo /></LazyDemo>
 
         {/* ─── Three.js Demos (5-8) ─── */}
         <div className="mb-12 mt-16 border-t border-slate-800 pt-8">

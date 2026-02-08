@@ -1,4 +1,6 @@
+import { useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { useInView } from "framer-motion";
 import Section from "../layout/Section";
 import ScrollReveal from "../ui/ScrollReveal";
 import { row1Skills, row2Skills } from "../../data/skills";
@@ -14,10 +16,12 @@ function MarqueeRow({
   reverse = false,
   duration = 30,
 }: MarqueeRowProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { margin: "200px" });
   const doubled = [...skills, ...skills];
 
   return (
-    <div className="group relative overflow-hidden py-2">
+    <div ref={ref} className="group relative overflow-hidden py-2">
       {/* Fade edges */}
       <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-32 bg-linear-to-r from-slate-950 to-transparent md:w-48" />
       <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-32 bg-linear-to-l from-slate-950 to-transparent md:w-48" />
@@ -26,6 +30,7 @@ function MarqueeRow({
         className="marquee-track flex w-max gap-4 group-hover:[animation-play-state:paused]"
         style={{
           animation: `${reverse ? "marquee-right" : "marquee-left"} ${duration}s linear infinite`,
+          animationPlayState: isInView ? "running" : "paused",
         }}
       >
         {doubled.map((skill, i) => (

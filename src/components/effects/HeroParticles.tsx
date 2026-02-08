@@ -1,7 +1,15 @@
 /* eslint-disable react-hooks/purity -- intentional one-time random seed in useMemo */
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useRef, useMemo, useEffect, useState } from "react";
-import * as THREE from "three";
+import {
+  AdditiveBlending,
+  CanvasTexture,
+  Color,
+  Euler,
+  Matrix4,
+  Vector3,
+} from "three";
+import type { BufferAttribute, PerspectiveCamera, Points } from "three";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { REDUCED_MOTION } from "../../constants/accessibility";
 
@@ -26,9 +34,9 @@ type ScrollRef = React.RefObject<number>;
 
 /* ─── Pre-allocated objects for per-frame math (zero GC pressure) ─── */
 
-const _euler = new THREE.Euler();
-const _invMatrix = new THREE.Matrix4();
-const _mouseLocal = new THREE.Vector3();
+const _euler = new Euler();
+const _invMatrix = new Matrix4();
+const _mouseLocal = new Vector3();
 
 /** Radial gradient texture — parameterized by color stops */
 const TEXTURE_SIZE = 32;
@@ -47,7 +55,7 @@ function useRadialTexture(stops: readonly (readonly [number, string])[]) {
     for (const [offset, color] of stops) gradient.addColorStop(offset, color);
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, TEXTURE_SIZE, TEXTURE_SIZE);
-    return new THREE.CanvasTexture(canvas);
+    return new CanvasTexture(canvas);
   }, [stops]);
 
   useEffect(() => () => texture.dispose(), [texture]);
@@ -97,9 +105,9 @@ function randomSpherePoint(radius: number) {
 function projectMouseToLocal(
   mouseRef: MouseRef,
   rotY: number,
-  cam: THREE.PerspectiveCamera,
+  cam: PerspectiveCamera,
   aspect: number,
-): THREE.Vector3 {
+): Vector3 {
   const vFOV = (cam.fov * Math.PI) / 180;
   const dist = cam.position.z;
   const halfH = Math.tan(vFOV / 2) * dist;
@@ -122,7 +130,7 @@ function computeRepulsion(
   baseX: number,
   baseY: number,
   baseZ: number,
-  mouse: THREE.Vector3,
+  mouse: Vector3,
 ) {
   const dx = baseX - mouse.x;
   const dy = baseY - mouse.y;
@@ -144,8 +152,8 @@ function computeRepulsion(
 /* ─── Main particle layer (2000 particles) ─── */
 
 function ParticleConstellation({ mouseRef }: { mouseRef: MouseRef }) {
-  const pointsRef = useRef<THREE.Points>(null);
-  const positionsRef = useRef<THREE.BufferAttribute>(null);
+  const pointsRef = useRef<Points>(null);
+  const positionsRef = useRef<BufferAttribute>(null);
   const texture = useRadialTexture(PARTICLE_GLOW_STOPS);
 
   const { positions, colors, basePositions } = useMemo(() => {
@@ -153,8 +161,8 @@ function ParticleConstellation({ mouseRef }: { mouseRef: MouseRef }) {
     const col = new Float32Array(PARTICLE_COUNT * 3);
     const base = new Float32Array(PARTICLE_COUNT * 3);
 
-    const cyan = new THREE.Color("#22d3ee");
-    const white = new THREE.Color("#f1f5f9");
+    const cyan = new Color("#22d3ee");
+    const white = new Color("#f1f5f9");
     const coreCount = Math.floor(PARTICLE_COUNT * CORE_FRACTION);
 
     for (let i = 0; i < PARTICLE_COUNT; i++) {
@@ -192,7 +200,7 @@ function ParticleConstellation({ mouseRef }: { mouseRef: MouseRef }) {
 
     const arr = positionsRef.current.array as Float32Array;
     const t = state.clock.elapsedTime;
-    const cam = state.camera as THREE.PerspectiveCamera;
+    const cam = state.camera as PerspectiveCamera;
     const aspect = state.size.width / state.size.height;
     const rotY = pointsRef.current.rotation.y;
     const mouse = projectMouseToLocal(mouseRef, rotY, cam, aspect);
@@ -240,7 +248,7 @@ function ParticleConstellation({ mouseRef }: { mouseRef: MouseRef }) {
         sizeAttenuation
         transparent
         opacity={1.0}
-        blending={THREE.AdditiveBlending}
+        blending={AdditiveBlending}
         depthWrite={false}
       />
     </points>
@@ -250,8 +258,8 @@ function ParticleConstellation({ mouseRef }: { mouseRef: MouseRef }) {
 /* ─── Bright stars layer (50 particles, twinkle + cursor) ─── */
 
 function BrightStars({ mouseRef }: { mouseRef: MouseRef }) {
-  const pointsRef = useRef<THREE.Points>(null);
-  const positionsRef = useRef<THREE.BufferAttribute>(null);
+  const pointsRef = useRef<Points>(null);
+  const positionsRef = useRef<BufferAttribute>(null);
   const texture = useRadialTexture(STAR_GLOW_STOPS);
 
   const { positions, basePositions } = useMemo(() => {
@@ -277,7 +285,7 @@ function BrightStars({ mouseRef }: { mouseRef: MouseRef }) {
 
     const arr = positionsRef.current.array as Float32Array;
     const t = state.clock.elapsedTime;
-    const cam = state.camera as THREE.PerspectiveCamera;
+    const cam = state.camera as PerspectiveCamera;
     const aspect = state.size.width / state.size.height;
     const rotY = pointsRef.current.rotation.y;
     const mouse = projectMouseToLocal(mouseRef, rotY, cam, aspect);
@@ -323,7 +331,7 @@ function BrightStars({ mouseRef }: { mouseRef: MouseRef }) {
         sizeAttenuation
         transparent
         opacity={1.0}
-        blending={THREE.AdditiveBlending}
+        blending={AdditiveBlending}
         depthWrite={false}
       />
     </points>

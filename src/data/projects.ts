@@ -26,7 +26,7 @@ export const projects: Project[] = [
     translationKey: "projects.blundermate",
     github: "https://github.com/Kamaiko/BlunderMate-Chessbot",
     tech: ["Prolog"],
-    screenshots: ["/images/projects/PARTIE_IVH.png"],
+    screenshots: ["/images/projects/PARTIE_IVH.webp"],
   },
   {
     id: "portfolio",
