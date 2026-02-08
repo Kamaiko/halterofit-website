@@ -26,10 +26,19 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         project.featured && "md:col-span-2",
       )}
     >
-      {/* Screenshot fan or placeholder */}
+      {/* Screenshot fan, single image, or placeholder */}
       {project.screenshots && project.screenshots.length === 3 ? (
         <div className="bg-slate-800/30">
           <ScreenshotFan screenshots={project.screenshots} projectName={projectName} />
+        </div>
+      ) : project.screenshots && project.screenshots.length > 0 ? (
+        <div className="relative h-48 w-full overflow-hidden bg-slate-800/30">
+          <img
+            src={project.screenshots[0]}
+            alt={projectName}
+            className="h-full w-full object-contain"
+            loading="lazy"
+          />
         </div>
       ) : (
         <div className="relative h-48 w-full overflow-hidden bg-slate-800/30">
