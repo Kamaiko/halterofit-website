@@ -2,7 +2,6 @@ import { useTranslation } from "react-i18next";
 import Mail from "lucide-react/dist/esm/icons/mail";
 import FileDown from "lucide-react/dist/esm/icons/file-down";
 import Section from "./Section";
-import ScrollReveal from "./ScrollReveal";
 import { socialLinks, CONTACT_EMAIL, CV_PATH } from "../data/contact";
 
 export default function Contact() {
@@ -10,7 +9,7 @@ export default function Contact() {
 
   return (
     <Section id="contact" title={t("contact.title")}>
-      <ScrollReveal className="max-w-lg rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
+      <div className="max-w-lg rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
         <p className="mb-8 text-slate-300">{t("contact.text")}</p>
 
         <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap">
@@ -45,7 +44,7 @@ export default function Contact() {
             </a>
           ))}
         </div>
-      </ScrollReveal>
+      </div>
     </Section>
   );
 }

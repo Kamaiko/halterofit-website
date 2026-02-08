@@ -22,6 +22,7 @@ const CORE_BRIGHTNESS = 1.3; // Core particles 30% brighter
 const SCATTER_BRIGHTNESS = 0.7; // Scatter particles 30% dimmer
 
 type MouseRef = React.RefObject<{ x: number; y: number }>;
+type ScrollRef = React.RefObject<number>;
 
 /* ─── Pre-allocated objects for per-frame math (zero GC pressure) ─── */
 
@@ -329,9 +330,26 @@ function BrightStars({ mouseRef }: { mouseRef: MouseRef }) {
   );
 }
 
+/* ─── Camera dive — scroll-linked fly-through ─── */
+
+const CAMERA_Z_START = 12;
+const DIVE_DEPTH = 8; // camera finishes at z=4 (inside the sphere of radius 6)
+const DIVE_EXPONENT = 2.5; // exponential easing — slow start, accelerates
+const DIVE_PROGRESS_END = 0.55; // complete dive before sticky unstick (0.6)
+
+function CameraDive({ scrollRef }: { scrollRef: ScrollRef }) {
+  useFrame((state) => {
+    const rawProgress = scrollRef.current;
+    const progress = Math.min(rawProgress / DIVE_PROGRESS_END, 1);
+    const dive = Math.pow(progress, DIVE_EXPONENT) * DIVE_DEPTH;
+    state.camera.position.z = CAMERA_Z_START - dive;
+  });
+  return null;
+}
+
 /* ─── Scene: shared mouseRef for both layers ─── */
 
-function ConstellationScene() {
+function ConstellationScene({ scrollRef }: { scrollRef?: ScrollRef }) {
   const mouseRef = useRef({ x: 100, y: 100 });
   const isMobile = useIsMobile();
 
@@ -347,6 +365,7 @@ function ConstellationScene() {
 
   return (
     <group rotation-z={TILT_Z}>
+      {scrollRef && <CameraDive scrollRef={scrollRef} />}
       <ParticleConstellation mouseRef={mouseRef} />
       <BrightStars mouseRef={mouseRef} />
     </group>
@@ -355,13 +374,31 @@ function ConstellationScene() {
 
 /* ─── Wrapper: lazy-loadable, fade-in, radial mask ─── */
 
-export default function HeroParticles() {
+/** Scroll progress beyond which particles are fully invisible (opacity hits 0 at 0.55) */
+const PAUSE_THRESHOLD = 0.6;
+
+export default function HeroParticles({ scrollRef }: { scrollRef?: ScrollRef }) {
   const [visible, setVisible] = useState(false);
+  const [paused, setPaused] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const timer = setTimeout(() => setVisible(true), 100);
     return () => clearTimeout(timer);
   }, []);
+
+  // Pause/resume Canvas based on scroll position
+  useEffect(() => {
+    if (!scrollRef) return;
+    let rafId: number;
+    const check = () => {
+      const shouldPause = scrollRef.current > PAUSE_THRESHOLD;
+      setPaused((prev) => (prev !== shouldPause ? shouldPause : prev));
+      rafId = requestAnimationFrame(check);
+    };
+    rafId = requestAnimationFrame(check);
+    return () => cancelAnimationFrame(rafId);
+  }, [scrollRef]);
 
   if (REDUCED_MOTION) return null;
 
@@ -377,10 +414,11 @@ export default function HeroParticles() {
       }}
     >
       <Canvas
-        camera={{ position: [0, 0, 12], fov: 60 }}
-        dpr={[1, 1.5]}
+        camera={{ position: [0, 0, CAMERA_Z_START], fov: 60 }}
+        dpr={isMobile ? 1 : [1, 1.5]}
+        frameloop={paused ? "never" : "always"}
       >
-        <ConstellationScene />
+        <ConstellationScene scrollRef={scrollRef} />
       </Canvas>
     </div>
   );

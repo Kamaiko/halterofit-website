@@ -36,7 +36,7 @@ export default function App() {
   if (isNotFound) return <NotFound />;
 
   const content = (
-      <div className="relative min-h-screen overflow-x-hidden bg-slate-950 text-slate-100">
+      <div className="relative min-h-screen overflow-x-clip bg-slate-950 text-slate-100">
       <CursorTrail />
 
       {/* Ambient background glow — static radial gradients (no blur filters) */}
