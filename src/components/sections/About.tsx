@@ -41,7 +41,7 @@ const INTEREST_HOVER: Record<string, Variant> = {
 /** Inline highlight used inside <Trans> for cyan-accented keywords */
 function Highlight({ children }: { children?: React.ReactNode }) {
   return (
-    <span className="glow-pulse text-cyan-400">
+    <span className="glow-pulse text-[1.15em] text-cyan-400">
       {children}
     </span>
   );
@@ -50,7 +50,16 @@ function Highlight({ children }: { children?: React.ReactNode }) {
 /** Muted second-line wrapper used inside <Trans> for the tagline subtitle */
 function Subtitle({ children }: { children?: React.ReactNode }) {
   return (
-    <span className="mt-2 block text-base font-light text-slate-400 md:text-lg">
+    <span className="mt-1 block text-[0.9em] text-slate-500">
+      {children}
+    </span>
+  );
+}
+
+/** Soft cyan accent for key words on the subtitle line (static glow, no animation) */
+function Accent({ children }: { children?: React.ReactNode }) {
+  return (
+    <span className="text-[1.15em]">
       {children}
     </span>
   );
@@ -179,7 +188,7 @@ export default function About() {
                 taglineInView && "glow-active",
               )}
             >
-              <Trans i18nKey="about.tagline" components={{ hl: <Highlight />, br: <br />, sub: <Subtitle /> }} />
+              <Trans i18nKey="about.tagline" components={{ hl: <Highlight />, br: <br />, sub: <Subtitle />, accent: <Accent /> }} />
             </p>
           </SpotlightCard>
         </ScrollReveal>
@@ -192,7 +201,7 @@ export default function About() {
             </h3>
             <div className="flex flex-col gap-3">
               {journeySteps.map((step) => {
-                const { key, icon: Icon, years } = step;
+                const { key, icon: Icon } = step;
                 const isCurrent = "current" in step && step.current;
                 return (
                   <div key={key} className="flex items-center gap-3">
@@ -217,7 +226,7 @@ export default function About() {
                       >
                         {t(`about.journey.${key}`)}
                       </p>
-                      <p className="text-xs text-slate-500">{years}</p>
+                      <p className="text-xs text-slate-500">{t(`about.journey.${key}_years`)}</p>
                     </div>
                   </div>
                 );
@@ -244,6 +253,7 @@ export default function About() {
                 >
                   <motion.div
                     variants={skip ? undefined : { hover: INTEREST_HOVER[key] }}
+                    animate={{ rotate: 0, y: 0, x: 0 }}
                     className="mt-0.5 shrink-0 text-slate-400"
                   >
                     <Icon size={18} />

@@ -13,11 +13,13 @@
   },
   "about": {
     "title": "About",
-    "tagline": "<hl>Psych</hl> grad turned <hl>dev</hl>.<br/><sub>I build products designed for their users.</sub>",
+    "tagline": "<hl>Psych</hl> grad turned <hl>dev</hl>.<br/><sub>I build products designed for their <accent>users</accent>.</sub>",
     "journey_title": "Journey",
     "journey": {
       "step1": "Psychology",
-      "step2": "Computer Science"
+      "step2": "Computer Science",
+      "step1_years": "2017–2022",
+      "step2_years": "2024–now"
     },
     "stack_title": "Favorite Stacks",
     "interests_title": "Interests",

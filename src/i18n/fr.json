@@ -13,11 +13,13 @@
   },
   "about": {
     "title": "À propos",
-    "tagline": "Diplômé en <hl>psycho</hl>, reconverti en <hl>dev</hl>.<br/><sub>Je construis des produits pensés pour les utilisateurs.</sub>",
+    "tagline": "Diplômé en <hl>psycho</hl>, reconverti en <hl>dev</hl>.<br/><sub>Je construis des produits pensés pour les <accent>utilisateurs</accent>.</sub>",
     "journey_title": "Parcours",
     "journey": {
       "step1": "Psychologie",
-      "step2": "Informatique"
+      "step2": "Informatique",
+      "step1_years": "2017–2022",
+      "step2_years": "2024–maintenant"
     },
     "stack_title": "Stacks favoris",
     "interests_title": "Intérêts",
