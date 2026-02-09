@@ -1,33 +1,31 @@
-/** Skills displayed in row 1 of the marquee (left-scrolling) */
+/** Skills displayed in row 1 of the marquee (left-scrolling) — Frontend & mobile */
 export const row1Skills = [
   "TypeScript",
-  "PostgreSQL",
-  "SQLite",
-  "HTML",
-  "CSS",
   "React",
   "React Native",
   "Expo",
-  "Vite",
-  "Three.js",
   "NativeWind",
   "Tailwind CSS",
-  "TanStack Router",
+  "Vite",
+  "TanStack",
+  "Three.js",
+  "Framer Motion",
+  "HTML",
+  "CSS",
 ] as const;
 
-/** Skills displayed in row 2 of the marquee (right-scrolling) */
+/** Skills displayed in row 2 of the marquee (right-scrolling) — Backend, data & languages */
 export const row2Skills = [
-  "Framer Motion",
-  "Jest/Vitest",
-  "Prolog",
-  "TanStack Query",
+  "Node.js",
+  "Express",
+  "PostgreSQL",
+  "SQLite",
+  "Supabase",
+  "WatermelonDB",
   "Python",
   "C++",
   "Java",
-  "Supabase",
-  "WatermelonDB",
-  "MMKV",
-  "Cloudflare",
-  "EAS Build",
-  "VS Code",
+  "VB.NET",
+  "Prolog",
+  "Jest/Vitest",
 ] as const;
