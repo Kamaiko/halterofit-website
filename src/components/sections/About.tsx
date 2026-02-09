@@ -57,10 +57,10 @@ function Subtitle({ children }: { children?: React.ReactNode }) {
   );
 }
 
-/** Soft cyan accent for key words on the subtitle line (static glow, no animation) */
+/** Gradient accent for key words on the subtitle line — slate→cyan like a reflected glow */
 function Accent({ children }: { children?: React.ReactNode }) {
   return (
-    <span className="text-[1.15em]">
+    <span className="bg-linear-to-r from-slate-300 to-cyan-300 bg-clip-text text-[1.15em] text-transparent">
       {children}
     </span>
   );

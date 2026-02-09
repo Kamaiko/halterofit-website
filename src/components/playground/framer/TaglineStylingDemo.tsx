@@ -7,53 +7,52 @@ import { CARD_BASE, CARD_SHADOW_LIGHT } from "../../../constants/styles";
 
 const cardClass = cn(CARD_BASE, CARD_SHADOW_LIGHT, "p-6");
 
-const SUBTITLE_TEXT = "Je construis des produits pensés pour les utilisateurs.";
+const SUBTITLE_PREFIX = "Je construis des produits pensés pour les ";
+const ACCENT_WORD = "utilisateurs";
 
 interface Variant {
   label: string;
   name: string;
   description: string;
-  renderSubtitle: (text: string) => ReactNode;
+  renderAccent: () => ReactNode;
 }
 
 const VARIANTS: Variant[] = [
   {
     label: "A",
-    name: "Editorial hierarchy",
-    description: "Smaller + font-light + spacing — 3 hierarchy signals",
-    renderSubtitle: (text) => (
-      <span className="mt-2 block text-base font-light text-slate-400 md:text-lg">
-        {text}
-      </span>
+    name: "Color lift + weight",
+    description: "text-slate-200 font-medium — contrast naturel, zéro couleur",
+    renderAccent: () => (
+      <span className="font-medium text-slate-200">{ACCENT_WORD}</span>
     ),
   },
   {
     label: "B",
-    name: "Magazine italic",
-    description: "Smaller + italic — editorial feature feel",
-    renderSubtitle: (text) => (
-      <span className="mt-2 block text-base italic text-slate-400/90 md:text-lg">
-        {text}
+    name: "Subtle underline",
+    description: "Fine ligne cyan transparente sous le mot",
+    renderAccent: () => (
+      <span className="text-slate-300 underline decoration-cyan-400/30 underline-offset-4 decoration-1">
+        {ACCENT_WORD}
       </span>
     ),
   },
   {
     label: "C",
-    name: "Accent border",
-    description: "Cyan left border — structured, visual anchor",
-    renderSubtitle: (text) => (
-      <span className="mt-3 block border-l-2 border-cyan-400/20 pl-3 text-base text-slate-400 md:text-lg">
-        {text}
+    name: "Gradient text",
+    description: "Dégradé slate→cyan, comme un reflet du glow",
+    renderAccent: () => (
+      <span className="bg-linear-to-r from-slate-300 to-cyan-300 bg-clip-text text-transparent">
+        {ACCENT_WORD}
       </span>
     ),
   },
   {
     label: "D",
-    name: "Gradient text",
-    description: "Subtle gradient — modern, premium depth",
-    renderSubtitle: (text) => (
-      <span className="mt-2 block bg-linear-to-r from-slate-400 to-slate-500 bg-clip-text text-base text-transparent md:text-lg">
-        {text}
+    name: "Tracking + weight",
+    description: "tracking-wider font-medium — purement typographique",
+    renderAccent: () => (
+      <span className="font-medium tracking-wider text-slate-300">
+        {ACCENT_WORD}
       </span>
     ),
   },
@@ -80,9 +79,12 @@ function TaglinePreview({ variant }: { variant: Variant }) {
       >
         <p className="text-xl leading-relaxed text-slate-300 md:text-2xl">
           Diplômé en{" "}
-          <span className="glow-pulse text-cyan-400">psycho</span>, reconverti
-          en <span className="glow-pulse text-cyan-400">dev</span>.
-          {variant.renderSubtitle(SUBTITLE_TEXT)}
+          <span className="glow-pulse text-[1.15em] text-cyan-400">psycho</span>, reconverti
+          en <span className="glow-pulse text-[1.15em] text-cyan-400">dev</span>.
+          <span className="mt-1 block text-[0.9em] text-slate-500">
+            {SUBTITLE_PREFIX}
+            <span className="text-[1.15em]">{variant.renderAccent()}</span>.
+          </span>
         </p>
       </div>
     </div>
@@ -93,8 +95,8 @@ export default function TaglineStylingDemo() {
   return (
     <DemoSection
       number={5}
-      title="Tagline Styling"
-      description="4 directions for the second-line treatment. All use size reduction + spacing (the biggest win). Compare typography, accents, and gradients."
+      title="Accent 'utilisateurs'"
+      description="4 traitements pour mettre l'emphase sur 'utilisateurs' dans la sous-ligne, sans répéter le glow cyan de psycho/dev."
     >
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {VARIANTS.map((variant) => (
