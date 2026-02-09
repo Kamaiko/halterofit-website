@@ -1,11 +1,11 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { motion, useInView, useReducedMotion, type Variant } from "framer-motion";
 import Section from "../layout/Section";
 import ScrollReveal from "../ui/ScrollReveal";
 import SpotlightCard from "../ui/SpotlightCard";
 import CityScene from "../ui/CityScene";
-import { stackItems, interests, journeySteps } from "../../data/about";
+import { stackItems, interests, journeySteps, SNIPPET_LINES, SNIPPET_CHAR_DELAY_MS } from "../../data/about";
 import { CARD_BASE, CARD_SHADOW_LIGHT } from "../../constants/styles";
 import { cn } from "../../utils/cn";
 
@@ -78,6 +78,74 @@ function StackCard({ title, delay }: { title: string; delay: number }) {
             </motion.span>
           ))}
         </motion.div>
+      </SpotlightCard>
+    </ScrollReveal>
+  );
+}
+
+function SnippetCard({ delay }: { delay: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const skip = !!useReducedMotion();
+
+  // Flatten tokens into individual characters
+  const allChars: { char: string; color: string }[] = [];
+  SNIPPET_LINES.forEach((line, lineIdx) => {
+    line.forEach((token) => {
+      for (const char of token.text) {
+        allChars.push({ char, color: token.color });
+      }
+    });
+    if (lineIdx < SNIPPET_LINES.length - 1) {
+      allChars.push({ char: "\n", color: "" });
+    }
+  });
+
+  const totalChars = allChars.length;
+  const [charIndex, setCharIndex] = useState(skip ? totalChars : 0);
+
+  useEffect(() => {
+    if (!isInView || skip) return;
+    if (charIndex >= totalChars) return;
+    const timer = setTimeout(
+      () => setCharIndex((prev) => prev + 1),
+      SNIPPET_CHAR_DELAY_MS,
+    );
+    return () => clearTimeout(timer);
+  }, [isInView, skip, charIndex, totalChars]);
+
+  const isDone = charIndex >= totalChars;
+
+  return (
+    <ScrollReveal delay={delay}>
+      <SpotlightCard className={cardClass}>
+        <div ref={ref} className="flex h-full items-center justify-center">
+          <pre className="font-mono text-sm leading-relaxed">
+            <code>
+              {allChars.map((c, i) =>
+                c.char === "\n" ? (
+                  <br key={i} />
+                ) : i === charIndex && !skip ? (
+                  <span key={i}>
+                    <span
+                      className="ml-px inline-block h-[1.1em] w-[2px] bg-cyan-400 align-text-bottom animate-pulse"
+                    />
+                    <span className={cn(c.color, "invisible")}>{c.char}</span>
+                  </span>
+                ) : (
+                  <span key={i} className={cn(c.color, i >= charIndex && !skip && "invisible")}>
+                    {c.char}
+                  </span>
+                ),
+              )}
+              {isDone && !skip && (
+                <span
+                  className="ml-px inline-block h-[1.1em] w-[2px] bg-cyan-400 align-text-bottom animate-pulse"
+                />
+              )}
+            </code>
+          </pre>
+        </div>
       </SpotlightCard>
     </ScrollReveal>
   );
@@ -180,27 +248,8 @@ export default function About() {
           </SpotlightCard>
         </ScrollReveal>
 
-        {/* ── Fun snippet card ── */}
-        <ScrollReveal delay={4 * STAGGER_MS}>
-          <SpotlightCard className={cardClass}>
-            <div className="flex h-full items-center justify-center">
-              <code className="text-sm text-slate-400 font-mono">
-                <span className="text-purple-400">while</span>
-                <span className="text-slate-500">(</span>
-                <span className="text-cyan-400">alive</span>
-                <span className="text-slate-500">) {"{"}</span>
-                {" "}
-                <span className="text-emerald-400">code</span>
-                <span className="text-slate-500">();</span>
-                {" "}
-                <span className="text-emerald-400">lift</span>
-                <span className="text-slate-500">();</span>
-                {" "}
-                <span className="text-slate-500">{"}"}</span>
-              </code>
-            </div>
-          </SpotlightCard>
-        </ScrollReveal>
+        {/* ── Code snippet card ── */}
+        <SnippetCard delay={4 * STAGGER_MS} />
 
         {/* ── Pixel landscape — decorative closing card ── */}
         <ScrollReveal

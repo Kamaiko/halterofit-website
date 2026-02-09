@@ -30,3 +30,59 @@ export const journeySteps = [
   { key: "step2", icon: Code },
   { key: "step3", icon: Rocket },
 ] as const;
+
+/** Syntax-highlighted code token for the typing snippet */
+export interface CodeToken {
+  text: string;
+  color: string;
+}
+
+/** Delay between each character in the typing effect (ms) */
+export const SNIPPET_CHAR_DELAY_MS = 35;
+
+/** Typing snippet — assert grind (syntax-highlighted token lines) */
+export const SNIPPET_LINES: CodeToken[][] = [
+  [
+    { text: "function ", color: "text-violet-400" },
+    { text: "assert", color: "text-blue-400" },
+    { text: "(", color: "text-slate-500" },
+  ],
+  [
+    { text: "  dev", color: "text-slate-200" },
+    { text: ": ", color: "text-slate-500" },
+    { text: "Junior", color: "text-cyan-400" },
+  ],
+  [
+    { text: "): ", color: "text-slate-500" },
+    { text: "asserts ", color: "text-violet-400" },
+    { text: "dev", color: "text-slate-200" },
+    { text: " is ", color: "text-violet-400" },
+    { text: "Senior", color: "text-cyan-400" },
+    { text: " {", color: "text-slate-500" },
+  ],
+  [
+    { text: "  let ", color: "text-violet-400" },
+    { text: "h", color: "text-slate-200" },
+    { text: " = ", color: "text-slate-500" },
+    { text: "0", color: "text-orange-400" },
+    { text: ";", color: "text-slate-500" },
+  ],
+  [
+    { text: "  while ", color: "text-violet-400" },
+    { text: "(", color: "text-slate-500" },
+    { text: "h", color: "text-slate-200" },
+    { text: " < ", color: "text-slate-500" },
+    { text: "10_000", color: "text-orange-400" },
+    { text: ") ", color: "text-slate-500" },
+    { text: "h", color: "text-slate-200" },
+    { text: " += ", color: "text-slate-500" },
+    { text: "grind", color: "text-blue-400" },
+    { text: "();", color: "text-slate-500" },
+  ],
+  [
+    { text: "  // no shortcut to this", color: "text-slate-600" },
+  ],
+  [
+    { text: "}", color: "text-slate-500" },
+  ],
+];
