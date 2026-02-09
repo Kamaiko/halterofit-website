@@ -8,6 +8,8 @@ import ScrollReveal from "./ScrollReveal";
 import { CARD_BASE, CARD_SHADOW } from "../../constants/styles";
 import { cn } from "../../utils/cn";
 
+const projectLinkClass = "flex items-center gap-1.5 text-sm text-slate-400 transition-colors hover:text-cyan-400";
+
 interface ProjectCardProps {
   project: Project;
 }
@@ -79,7 +81,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             href={project.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-sm text-slate-400 transition-colors hover:text-cyan-400"
+            className={projectLinkClass}
           >
             <Github size={16} />
             {t("projects.view_code")}
@@ -89,7 +91,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
               href={project.demo}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-sm text-slate-400 transition-colors hover:text-cyan-400"
+              className={projectLinkClass}
             >
               <ExternalLink size={16} />
               {t("projects.view_demo")}

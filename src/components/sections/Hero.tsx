@@ -13,6 +13,28 @@ const HeroParticles = lazy(() => import("../effects/HeroParticles"));
 /** Extra scroll height for the pinned transition (100vh hero + 150vh animation) */
 const HERO_SCROLL_HEIGHT = "250vh";
 
+// ── Entrance animation timing ──
+const WORD_BASE_DELAY_S = 0.3;
+const WORD_STAGGER_S = 0.12;
+const WORD_DURATION_S = 0.8;
+const LINE_DURATION_S = 0.7;
+const SUBTITLE_OFFSET_S = 0.2;
+const INDICATOR_OFFSET_S = 1;
+const CHEVRON_DURATION_S = 1.8;
+const CHEVRON_STAGGER_S = 0.25;
+
+// ── Scroll choreography — progress thresholds ──
+const TEXT_FADE: [number, number] = [0.05, 0.25];
+const TEXT_Y_RANGE: [number, number] = [0, 0.4];
+const TEXT_SCALE_RANGE: [number, number] = [0, 0.3];
+const TEXT_SCALE_MIN = 0.85;
+const TEXT_BLUR_MAX_PX = 12;
+const GLOW_Y_RANGE: [number, number] = [0, 0.5];
+const GLOW_FADE_END = 0.3;
+const PARTICLE_FADE: [number, number] = [0.35, 0.55];
+const INDICATOR_FADE_END = 0.06;
+const CANVAS_PAUSE_THRESHOLD = 0.6;
+
 const wordVariants = {
   hidden: { opacity: 0, y: 30, filter: "blur(10px)" },
   visible: (i: number) => ({
@@ -20,8 +42,8 @@ const wordVariants = {
     y: 0,
     filter: "blur(0px)",
     transition: {
-      duration: 0.8,
-      delay: 0.3 + i * 0.12,
+      duration: WORD_DURATION_S,
+      delay: WORD_BASE_DELAY_S + i * WORD_STAGGER_S,
       ease: EASE_OUT_EXPO,
     },
   }),
@@ -32,7 +54,7 @@ const lineVariants = {
   visible: (delay: number) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, delay, ease: EASE_OUT_EXPO },
+    transition: { duration: LINE_DURATION_S, delay, ease: EASE_OUT_EXPO },
   }),
 };
 
@@ -42,39 +64,39 @@ export default function Hero() {
   const lenis = useLenis();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const nameWords = t("hero.name").split(" ");
-  const nameDelay = 0.3 + nameWords.length * 0.12 + 0.3;
+  const nameDelay = WORD_BASE_DELAY_S + nameWords.length * WORD_STAGGER_S + WORD_BASE_DELAY_S;
 
   // Track scroll progress through the extended wrapper (250vh)
   // 0 = wrapper top at viewport top, 1 = wrapper bottom at viewport top
-  // Hero stays sticky for progress 0→0.6 (150vh of scroll)
+  // Hero stays sticky for progress 0→CANVAS_PAUSE_THRESHOLD (150vh of scroll)
   const { scrollYProgress } = useScroll({
     target: wrapperRef,
     offset: ["start start", "end start"],
   });
 
   // ── Text layer: blur recession (recedes into space) ──
-  const textY = useTransform(scrollYProgress, [0, 0.4], ["0%", "-15%"]);
-  const textOpacity = useTransform(scrollYProgress, [0.05, 0.25], [1, 0]);
-  const textScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.85]);
-  const textBlur = useTransform(scrollYProgress, [0.05, 0.25], [0, 12]);
+  const textY = useTransform(scrollYProgress, TEXT_Y_RANGE, ["0%", "-15%"]);
+  const textOpacity = useTransform(scrollYProgress, TEXT_FADE, [1, 0]);
+  const textScale = useTransform(scrollYProgress, TEXT_SCALE_RANGE, [1, TEXT_SCALE_MIN]);
+  const textBlur = useTransform(scrollYProgress, TEXT_FADE, [0, TEXT_BLUR_MAX_PX]);
   const textFilter = useTransform(textBlur, (v) => `blur(${v}px)`);
 
   // ── Spotlight layer: fades with text ──
-  const glowY = useTransform(scrollYProgress, [0, 0.5], ["0%", "-25%"]);
-  const glowOpacity = useTransform(scrollYProgress, [0.05, 0.3], [1, 0]);
+  const glowY = useTransform(scrollYProgress, GLOW_Y_RANGE, ["0%", "-25%"]);
+  const glowOpacity = useTransform(scrollYProgress, [TEXT_FADE[0], GLOW_FADE_END], [1, 0]);
 
   // ── Particles: fade later, after camera dive is underway ──
-  const particleOpacity = useTransform(scrollYProgress, [0.35, 0.55], [1, 0]);
+  const particleOpacity = useTransform(scrollYProgress, PARTICLE_FADE, [1, 0]);
 
   // ── Scroll indicator: vanishes immediately ──
-  const indicatorOpacity = useTransform(scrollYProgress, [0, 0.06], [1, 0]);
+  const indicatorOpacity = useTransform(scrollYProgress, [0, INDICATOR_FADE_END], [1, 0]);
 
   // Bridge FM scroll progress → R3F via ref (MotionValues don't work inside Canvas)
   const scrollRef = useRef(0);
   const [canvasPaused, setCanvasPaused] = useState(false);
   useMotionValueEvent(scrollYProgress, "change", (v) => {
     scrollRef.current = v;
-    setCanvasPaused(v > 0.6);
+    setCanvasPaused(v > CANVAS_PAUSE_THRESHOLD);
   });
 
   const skip = !!prefersReducedMotion;
@@ -171,7 +193,7 @@ export default function Hero() {
 
           {/* Subtitle */}
           <motion.p
-            custom={nameDelay + 0.2}
+            custom={nameDelay + SUBTITLE_OFFSET_S}
             initial="hidden"
             animate="visible"
             variants={lineVariants}
@@ -187,7 +209,7 @@ export default function Hero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             whileHover={{ scale: 1.15 }}
-            transition={{ delay: nameDelay + 1, duration: 1 }}
+            transition={{ delay: nameDelay + INDICATOR_OFFSET_S, duration: INDICATOR_OFFSET_S }}
             style={skip ? undefined : { opacity: indicatorOpacity }}
             className="mx-auto mt-20 flex cursor-pointer flex-col items-center gap-2 p-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-400"
           >
@@ -204,10 +226,10 @@ export default function Hero() {
                     y: [0, 8, 16],
                   }}
                   transition={{
-                    duration: 1.8,
+                    duration: CHEVRON_DURATION_S,
                     repeat: Infinity,
                     ease: "easeInOut",
-                    delay: i * 0.25,
+                    delay: i * CHEVRON_STAGGER_S,
                   }}
                 >
                   <path

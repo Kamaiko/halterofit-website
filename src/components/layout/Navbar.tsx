@@ -5,6 +5,7 @@ import X from "lucide-react/dist/esm/icons/x";
 import Globe from "lucide-react/dist/esm/icons/globe";
 import { useLenis } from "lenis/react";
 import { NAV_HEIGHT, SECTION_PROXIMITY_PX, SCROLL_BOTTOM_MARGIN_PX } from "../../constants/layout";
+import { CONTAINER_WIDTH } from "../../constants/styles";
 import { cn } from "../../utils/cn";
 
 const navLinks = ["about", "projects", "skills", "contact"] as const;
@@ -59,6 +60,9 @@ export default function Navbar() {
     i18n.changeLanguage(i18n.language === "fr" ? "en" : "fr");
   };
 
+  const linkColor = (link: string) =>
+    activeSection === link ? "text-cyan-400" : "text-slate-400";
+
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
@@ -78,7 +82,7 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 z-50 w-full border-b border-slate-800 bg-slate-950/80 backdrop-blur-md">
-      <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+      <div className={cn(CONTAINER_WIDTH, "flex items-center justify-between px-6 py-4")}>
         <button
           onClick={() => lenis ? lenis.scrollTo(0) : window.scrollTo({ top: 0, behavior: "smooth" })}
           aria-label="Scroll to top"
@@ -95,7 +99,7 @@ export default function Navbar() {
               onClick={() => scrollTo(link)}
               className={cn(
                 "text-sm transition-colors hover:text-white",
-                activeSection === link ? "text-cyan-400" : "text-slate-400",
+                linkColor(link),
               )}
             >
               {t(`nav.${link}`)}
@@ -129,7 +133,7 @@ export default function Navbar() {
               onClick={() => scrollTo(link)}
               className={cn(
                 "block w-full py-3 text-left transition-colors hover:text-white",
-                activeSection === link ? "text-cyan-400" : "text-slate-400",
+                linkColor(link),
               )}
             >
               {t(`nav.${link}`)}

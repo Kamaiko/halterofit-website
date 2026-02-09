@@ -4,6 +4,9 @@ import FileDown from "lucide-react/dist/esm/icons/file-down";
 import Section from "../layout/Section";
 import ScrollReveal from "../ui/ScrollReveal";
 import { socialLinks, CONTACT_EMAIL, CV_PATH } from "../../data/contact";
+import { cn } from "../../utils/cn";
+
+const buttonBase = "flex items-center gap-2 rounded-lg px-5 py-3 font-medium transition-colors";
 
 export default function Contact() {
   const { t } = useTranslation();
@@ -17,7 +20,7 @@ export default function Contact() {
         <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap">
           <a
             href={`mailto:${CONTACT_EMAIL}`}
-            className="flex items-center gap-2 rounded-lg bg-cyan-500 px-5 py-3 font-medium text-slate-950 transition-colors hover:bg-cyan-400"
+            className={cn(buttonBase, "bg-cyan-500 text-slate-950 hover:bg-cyan-400")}
           >
             <Mail size={18} />
             {t("contact.email_btn")}
@@ -25,7 +28,7 @@ export default function Contact() {
           <a
             href={CV_PATH}
             download
-            className="flex items-center gap-2 rounded-lg border border-slate-700 px-5 py-3 font-medium text-slate-300 transition-colors hover:border-slate-500 hover:text-white"
+            className={cn(buttonBase, "border border-slate-700 text-slate-300 hover:border-slate-500 hover:text-white")}
           >
             <FileDown size={18} />
             {t("contact.cv_btn")}

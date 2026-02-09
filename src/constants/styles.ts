@@ -9,3 +9,6 @@ export const CARD_SHADOW =
 /** Subtle glow shadow for about cards */
 export const CARD_SHADOW_LIGHT =
   "hover:shadow-[0_0_20px_rgba(34,211,238,0.05)]";
+
+/** Shared container max-width + centering */
+export const CONTAINER_WIDTH = "mx-auto max-w-5xl";

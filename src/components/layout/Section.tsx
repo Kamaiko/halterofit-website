@@ -2,6 +2,7 @@ import { useRef } from "react";
 import type { ReactNode } from "react";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import ScrollReveal from "../ui/ScrollReveal";
+import { CONTAINER_WIDTH } from "../../constants/styles";
 import { cn } from "../../utils/cn";
 
 const TITLE_PARALLAX_PX = 40;
@@ -32,7 +33,7 @@ export default function Section({ id, title, children, className }: SectionProps
 
   return (
     <section ref={sectionRef} id={id} className={cn("pt-24 pb-24 px-6", className)}>
-      <div className="mx-auto max-w-5xl">
+      <div className={CONTAINER_WIDTH}>
         {/* Outer: continuous parallax | Inner: one-time entrance reveal */}
         <motion.div style={skip ? undefined : { y: titleY }}>
           <ScrollReveal>
