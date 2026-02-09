@@ -182,32 +182,37 @@ export default function About() {
               {t("about.journey_title")}
             </h3>
             <div className="flex flex-col gap-3">
-              {journeySteps.map(({ key, icon: Icon }, i) => (
-                <div key={key} className="flex items-center gap-3">
-                  <div className="flex flex-col items-center">
+              {journeySteps.map((step) => {
+                const { key, icon: Icon, years } = step;
+                const isCurrent = "current" in step && step.current;
+                return (
+                  <div key={key} className="flex items-center gap-3">
                     <div
                       className={cn(
                         "flex h-7 w-7 shrink-0 items-center justify-center rounded-full",
-                        i === journeySteps.length - 1
+                        isCurrent
                           ? "bg-cyan-400/20 text-cyan-400"
                           : "bg-slate-800 text-slate-400",
                       )}
                     >
                       <Icon size={14} />
                     </div>
+                    <div>
+                      <p
+                        className={cn(
+                          "text-sm",
+                          isCurrent
+                            ? "font-semibold text-cyan-400"
+                            : "text-slate-300",
+                        )}
+                      >
+                        {t(`about.journey.${key}`)}
+                      </p>
+                      <p className="text-xs text-slate-500">{years}</p>
+                    </div>
                   </div>
-                  <span
-                    className={cn(
-                      "text-sm",
-                      i === journeySteps.length - 1
-                        ? "font-semibold text-cyan-400"
-                        : "text-slate-300",
-                    )}
-                  >
-                    {t(`about.journey.${key}`)}
-                  </span>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </SpotlightCard>
         </ScrollReveal>

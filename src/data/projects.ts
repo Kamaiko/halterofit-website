@@ -33,6 +33,5 @@ export const projects: Project[] = [
     translationKey: "projects.portfolio",
     github: "https://github.com/Kamaiko/halterofit-website",
     tech: ["React", "Vite", "TypeScript", "Tailwind CSS", "Framer Motion", "Three.js"],
-    demo: "https://halterofit.ca",
   },
 ];

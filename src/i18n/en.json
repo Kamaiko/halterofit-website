@@ -17,8 +17,7 @@
     "journey_title": "Journey",
     "journey": {
       "step1": "Psychology",
-      "step2": "Computer Science",
-      "step3": "Fullstack Dev"
+      "step2": "Computer Science"
     },
     "stack_title": "Favorite Stacks",
     "interests_title": "Interests",

@@ -3,8 +3,6 @@ import ChessPawn from "lucide-react/dist/esm/icons/chess-pawn";
 import Gamepad2 from "lucide-react/dist/esm/icons/gamepad-2";
 import Brain from "lucide-react/dist/esm/icons/brain";
 import Code from "lucide-react/dist/esm/icons/code";
-import Rocket from "lucide-react/dist/esm/icons/rocket";
-
 /** Tech stack items with Tailwind color-dot classes */
 export const stackItems = [
   { name: "React", color: "bg-cyan-400" },
@@ -26,9 +24,8 @@ export const interests = [
 
 /** Journey timeline steps with i18n keys and Lucide icons */
 export const journeySteps = [
-  { key: "step1", icon: Brain },
-  { key: "step2", icon: Code },
-  { key: "step3", icon: Rocket },
+  { key: "step1", icon: Brain, years: "2017–2022" },
+  { key: "step2", icon: Code, years: "2024–now", current: true },
 ] as const;
 
 /** Syntax-highlighted code token for the typing snippet */
