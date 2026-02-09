@@ -50,13 +50,15 @@ export default function Skills() {
   const { t } = useTranslation();
 
   return (
-    <Section id="skills" title={t("skills.title")} className="pb-40">
-      <ScrollReveal>
-        <div className="flex flex-col gap-4">
-          <MarqueeRow skills={row1Skills} duration={35} />
-          <MarqueeRow skills={row2Skills} reverse duration={40} />
-        </div>
-      </ScrollReveal>
+    <Section id="skills" title={t("skills.title")}>
+      <div className="flex min-h-[20vh] w-full items-center">
+        <ScrollReveal className="w-full">
+          <div className="flex flex-col gap-4">
+            <MarqueeRow skills={row1Skills} duration={35} />
+            <MarqueeRow skills={row2Skills} reverse duration={40} />
+          </div>
+        </ScrollReveal>
+      </div>
     </Section>
   );
 }
