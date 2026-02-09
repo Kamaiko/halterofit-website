@@ -94,7 +94,7 @@ function AnimatedTagline() {
 
         {/* ── Segment 3: Subtitle with "utilisateurs" ── */}
         <motion.span
-          className="mt-1 block text-[0.9em] text-slate-500"
+          className="mt-1 block text-[0.9em] text-slate-400"
           variants={blurReveal}
           initial="hidden"
           animate={animate}
@@ -102,7 +102,7 @@ function AnimatedTagline() {
         >
           Je construis des produits pensés pour les{" "}
           <motion.span
-            className="glow-pulse bg-linear-to-r from-slate-300 to-cyan-300 bg-clip-text text-[1.15em] text-transparent"
+            className="glow-pulse text-[1.15em] text-cyan-400"
             variants={keywordPunch}
             initial="hidden"
             animate={animate}

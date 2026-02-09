@@ -11,8 +11,19 @@ import { INVIEW_MARGIN } from "../../constants/layout";
 import { cn } from "../../utils/cn";
 
 const STAGGER_MS = 0.1;
+const SEGMENT_DELAY_S = 0.6;
 
 const cardClass = cn(CARD_BASE, CARD_SHADOW_LIGHT, "p-6");
+
+const blurReveal = {
+  hidden: { filter: "blur(8px)", opacity: 0, y: 12 },
+  visible: (delay: number) => ({
+    filter: "blur(0px)",
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, delay, ease: [0.25, 0.1, 0.25, 1] as const },
+  }),
+};
 
 const stackContainerVariants = {
   hidden: { opacity: 1 },
@@ -48,21 +59,23 @@ function Highlight({ children }: { children?: React.ReactNode }) {
   );
 }
 
-/** Muted second-line wrapper used inside <Trans> for the tagline subtitle */
-function Subtitle({ children }: { children?: React.ReactNode }) {
+/** Blur-reveal segment wrapper used inside <Trans> for staggered tagline animation */
+function BlurSegment({ children, delay, animate, className }: {
+  children?: React.ReactNode;
+  delay: number;
+  animate: string;
+  className?: string;
+}) {
   return (
-    <span className="mt-1 block text-[0.9em] text-slate-500">
+    <motion.span
+      className={className ?? "inline"}
+      variants={blurReveal}
+      initial="hidden"
+      animate={animate}
+      custom={delay}
+    >
       {children}
-    </span>
-  );
-}
-
-/** Gradient accent for key words on the subtitle line — slate→cyan like a reflected glow */
-function Accent({ children }: { children?: React.ReactNode }) {
-  return (
-    <span className="glow-pulse bg-linear-to-r from-slate-300 to-cyan-300 bg-clip-text text-[1.15em] text-transparent">
-      {children}
-    </span>
+    </motion.span>
   );
 }
 
@@ -175,6 +188,7 @@ export default function About() {
   const skip = !!useReducedMotion();
   const taglineRef = useRef<HTMLParagraphElement>(null);
   const taglineInView = useInView(taglineRef, { once: true, margin: INVIEW_MARGIN });
+  const animate = skip ? "visible" : taglineInView ? "visible" : "hidden";
 
   return (
     <Section id="about" title={t("about.title")}>
@@ -189,7 +203,16 @@ export default function About() {
                 taglineInView && "glow-active",
               )}
             >
-              <Trans i18nKey="about.tagline" components={{ hl: <Highlight />, br: <br />, sub: <Subtitle />, accent: <Accent /> }} />
+              <Trans
+                i18nKey="about.tagline"
+                components={{
+                  hl: <Highlight />,
+                  br: <br />,
+                  s1: <BlurSegment delay={0} animate={animate} />,
+                  s2: <BlurSegment delay={SEGMENT_DELAY_S} animate={animate} />,
+                  s3: <BlurSegment delay={SEGMENT_DELAY_S * 2} animate={animate} className="mt-1 block text-[0.9em] text-slate-400" />,
+                }}
+              />
             </p>
           </SpotlightCard>
         </ScrollReveal>

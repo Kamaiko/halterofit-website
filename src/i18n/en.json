@@ -13,7 +13,7 @@
   },
   "about": {
     "title": "About",
-    "tagline": "<hl>Psych</hl> grad turned <hl>dev</hl>.<br/><sub>I build products designed for their <accent>users</accent>.</sub>",
+    "tagline": "<s1><hl>Psych</hl> grad</s1> <s2>turned <hl>dev</hl>.</s2><br/><s3>I build products designed for their <hl>users</hl>.</s3>",
     "journey_title": "Journey",
     "journey": {
       "step1": "Psychology",

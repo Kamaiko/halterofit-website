@@ -105,10 +105,25 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   Glow pulse — breathing highlight effect for tagline keywords
-   Activated by .tagline-glow.glow-active on the parent container.
-   Each word breathes at a unique rhythm (4s / 4.7s).
+   Glow flash + punch + breathing — tagline keyword effects
+   Activated by .tagline-glow.glow-active on the <p> container.
+   Each keyword gets: (1) scale punch, (2) text-shadow flash,
+   (3) infinite filter breathing. Delays synced with blur-reveal
+   segments (0s / 0.45s / 0.9s stagger).
    ═══════════════════════════════════════════════════════════════ */
+
+@keyframes glow-flash {
+  0%   { text-shadow: 0 0 0 transparent; }
+  40%  { text-shadow: 0 0 12px rgba(34, 211, 238, 0.6),
+                      0 0 24px rgba(34, 211, 238, 0.3); }
+  100% { text-shadow: 0 0 0 transparent; }
+}
+
+@keyframes keyword-punch {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
 
 @keyframes glow-pulse {
   0%, 100% {
@@ -123,15 +138,21 @@ body {
   }
 }
 
-/* Staggered breathing — scoped to tagline */
-.tagline-glow.glow-active .glow-pulse:nth-of-type(1) {
-  animation: glow-pulse 4s ease-in-out 0.6s infinite both;
+/* Staggered punch + flash + breathing per keyword (synced with blur-reveal segments) */
+.tagline-glow.glow-active > span:nth-of-type(1) > .glow-pulse {
+  animation: keyword-punch 0.35s ease-out 0.4s 1 both,
+             glow-flash 1.2s ease-out 0.4s 1 both,
+             glow-pulse 4s ease-in-out 2.5s infinite both;
 }
-.tagline-glow.glow-active .glow-pulse:nth-of-type(2) {
-  animation: glow-pulse 4.7s ease-in-out 0.72s infinite both;
+.tagline-glow.glow-active > span:nth-of-type(2) > .glow-pulse {
+  animation: keyword-punch 0.35s ease-out 1s 1 both,
+             glow-flash 1.2s ease-out 1s 1 both,
+             glow-pulse 4.7s ease-in-out 2.5s infinite both;
 }
-.tagline-glow.glow-active .glow-pulse:nth-of-type(3) {
-  animation: glow-pulse 5.2s ease-in-out 0.85s infinite both;
+.tagline-glow.glow-active > span:nth-of-type(3) > .glow-pulse {
+  animation: keyword-punch 0.35s ease-out 1.6s 1 both,
+             glow-flash 1.2s ease-out 1.6s 1 both,
+             glow-pulse 5.2s ease-in-out 3s infinite both;
 }
 
 /* ─── Reduced motion ─── */
