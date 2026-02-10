@@ -9,14 +9,70 @@ import {
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { GRADIENT } from "../../constants/visual-effects";
 import { cn } from "../../utils/cn";
+import { lerp, clamp } from "../../utils/math";
 
 interface ScreenshotFanProps {
   screenshots: string[];
   projectName: string;
 }
 
-const SPRING_TRANSITION = { type: "spring", stiffness: 200, damping: 28 } as const;
+// ── Spring transition ──
+const SPRING_STIFFNESS = 200;
+const SPRING_DAMPING = 28;
+const SPRING_TRANSITION = {
+  type: "spring",
+  stiffness: SPRING_STIFFNESS,
+  damping: SPRING_DAMPING,
+} as const;
 
+// ── Container & 3D ──
+const PERSPECTIVE_PX = "1200px";
+
+// ── Z-index layering ──
+const Z_SIDE = 10;
+const Z_CENTER = 20;
+
+// ── Compact state (mobile scroll-start) ──
+const COMPACT_Z_SIDE = -10;
+const COMPACT_Z_CENTER = 10;
+const COMPACT_SCALE_SIDE = 0.92;
+
+// ── Staggered opacity reveal thresholds ──
+const OPACITY_RANGE_CENTER: [number, number] = [0.0, 0.2];
+const OPACITY_RANGE_SIDE: [number, number] = [0.15, 0.35];
+
+// ── Scroll choreography ──
+const SCROLL_OFFSET_START = "start 0.85";
+const SCROLL_OFFSET_END = "start 0.35";
+const SCROLL_REVEAL_Y_PX = 40;
+const SCROLL_OPACITY_FRACTION = 0.3;
+
+// ── Glow animation ──
+const GLOW_REST = { opacity: 0.4, scale: 0.9 } as const;
+const GLOW_SPREAD = { opacity: 1, scale: 1.2 } as const;
+const GLOW_SCALE_RANGE: [number, number] = [0.8, 1.2];
+const GLOW_TRANSITION_S = 0.5;
+
+// ── Phone dimensions ──
+const PHONE_WIDTH_MOBILE = "w-[34%] max-w-[200px]";
+const PHONE_WIDTH_DESKTOP = "w-[26%] max-w-[160px]";
+
+// ── Fade overlay ──
+const FADE_TRANSITION_S = 0.3;
+
+// ── Device frame classes ──
+const DEVICE_SHELL_CLASS =
+  "absolute inset-0 rounded-[1.6rem] border-2 border-slate-700/80 bg-slate-900";
+const SCREEN_CLASS =
+  "absolute inset-[2px] overflow-hidden rounded-[calc(1.6rem-2px)]";
+const NOTCH_CLASS =
+  "absolute left-1/2 top-[2px] h-4 w-20 -translate-x-1/2 rounded-b-xl bg-slate-900";
+const FADE_OVERLAY_CLASS =
+  "pointer-events-none absolute inset-0 rounded-[1.6rem]";
+const GLOW_CLASS =
+  "pointer-events-none absolute left-1/2 top-1/2 h-[90%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full";
+
+// ── Side phone shared offsets (mirrored for left/right) ──
 const SIDE_CONFIG = {
   rotate: 10,
   x: 34,
@@ -28,14 +84,26 @@ const SIDE_CONFIG = {
   spreadScale: 0.92,
 } as const;
 
-const phoneConfig = [
+// ── Framer Motion variants ──
+const glowVariants = {
+  rest: GLOW_REST,
+  spread: GLOW_SPREAD,
+};
+
+const fadeOverlayVariants = {
+  rest: { opacity: 1 },
+  spread: { opacity: 0 },
+};
+
+// ── Phone configuration (left · center · right) ──
+const PHONE_CONFIG = [
   {
     // Rest & spread (desktop hover)
     rotate: -SIDE_CONFIG.rotate,
     x: -SIDE_CONFIG.x,
     z: SIDE_CONFIG.z,
     scale: SIDE_CONFIG.scale,
-    zIndex: 10,
+    zIndex: Z_SIDE,
     spreadX: -SIDE_CONFIG.spreadX,
     spreadRotate: -SIDE_CONFIG.spreadRotate,
     spreadZ: SIDE_CONFIG.spreadZ,
@@ -44,17 +112,17 @@ const phoneConfig = [
     // Compact (mobile scroll start)
     compactX: 0,
     compactRotate: 0,
-    compactZ: -10,
-    compactScale: 0.92,
+    compactZ: COMPACT_Z_SIDE,
+    compactScale: COMPACT_SCALE_SIDE,
     // Staggered reveal: side phones appear after center
-    opacityRange: [0.15, 0.35] as [number, number],
+    opacityRange: OPACITY_RANGE_SIDE,
   },
   {
     rotate: 0,
     x: 0,
-    z: 10,
+    z: Z_SIDE,
     scale: 1,
-    zIndex: 20,
+    zIndex: Z_CENTER,
     spreadX: 0,
     spreadRotate: 0,
     spreadZ: 40,
@@ -62,17 +130,17 @@ const phoneConfig = [
     fadeDirection: "none" as const,
     compactX: 0,
     compactRotate: 0,
-    compactZ: 10,
+    compactZ: COMPACT_Z_CENTER,
     compactScale: 1,
     // Center phone appears first
-    opacityRange: [0.0, 0.2] as [number, number],
+    opacityRange: OPACITY_RANGE_CENTER,
   },
   {
     rotate: SIDE_CONFIG.rotate,
     x: SIDE_CONFIG.x,
     z: SIDE_CONFIG.z,
     scale: SIDE_CONFIG.scale,
-    zIndex: 10,
+    zIndex: Z_SIDE,
     spreadX: SIDE_CONFIG.spreadX,
     spreadRotate: SIDE_CONFIG.spreadRotate,
     spreadZ: SIDE_CONFIG.spreadZ,
@@ -80,21 +148,13 @@ const phoneConfig = [
     fadeDirection: "right" as const,
     compactX: 0,
     compactRotate: 0,
-    compactZ: -10,
-    compactScale: 0.92,
-    opacityRange: [0.15, 0.35] as [number, number],
+    compactZ: COMPACT_Z_SIDE,
+    compactScale: COMPACT_SCALE_SIDE,
+    opacityRange: OPACITY_RANGE_SIDE,
   },
 ];
 
-function lerp(a: number, b: number, t: number) {
-  return a + (b - a) * t;
-}
-
-function clamp(value: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, value));
-}
-
-type PhoneConfig = (typeof phoneConfig)[number];
+type PhoneConfig = (typeof PHONE_CONFIG)[number];
 
 function useScrollPhoneStyle(progress: MotionValue<number>, config: PhoneConfig) {
   const [opacityStart, opacityEnd] = config.opacityRange;
@@ -107,7 +167,9 @@ function useScrollPhoneStyle(progress: MotionValue<number>, config: PhoneConfig)
     opacity: useTransform(progress, (v) =>
       clamp((v - opacityStart) / (opacityEnd - opacityStart), 0, 1),
     ),
-    y: useTransform(progress, (v) => lerp(40, 0, clamp(v / 0.3, 0, 1))),
+    y: useTransform(progress, (v) =>
+      lerp(SCROLL_REVEAL_Y_PX, 0, clamp(v / SCROLL_OPACITY_FRACTION, 0, 1)),
+    ),
   };
 }
 
@@ -126,18 +188,20 @@ export default function ScreenshotFan({ screenshots, projectName }: ScreenshotFa
   const { scrollYProgress } = useScroll({
     target: containerRef,
     container: scrollContainerRef as React.RefObject<HTMLElement>,
-    offset: ["start 0.85", "start 0.35"],
+    offset: [SCROLL_OFFSET_START, SCROLL_OFFSET_END],
   });
   const scrollProgress = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   // Scroll-driven styles (hooks called unconditionally, applied only on mobile)
-  const glowOpacity = useTransform(scrollProgress, (v) => lerp(0, 1, v));
-  const glowScale = useTransform(scrollProgress, (v) => lerp(0.8, 1.2, v));
-  const fadeOpacity = useTransform(scrollProgress, (v) => lerp(1, 0, v));
+  const glowOpacity = useTransform(scrollProgress, (v) => v);
+  const glowScale = useTransform(scrollProgress, (v) =>
+    lerp(GLOW_SCALE_RANGE[0], GLOW_SCALE_RANGE[1], v),
+  );
+  const fadeOpacity = useTransform(scrollProgress, (v) => 1 - v);
 
-  const phone0Style = useScrollPhoneStyle(scrollProgress, phoneConfig[0]);
-  const phone1Style = useScrollPhoneStyle(scrollProgress, phoneConfig[1]);
-  const phone2Style = useScrollPhoneStyle(scrollProgress, phoneConfig[2]);
+  const phone0Style = useScrollPhoneStyle(scrollProgress, PHONE_CONFIG[0]);
+  const phone1Style = useScrollPhoneStyle(scrollProgress, PHONE_CONFIG[1]);
+  const phone2Style = useScrollPhoneStyle(scrollProgress, PHONE_CONFIG[2]);
   const phoneScrollStyles = [phone0Style, phone1Style, phone2Style];
 
   if (screenshots.length !== 3) return null;
@@ -146,31 +210,24 @@ export default function ScreenshotFan({ screenshots, projectName }: ScreenshotFa
     <motion.div
       ref={containerRef}
       className="relative h-96 w-full"
-      style={{ perspective: "1200px" }}
+      style={{ perspective: PERSPECTIVE_PX }}
       initial="rest"
       whileHover={isMobile ? undefined : "spread"}
     >
       {/* Cyan glow background */}
       <motion.div
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[90%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full"
+        className={GLOW_CLASS}
         style={{
           background: GRADIENT.fanGlow,
           ...(isMobile ? { opacity: glowOpacity, scale: glowScale } : {}),
         }}
-        variants={
-          isMobile
-            ? undefined
-            : {
-                rest: { opacity: 0.4, scale: 0.9 },
-                spread: { opacity: 1, scale: 1.2 },
-              }
-        }
-        transition={{ duration: 0.5, ease: "easeOut" }}
+        variants={isMobile ? undefined : glowVariants}
+        transition={{ duration: GLOW_TRANSITION_S, ease: "easeOut" }}
       />
 
       <div className="absolute inset-0 flex items-center justify-center">
         {screenshots.map((screenshot, index) => {
-          const config = phoneConfig[index];
+          const config = PHONE_CONFIG[index];
           const scrollStyle = phoneScrollStyles[index];
           const useSpreadValues = !prefersReducedMotion;
 
@@ -179,7 +236,7 @@ export default function ScreenshotFan({ screenshots, projectName }: ScreenshotFa
               key={screenshot}
               className={cn(
                 "absolute",
-                isMobile ? "w-[34%] max-w-[200px]" : "w-[26%] max-w-[160px]",
+                isMobile ? PHONE_WIDTH_MOBILE : PHONE_WIDTH_DESKTOP,
               )}
               style={{
                 transformStyle: "preserve-3d",
@@ -210,10 +267,10 @@ export default function ScreenshotFan({ screenshots, projectName }: ScreenshotFa
               {/* Phone device frame */}
               <div className="relative aspect-[9/19.5] w-full">
                 {/* Device shell */}
-                <div className="absolute inset-0 rounded-[1.6rem] border-2 border-slate-700/80 bg-slate-900" />
+                <div className={DEVICE_SHELL_CLASS} />
 
                 {/* Screen */}
-                <div className="absolute inset-[2px] overflow-hidden rounded-[calc(1.6rem-2px)]">
+                <div className={SCREEN_CLASS}>
                   <img
                     src={screenshot}
                     alt={`${projectName} – ${index + 1}`}
@@ -223,27 +280,20 @@ export default function ScreenshotFan({ screenshots, projectName }: ScreenshotFa
                 </div>
 
                 {/* Notch */}
-                <div className="absolute left-1/2 top-[2px] h-4 w-20 -translate-x-1/2 rounded-b-xl bg-slate-900" />
+                <div className={NOTCH_CLASS} />
 
                 {/* Edge fade overlay for side phones */}
                 {config.fadeDirection !== "none" && (
                   <motion.div
                     className={cn(
-                      "pointer-events-none absolute inset-0 rounded-[1.6rem]",
+                      FADE_OVERLAY_CLASS,
                       config.fadeDirection === "left"
                         ? "bg-linear-to-l from-transparent via-transparent to-slate-900/70"
                         : "bg-linear-to-r from-transparent via-transparent to-slate-900/70",
                     )}
                     style={isMobile ? { opacity: fadeOpacity } : undefined}
-                    variants={
-                      isMobile
-                        ? undefined
-                        : {
-                            rest: { opacity: 1 },
-                            spread: { opacity: 0 },
-                          }
-                    }
-                    transition={{ duration: 0.3 }}
+                    variants={isMobile ? undefined : fadeOverlayVariants}
+                    transition={{ duration: FADE_TRANSITION_S }}
                   />
                 )}
               </div>

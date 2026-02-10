@@ -6,7 +6,9 @@ import ScrollReveal from "../ui/ScrollReveal";
 import { socialLinks, CONTACT_EMAIL, CV_PATH } from "../../data/contact";
 import { cn } from "../../utils/cn";
 
-const buttonBase = "flex items-center gap-2 rounded-lg px-5 py-3 font-medium transition-colors";
+const BUTTON_BASE = "flex items-center gap-2 rounded-lg px-5 py-3 font-medium transition-colors";
+const BUTTON_ICON_PX = 18;
+const SOCIAL_ICON_PX = 22;
 
 export default function Contact() {
   const { t } = useTranslation();
@@ -20,17 +22,17 @@ export default function Contact() {
         <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap">
           <a
             href={`mailto:${CONTACT_EMAIL}`}
-            className={cn(buttonBase, "bg-cyan-500 text-slate-950 hover:bg-cyan-400")}
+            className={cn(BUTTON_BASE, "bg-cyan-500 text-slate-950 hover:bg-cyan-400")}
           >
-            <Mail size={18} />
+            <Mail size={BUTTON_ICON_PX} />
             {t("contact.email_btn")}
           </a>
           <a
             href={CV_PATH}
             download
-            className={cn(buttonBase, "border border-slate-700 text-slate-300 hover:border-slate-500 hover:text-white")}
+            className={cn(BUTTON_BASE, "border border-slate-700 text-slate-300 hover:border-slate-500 hover:text-white")}
           >
-            <FileDown size={18} />
+            <FileDown size={BUTTON_ICON_PX} />
             {t("contact.cv_btn")}
           </a>
         </div>
@@ -45,7 +47,7 @@ export default function Contact() {
               aria-label={label}
               className="text-slate-400 transition-colors hover:text-white"
             >
-              <Icon size={22} />
+              <Icon size={SOCIAL_ICON_PX} />
             </a>
           ))}
         </div>
