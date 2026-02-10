@@ -11,12 +11,31 @@ import { INVIEW_MARGIN } from "../../constants/layout";
 import { SNIPPET_CHAR_DELAY_MS } from "../../constants/animation";
 import { cn } from "../../utils/cn";
 
+// ── Card reveal stagger ──
 const STAGGER_DELAY_S = 0.1;
 const SEGMENT_DELAY_S = 0.6;
 
-const cardClass = cn(CARD_BASE, CARD_SHADOW_LIGHT, "p-6");
-const sectionHeadingClass = "mb-4 text-sm font-semibold tracking-widest text-cyan-400 uppercase";
-const cursorClass = "ml-px inline-block h-[1.1em] w-[2px] bg-cyan-400 align-text-bottom animate-pulse";
+// ── Blur reveal transition ──
+const BLUR_REVEAL_DURATION_S = 0.6;
+const BLUR_REVEAL_EASE = [0.25, 0.1, 0.25, 1] as const;
+
+// ── Tech stack animation ──
+const STACK_DELAY_CHILDREN_S = 0.5;
+const STACK_STAGGER_S = 0.08;
+const STACK_SPRING_STIFFNESS = 150;
+const STACK_SPRING_DAMPING = 18;
+
+// ── Interest hover ──
+const HOVER_DURATION_S = 0.4;
+
+// ── Icon sizes ──
+const JOURNEY_ICON_PX = 14;
+const INTEREST_ICON_PX = 18;
+
+// ── Shared class strings ──
+const CARD_CLASS = cn(CARD_BASE, CARD_SHADOW_LIGHT, "p-6");
+const SECTION_HEADING_CLASS = "mb-4 text-sm font-semibold tracking-widest text-cyan-400 uppercase";
+const CURSOR_CLASS = "ml-px inline-block h-[1.1em] w-[2px] bg-cyan-400 align-text-bottom animate-pulse";
 
 const blurReveal = {
   hidden: { filter: "blur(8px)", opacity: 0, y: 12 },
@@ -24,7 +43,7 @@ const blurReveal = {
     filter: "blur(0px)",
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, delay, ease: [0.25, 0.1, 0.25, 1] as const },
+    transition: { duration: BLUR_REVEAL_DURATION_S, delay, ease: BLUR_REVEAL_EASE },
   }),
 };
 
@@ -32,7 +51,7 @@ const stackContainerVariants = {
   hidden: { opacity: 1 },
   visible: {
     opacity: 1,
-    transition: { delayChildren: 0.5, staggerChildren: 0.08, when: "beforeChildren" as const },
+    transition: { delayChildren: STACK_DELAY_CHILDREN_S, staggerChildren: STACK_STAGGER_S, when: "beforeChildren" as const },
   },
 };
 
@@ -42,15 +61,15 @@ const stackItemVariants = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { type: "spring" as const, stiffness: 150, damping: 18 },
+    transition: { type: "spring" as const, stiffness: STACK_SPRING_STIFFNESS, damping: STACK_SPRING_DAMPING },
   },
 };
 
 /** Hover micro-animations for each interest icon (keyed by i18n key) */
 const INTEREST_HOVER: Record<string, Variant> = {
-  fitness: { y: [-4, 0, -2, 0], transition: { duration: 0.4 } },
-  chess: { rotate: [0, -15, 5, 0], transition: { duration: 0.4 } },
-  gaming: { x: [0, 3, -3, 2, -1, 0], transition: { duration: 0.4 } },
+  fitness: { y: [-4, 0, -2, 0], transition: { duration: HOVER_DURATION_S } },
+  chess: { rotate: [0, -15, 5, 0], transition: { duration: HOVER_DURATION_S } },
+  gaming: { x: [0, 3, -3, 2, -1, 0], transition: { duration: HOVER_DURATION_S } },
 };
 
 /** Inline highlight used inside <Trans> for cyan-accented keywords */
@@ -89,8 +108,8 @@ function StackCard({ title, delay }: { title: string; delay: number }) {
 
   return (
     <ScrollReveal delay={delay}>
-      <SpotlightCard className={cardClass}>
-        <h3 className={sectionHeadingClass}>
+      <SpotlightCard className={CARD_CLASS}>
+        <h3 className={SECTION_HEADING_CLASS}>
           {title}
         </h3>
         <motion.div
@@ -153,7 +172,7 @@ function SnippetCard({ delay }: { delay: number }) {
 
   return (
     <ScrollReveal delay={delay}>
-      <SpotlightCard className={cardClass}>
+      <SpotlightCard className={CARD_CLASS}>
         <div ref={ref} className="flex h-full items-center justify-center">
           <pre className="font-mono text-sm leading-relaxed">
             <code>
@@ -163,7 +182,7 @@ function SnippetCard({ delay }: { delay: number }) {
                 ) : i === charIndex && !skip ? (
                   <span key={i}>
                     <span
-                      className={cursorClass}
+                      className={CURSOR_CLASS}
                     />
                     <span className={cn(c.color, "invisible")}>{c.char}</span>
                   </span>
@@ -175,7 +194,7 @@ function SnippetCard({ delay }: { delay: number }) {
               )}
               {isDone && !skip && (
                 <span
-                  className={cursorClass}
+                  className={CURSOR_CLASS}
                 />
               )}
             </code>
@@ -198,7 +217,7 @@ export default function About() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {/* ── Tagline card — 2 cols ── */}
         <ScrollReveal delay={0} className="md:col-span-2">
-          <SpotlightCard className={cn(cardClass, "flex items-center")}>
+          <SpotlightCard className={cn(CARD_CLASS, "flex items-center")}>
             <p
               ref={taglineRef}
               className={cn(
@@ -222,8 +241,8 @@ export default function About() {
 
         {/* ── Journey card — 1 col ── */}
         <ScrollReveal delay={1 * STAGGER_DELAY_S}>
-          <SpotlightCard className={cardClass}>
-            <h3 className={sectionHeadingClass}>
+          <SpotlightCard className={CARD_CLASS}>
+            <h3 className={SECTION_HEADING_CLASS}>
               {t("about.journey_title")}
             </h3>
             <div className="flex flex-col gap-3">
@@ -240,7 +259,7 @@ export default function About() {
                           : "bg-slate-800 text-slate-400",
                       )}
                     >
-                      <Icon size={14} />
+                      <Icon size={JOURNEY_ICON_PX} />
                     </div>
                     <div>
                       <p
@@ -267,8 +286,8 @@ export default function About() {
 
         {/* ── Interests card ── */}
         <ScrollReveal delay={3 * STAGGER_DELAY_S}>
-          <SpotlightCard className={cardClass}>
-            <h3 className={sectionHeadingClass}>
+          <SpotlightCard className={CARD_CLASS}>
+            <h3 className={SECTION_HEADING_CLASS}>
               {t("about.interests_title")}
             </h3>
             <div className="flex flex-col gap-4">
@@ -283,7 +302,7 @@ export default function About() {
                     animate={{ rotate: 0, y: 0, x: 0 }}
                     className="mt-0.5 shrink-0 text-slate-400"
                   >
-                    <Icon size={18} />
+                    <Icon size={INTEREST_ICON_PX} />
                   </motion.div>
                   <div>
                     <p className="text-sm font-medium text-slate-200">
@@ -305,7 +324,7 @@ export default function About() {
         {/* ── Pixel landscape — decorative closing card ── */}
         <ScrollReveal
           delay={5 * STAGGER_DELAY_S}
-          className={cn(cardClass, "md:col-span-3 overflow-hidden p-0")}
+          className={cn(CARD_CLASS, "md:col-span-3 overflow-hidden p-0")}
         >
           <CityScene className="h-28 w-full md:h-40" />
         </ScrollReveal>
