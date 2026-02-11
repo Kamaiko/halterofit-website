@@ -110,11 +110,7 @@ interface Projectile {
 
 /* ─── Scene ─── */
 
-function Destruction404Scene({
-  onAllDestroyed,
-}: {
-  onAllDestroyed: () => void;
-}) {
+function Destruction404Scene({ onAllDestroyed }: { onAllDestroyed: () => void }) {
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const projMeshRef = useRef<THREE.Mesh>(null);
   const { camera } = useThree();
@@ -250,11 +246,7 @@ function Destruction404Scene({
 
       if (!physics.active[i]) {
         // Static block — just set matrix
-        _position.set(
-          physics.positions[i3],
-          physics.positions[i3 + 1],
-          physics.positions[i3 + 2],
-        );
+        _position.set(physics.positions[i3], physics.positions[i3 + 1], physics.positions[i3 + 2]);
         _euler.set(0, 0, 0);
         _quaternion.setFromEuler(_euler);
         _matrix.compose(_position, _quaternion, _scale);
@@ -299,16 +291,8 @@ function Destruction404Scene({
       }
 
       // Update matrix
-      _position.set(
-        physics.positions[i3],
-        physics.positions[i3 + 1],
-        physics.positions[i3 + 2],
-      );
-      _euler.set(
-        physics.rotations[i3],
-        physics.rotations[i3 + 1],
-        physics.rotations[i3 + 2],
-      );
+      _position.set(physics.positions[i3], physics.positions[i3 + 1], physics.positions[i3 + 2]);
+      _euler.set(physics.rotations[i3], physics.rotations[i3 + 1], physics.rotations[i3 + 2]);
       _quaternion.setFromEuler(_euler);
       _matrix.compose(_position, _quaternion, _scale);
       mesh.setMatrixAt(i, _matrix);
@@ -393,12 +377,8 @@ export default function Destruction404Demo() {
         {destroyed && (
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
             <div className="rounded-lg bg-slate-950/80 px-6 py-4 text-center backdrop-blur-sm">
-              <p className="font-mono text-lg font-bold text-cyan-400">
-                You broke it...
-              </p>
-              <p className="mt-1 font-mono text-sm text-slate-400">
-                it was already broken.
-              </p>
+              <p className="font-mono text-lg font-bold text-cyan-400">You broke it...</p>
+              <p className="mt-1 font-mono text-sm text-slate-400">it was already broken.</p>
             </div>
           </div>
         )}

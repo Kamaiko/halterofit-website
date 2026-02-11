@@ -49,9 +49,7 @@ export default function Playground() {
         <div className="mx-auto max-w-4xl px-6 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-xl font-bold text-slate-100">
-                Animation Playground
-              </h1>
+              <h1 className="text-xl font-bold text-slate-100">Animation Playground</h1>
               <p className="mt-1 text-sm text-slate-400">
                 12 demos — Framer Motion, Three.js, et prototypes 404 Easter Egg.
               </p>
@@ -69,48 +67,66 @@ export default function Playground() {
       {/* Demos */}
       <div className="mx-auto max-w-4xl px-6 py-12">
         {/* ─── Framer Motion Demos (1-5) ─── */}
-        <LazyDemo><TypingEffectDemo /></LazyDemo>
-        <LazyDemo><MicroAnimationsDemo /></LazyDemo>
-        <LazyDemo><ExpandCollapseDemo /></LazyDemo>
-        <LazyDemo><TerminalDemo /></LazyDemo>
-        <LazyDemo><TaglineStylingDemo /></LazyDemo>
+        <LazyDemo>
+          <TypingEffectDemo />
+        </LazyDemo>
+        <LazyDemo>
+          <MicroAnimationsDemo />
+        </LazyDemo>
+        <LazyDemo>
+          <ExpandCollapseDemo />
+        </LazyDemo>
+        <LazyDemo>
+          <TerminalDemo />
+        </LazyDemo>
+        <LazyDemo>
+          <TaglineStylingDemo />
+        </LazyDemo>
 
         {/* ─── Three.js Demos (6-9) ─── */}
         <div className="mb-12 mt-16 border-t border-slate-800 pt-8">
-          <h2 className="text-lg font-bold text-slate-100">
-            Three.js / WebGL
-          </h2>
+          <h2 className="text-lg font-bold text-slate-100">Three.js / WebGL</h2>
           <p className="mt-1 text-sm text-slate-400">
             Demos avancees avec Three.js via @react-three/fiber.
           </p>
         </div>
 
-        <LazyDemo><ChessBoardDemo /></LazyDemo>
-        <LazyDemo><ParticleFieldDemo /></LazyDemo>
-        <LazyDemo><AbstractGeometryDemo /></LazyDemo>
-        <LazyDemo><HeroParticlesZoneDemo /></LazyDemo>
+        <LazyDemo>
+          <ChessBoardDemo />
+        </LazyDemo>
+        <LazyDemo>
+          <ParticleFieldDemo />
+        </LazyDemo>
+        <LazyDemo>
+          <AbstractGeometryDemo />
+        </LazyDemo>
+        <LazyDemo>
+          <HeroParticlesZoneDemo />
+        </LazyDemo>
 
         {/* ─── 404 Easter Egg Prototypes (10-12) ─── */}
         <div className="mb-12 mt-16 border-t border-slate-800 pt-8">
-          <h2 className="text-lg font-bold text-slate-100">
-            404 Easter Egg — 3 prototypes
-          </h2>
+          <h2 className="text-lg font-bold text-slate-100">404 Easter Egg — 3 prototypes</h2>
           <p className="mt-1 text-sm text-slate-400">
-            Trois approches pour transformer la page 404 en experience
-            interactive. Compare: runner pixel (Canvas 2D), particules texte
-            (R3F), et destruction physique (R3F).
+            Trois approches pour transformer la page 404 en experience interactive. Compare: runner
+            pixel (Canvas 2D), particules texte (R3F), et destruction physique (R3F).
           </p>
         </div>
 
-        <LazyDemo><RunnerDemo /></LazyDemo>
-        <LazyDemo><Particles404Demo /></LazyDemo>
-        <LazyDemo><Destruction404Demo /></LazyDemo>
+        <LazyDemo>
+          <RunnerDemo />
+        </LazyDemo>
+        <LazyDemo>
+          <Particles404Demo />
+        </LazyDemo>
+        <LazyDemo>
+          <Destruction404Demo />
+        </LazyDemo>
 
         {/* Footer note */}
         <div className="mt-12 border-t border-slate-800 pt-8 text-center">
           <p className="text-sm text-slate-500">
-            Page temporaire — sera supprimee apres integration des animations
-            choisies.
+            Page temporaire — sera supprimee apres integration des animations choisies.
           </p>
         </div>
       </div>

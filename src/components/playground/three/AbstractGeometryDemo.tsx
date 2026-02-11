@@ -1,7 +1,7 @@
-import { Canvas, useFrame } from '@react-three/fiber';
-import { useRef, useState, useMemo } from 'react';
-import * as THREE from 'three';
-import DemoSection from '../DemoSection';
+import { Canvas, useFrame } from "@react-three/fiber";
+import { useRef, useState, useMemo } from "react";
+import * as THREE from "three";
+import DemoSection from "../DemoSection";
 
 function RotatingGeometry({ isHovered }: { isHovered: boolean }) {
   const groupRef = useRef<THREE.Group>(null);
@@ -14,7 +14,7 @@ function RotatingGeometry({ isHovered }: { isHovered: boolean }) {
     if (!groupRef.current) return;
 
     const targetSpeedX = isHovered ? 0.012 : 0.003;
-    const targetSpeedY = isHovered ? 0.020 : 0.005;
+    const targetSpeedY = isHovered ? 0.02 : 0.005;
     const targetScale = isHovered ? 1.1 : 1.0;
 
     rotationSpeed.current.x = THREE.MathUtils.lerp(rotationSpeed.current.x, targetSpeedX, 0.05);
@@ -49,15 +49,9 @@ export default function AbstractGeometryDemo() {
       title="Geometrie Abstraite"
       description="Icosaedre filaire avec animation de rotation fluide. Survolez pour accelerer la rotation et agrandir la forme."
     >
-      <div
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
+      <div onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
         <div className="h-[400px] overflow-hidden rounded-2xl border border-slate-800 bg-slate-950">
-          <Canvas
-            camera={{ position: [0, 0, 6], fov: 50 }}
-            dpr={[1, 1.5]}
-          >
+          <Canvas camera={{ position: [0, 0, 6], fov: 50 }} dpr={[1, 1.5]}>
             <RotatingGeometry isHovered={isHovered} />
           </Canvas>
         </div>

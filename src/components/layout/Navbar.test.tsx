@@ -34,9 +34,17 @@ describe("Navbar", () => {
     vi.spyOn(window, "scrollTo").mockImplementation(() => {});
 
     // Prevent bottom detection from triggering by default
-    Object.defineProperty(window, "innerHeight", { value: 800, writable: true, configurable: true });
+    Object.defineProperty(window, "innerHeight", {
+      value: 800,
+      writable: true,
+      configurable: true,
+    });
     Object.defineProperty(window, "scrollY", { value: 0, writable: true, configurable: true });
-    Object.defineProperty(document.body, "scrollHeight", { value: 5000, writable: true, configurable: true });
+    Object.defineProperty(document.body, "scrollHeight", {
+      value: 5000,
+      writable: true,
+      configurable: true,
+    });
 
     // Create mock section elements in the DOM
     for (const id of NAV_SECTIONS) {
@@ -92,9 +100,17 @@ describe("Navbar", () => {
     render(<Navbar />);
 
     // Mock scroll at page bottom
-    Object.defineProperty(window, "innerHeight", { value: 800, writable: true, configurable: true });
+    Object.defineProperty(window, "innerHeight", {
+      value: 800,
+      writable: true,
+      configurable: true,
+    });
     Object.defineProperty(window, "scrollY", { value: 5000, writable: true, configurable: true });
-    Object.defineProperty(document.body, "scrollHeight", { value: 5800, writable: true, configurable: true });
+    Object.defineProperty(document.body, "scrollHeight", {
+      value: 5800,
+      writable: true,
+      configurable: true,
+    });
 
     fireEvent.scroll(window);
 
@@ -111,8 +127,15 @@ describe("Navbar", () => {
     // Position "about" near the top so scroll spy picks it
     const aboutEl = document.getElementById("about")!;
     vi.spyOn(aboutEl, "getBoundingClientRect").mockReturnValue({
-      top: 70, bottom: 1070, left: 0, right: 1000,
-      width: 1000, height: 1000, x: 0, y: 70, toJSON: () => {},
+      top: 70,
+      bottom: 1070,
+      left: 0,
+      right: 1000,
+      width: 1000,
+      height: 1000,
+      x: 0,
+      y: 70,
+      toJSON: () => {},
     });
 
     render(<Navbar />);

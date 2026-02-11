@@ -36,15 +36,12 @@ export default function CursorTrail() {
       mouseY.set(e.clientY);
       // Direct DOM update for the dot — zero latency
       if (dotRef.current) {
-        dotRef.current.style.translate =
-          `${e.clientX - DOT_OFFSET}px ${e.clientY - DOT_OFFSET}px`;
+        dotRef.current.style.translate = `${e.clientX - DOT_OFFSET}px ${e.clientY - DOT_OFFSET}px`;
 
         // Restore visibility on re-entry (mouseenter may fire after mousemove)
         if (!cursorVisibleRef.current) {
           cursorVisibleRef.current = true;
-          dotRef.current.style.opacity = isHoveringRef.current
-            ? String(DOT_HOVER_OPACITY)
-            : "1";
+          dotRef.current.style.opacity = isHoveringRef.current ? String(DOT_HOVER_OPACITY) : "1";
           if (ringRef.current) ringRef.current.style.opacity = "1";
         }
 
@@ -73,9 +70,7 @@ export default function CursorTrail() {
     const onEnter = () => {
       cursorVisibleRef.current = true;
       if (dotRef.current) {
-        dotRef.current.style.opacity = isHoveringRef.current
-          ? String(DOT_HOVER_OPACITY)
-          : "1";
+        dotRef.current.style.opacity = isHoveringRef.current ? String(DOT_HOVER_OPACITY) : "1";
       }
       if (ringRef.current) ringRef.current.style.opacity = "1";
     };
@@ -115,8 +110,7 @@ export default function CursorTrail() {
         className="pointer-events-none fixed left-0 top-0 z-40 h-1.5 w-1.5 rounded-full bg-cyan-400"
         style={{
           willChange: "translate, scale, opacity",
-          transition:
-            "scale 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease-out",
+          transition: "scale 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease-out",
         }}
       />
     </>

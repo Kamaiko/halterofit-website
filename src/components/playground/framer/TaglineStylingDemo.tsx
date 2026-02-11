@@ -40,10 +40,7 @@ function AnimatedTagline() {
   const animate = skip ? "visible" : isInView ? "visible" : "hidden";
 
   return (
-    <div
-      ref={ref}
-      className={cn("tagline-glow", glowActive && "glow-active")}
-    >
+    <div ref={ref} className={cn("tagline-glow", glowActive && "glow-active")}>
       <p className="text-xl leading-relaxed text-slate-300 md:text-2xl">
         {/* ── Segment 1: "Diplômé en psycho," ── */}
         <motion.span

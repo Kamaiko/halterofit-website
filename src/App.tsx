@@ -32,11 +32,16 @@ export default function App() {
     }
   }, [i18n.language]);
 
-  if (isPlayground) return <Suspense fallback={null}><Playground /></Suspense>;
+  if (isPlayground)
+    return (
+      <Suspense fallback={null}>
+        <Playground />
+      </Suspense>
+    );
   if (isNotFound) return <NotFound />;
 
   const content = (
-      <div className="relative min-h-screen overflow-x-clip bg-slate-950 text-slate-100">
+    <div className="relative min-h-screen overflow-x-clip bg-slate-950 text-slate-100">
       <CursorTrail />
 
       {/* Ambient background glow — static radial gradients (no blur filters) */}
@@ -74,7 +79,7 @@ export default function App() {
         <Contact />
       </main>
       <Footer />
-      </div>
+    </div>
   );
 
   if (REDUCED_MOTION) return content;

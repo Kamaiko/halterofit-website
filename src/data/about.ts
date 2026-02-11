@@ -34,7 +34,6 @@ export interface CodeToken {
   color: string;
 }
 
-
 /** Typing snippet — assert grind (syntax-highlighted token lines) */
 export const SNIPPET_LINES: CodeToken[][] = [
   [
@@ -74,10 +73,6 @@ export const SNIPPET_LINES: CodeToken[][] = [
     { text: "grind", color: "text-blue-400" },
     { text: "();", color: "text-slate-500" },
   ],
-  [
-    { text: "  // clean as you code", color: "text-slate-500" },
-  ],
-  [
-    { text: "}", color: "text-slate-500" },
-  ],
+  [{ text: "  // clean as you code", color: "text-slate-500" }],
+  [{ text: "}", color: "text-slate-500" }],
 ];

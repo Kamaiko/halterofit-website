@@ -35,7 +35,8 @@ const INTEREST_ICON_PX = 18;
 // ── Shared class strings ──
 const CARD_CLASS = cn(CARD_BASE, CARD_SHADOW_LIGHT, "p-6");
 const SECTION_HEADING_CLASS = "mb-4 text-sm font-semibold tracking-widest text-cyan-400 uppercase";
-const CURSOR_CLASS = "ml-px inline-block h-[1.1em] w-[2px] bg-cyan-400 align-text-bottom animate-pulse";
+const CURSOR_CLASS =
+  "ml-px inline-block h-[1.1em] w-[2px] bg-cyan-400 align-text-bottom animate-pulse";
 
 const blurReveal = {
   hidden: { filter: "blur(8px)", opacity: 0, y: 12 },
@@ -51,7 +52,11 @@ const stackContainerVariants = {
   hidden: { opacity: 1 },
   visible: {
     opacity: 1,
-    transition: { delayChildren: STACK_DELAY_CHILDREN_S, staggerChildren: STACK_STAGGER_S, when: "beforeChildren" as const },
+    transition: {
+      delayChildren: STACK_DELAY_CHILDREN_S,
+      staggerChildren: STACK_STAGGER_S,
+      when: "beforeChildren" as const,
+    },
   },
 };
 
@@ -61,7 +66,11 @@ const stackItemVariants = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { type: "spring" as const, stiffness: STACK_SPRING_STIFFNESS, damping: STACK_SPRING_DAMPING },
+    transition: {
+      type: "spring" as const,
+      stiffness: STACK_SPRING_STIFFNESS,
+      damping: STACK_SPRING_DAMPING,
+    },
   },
 };
 
@@ -74,15 +83,16 @@ const INTEREST_HOVER: Record<string, Variant> = {
 
 /** Inline highlight used inside <Trans> for cyan-accented keywords */
 function Highlight({ children }: { children?: React.ReactNode }) {
-  return (
-    <span className="glow-pulse text-[1.15em] text-cyan-400">
-      {children}
-    </span>
-  );
+  return <span className="glow-pulse text-[1.15em] text-cyan-400">{children}</span>;
 }
 
 /** Blur-reveal segment wrapper used inside <Trans> for staggered tagline animation */
-function BlurSegment({ children, delay, animate, className }: {
+function BlurSegment({
+  children,
+  delay,
+  animate,
+  className,
+}: {
   children?: React.ReactNode;
   delay: number;
   animate: string;
@@ -109,9 +119,7 @@ function StackCard({ title, delay }: { title: string; delay: number }) {
   return (
     <ScrollReveal delay={delay}>
       <SpotlightCard className={CARD_CLASS}>
-        <h3 className={SECTION_HEADING_CLASS}>
-          {title}
-        </h3>
+        <h3 className={SECTION_HEADING_CLASS}>{title}</h3>
         <motion.div
           ref={ref}
           className="grid grid-cols-2 gap-2"
@@ -125,9 +133,7 @@ function StackCard({ title, delay }: { title: string; delay: number }) {
               className="flex items-center gap-1.5 text-xs text-slate-300"
               variants={skip ? undefined : stackItemVariants}
             >
-              <span
-                className={cn("h-1.5 w-1.5 shrink-0 rounded-full", tech.color)}
-              />
+              <span className={cn("h-1.5 w-1.5 shrink-0 rounded-full", tech.color)} />
               {tech.name}
             </motion.span>
           ))}
@@ -161,10 +167,7 @@ function SnippetCard({ delay }: { delay: number }) {
   useEffect(() => {
     if (!isInView || skip) return;
     if (charIndex >= totalChars) return;
-    const timer = setTimeout(
-      () => setCharIndex((prev) => prev + 1),
-      SNIPPET_CHAR_DELAY_MS,
-    );
+    const timer = setTimeout(() => setCharIndex((prev) => prev + 1), SNIPPET_CHAR_DELAY_MS);
     return () => clearTimeout(timer);
   }, [isInView, skip, charIndex, totalChars]);
 
@@ -181,9 +184,7 @@ function SnippetCard({ delay }: { delay: number }) {
                   <br key={i} />
                 ) : i === charIndex && !skip ? (
                   <span key={i}>
-                    <span
-                      className={CURSOR_CLASS}
-                    />
+                    <span className={CURSOR_CLASS} />
                     <span className={cn(c.color, "invisible")}>{c.char}</span>
                   </span>
                 ) : (
@@ -192,11 +193,7 @@ function SnippetCard({ delay }: { delay: number }) {
                   </span>
                 ),
               )}
-              {isDone && !skip && (
-                <span
-                  className={CURSOR_CLASS}
-                />
-              )}
+              {isDone && !skip && <span className={CURSOR_CLASS} />}
             </code>
           </pre>
         </div>
@@ -232,7 +229,13 @@ export default function About() {
                   br: <br />,
                   s1: <BlurSegment delay={0} animate={animate} />,
                   s2: <BlurSegment delay={SEGMENT_DELAY_S} animate={animate} />,
-                  s3: <BlurSegment delay={SEGMENT_DELAY_S * 2} animate={animate} className="mt-1 block text-[0.9em] text-slate-400" />,
+                  s3: (
+                    <BlurSegment
+                      delay={SEGMENT_DELAY_S * 2}
+                      animate={animate}
+                      className="mt-1 block text-[0.9em] text-slate-400"
+                    />
+                  ),
                 }}
               />
             </p>
@@ -242,9 +245,7 @@ export default function About() {
         {/* ── Journey card — 1 col ── */}
         <ScrollReveal delay={1 * STAGGER_DELAY_S}>
           <SpotlightCard className={CARD_CLASS}>
-            <h3 className={SECTION_HEADING_CLASS}>
-              {t("about.journey_title")}
-            </h3>
+            <h3 className={SECTION_HEADING_CLASS}>{t("about.journey_title")}</h3>
             <div className="flex flex-col gap-3">
               {journeySteps.map((step) => {
                 const { key, icon: Icon } = step;
@@ -254,9 +255,7 @@ export default function About() {
                     <div
                       className={cn(
                         "flex h-7 w-7 shrink-0 items-center justify-center rounded-full",
-                        isCurrent
-                          ? "bg-cyan-400/20 text-cyan-400"
-                          : "bg-slate-800 text-slate-400",
+                        isCurrent ? "bg-cyan-400/20 text-cyan-400" : "bg-slate-800 text-slate-400",
                       )}
                     >
                       <Icon size={JOURNEY_ICON_PX} />
@@ -265,9 +264,7 @@ export default function About() {
                       <p
                         className={cn(
                           "text-sm",
-                          isCurrent
-                            ? "font-semibold text-cyan-400"
-                            : "text-slate-300",
+                          isCurrent ? "font-semibold text-cyan-400" : "text-slate-300",
                         )}
                       >
                         {t(`about.journey.${key}`)}
@@ -287,9 +284,7 @@ export default function About() {
         {/* ── Interests card ── */}
         <ScrollReveal delay={3 * STAGGER_DELAY_S}>
           <SpotlightCard className={CARD_CLASS}>
-            <h3 className={SECTION_HEADING_CLASS}>
-              {t("about.interests_title")}
-            </h3>
+            <h3 className={SECTION_HEADING_CLASS}>{t("about.interests_title")}</h3>
             <div className="flex flex-col gap-4">
               {interests.map(({ key, icon: Icon }) => (
                 <motion.div
@@ -308,9 +303,7 @@ export default function About() {
                     <p className="text-sm font-medium text-slate-200">
                       {t(`about.interests.${key}`)}
                     </p>
-                    <p className="text-xs text-slate-400">
-                      {t(`about.interests.${key}_fact`)}
-                    </p>
+                    <p className="text-xs text-slate-400">{t(`about.interests.${key}_fact`)}</p>
                   </div>
                 </motion.div>
               ))}

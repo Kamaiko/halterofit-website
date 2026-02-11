@@ -1,12 +1,12 @@
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
-import { useRef } from 'react';
-import * as THREE from 'three';
-import DemoSection from '../DemoSection';
+import { Canvas, useFrame } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
+import { useRef } from "react";
+import * as THREE from "three";
+import DemoSection from "../DemoSection";
 
 // Types
-type PieceType = 'pawn' | 'rook' | 'knight' | 'bishop' | 'queen' | 'king';
-type Team = 'cyan' | 'slate';
+type PieceType = "pawn" | "rook" | "knight" | "bishop" | "queen" | "king";
+type Team = "cyan" | "slate";
 
 interface PiecePosition {
   x: number;
@@ -18,20 +18,20 @@ interface PiecePosition {
 
 // Materials
 const cyanMaterial = new THREE.MeshStandardMaterial({
-  color: '#22d3ee',
+  color: "#22d3ee",
   metalness: 0.3,
   roughness: 0.5,
 });
 
 const slateMaterial = new THREE.MeshStandardMaterial({
-  color: '#94a3b8',
+  color: "#94a3b8",
   metalness: 0.3,
   roughness: 0.5,
 });
 
 // Piece geometries components
 function Pawn({ team }: { team: Team }) {
-  const material = team === 'cyan' ? cyanMaterial : slateMaterial;
+  const material = team === "cyan" ? cyanMaterial : slateMaterial;
 
   return (
     <group>
@@ -46,7 +46,7 @@ function Pawn({ team }: { team: Team }) {
 }
 
 function Rook({ team }: { team: Team }) {
-  const material = team === 'cyan' ? cyanMaterial : slateMaterial;
+  const material = team === "cyan" ? cyanMaterial : slateMaterial;
 
   return (
     <group>
@@ -71,7 +71,7 @@ function Rook({ team }: { team: Team }) {
 }
 
 function Knight({ team }: { team: Team }) {
-  const material = team === 'cyan' ? cyanMaterial : slateMaterial;
+  const material = team === "cyan" ? cyanMaterial : slateMaterial;
 
   return (
     <group>
@@ -99,7 +99,7 @@ function Knight({ team }: { team: Team }) {
 }
 
 function Bishop({ team }: { team: Team }) {
-  const material = team === 'cyan' ? cyanMaterial : slateMaterial;
+  const material = team === "cyan" ? cyanMaterial : slateMaterial;
 
   return (
     <group>
@@ -114,7 +114,7 @@ function Bishop({ team }: { team: Team }) {
 }
 
 function Queen({ team }: { team: Team }) {
-  const material = team === 'cyan' ? cyanMaterial : slateMaterial;
+  const material = team === "cyan" ? cyanMaterial : slateMaterial;
 
   return (
     <group>
@@ -146,7 +146,7 @@ function Queen({ team }: { team: Team }) {
 }
 
 function King({ team }: { team: Team }) {
-  const material = team === 'cyan' ? cyanMaterial : slateMaterial;
+  const material = team === "cyan" ? cyanMaterial : slateMaterial;
 
   return (
     <group>
@@ -170,28 +170,36 @@ function King({ team }: { team: Team }) {
 // Piece selector
 function ChessPiece({ type, team }: { type: PieceType; team: Team }) {
   switch (type) {
-    case 'pawn':
+    case "pawn":
       return <Pawn team={team} />;
-    case 'rook':
+    case "rook":
       return <Rook team={team} />;
-    case 'knight':
+    case "knight":
       return <Knight team={team} />;
-    case 'bishop':
+    case "bishop":
       return <Bishop team={team} />;
-    case 'queen':
+    case "queen":
       return <Queen team={team} />;
-    case 'king':
+    case "king":
       return <King team={team} />;
   }
 }
 
 // Animation phases for knight hop
-type KnightPhase = 'pause' | 'rise' | 'move' | 'descend' | 'return-pause' | 'return-rise' | 'return-move' | 'return-descend';
+type KnightPhase =
+  | "pause"
+  | "rise"
+  | "move"
+  | "descend"
+  | "return-pause"
+  | "return-rise"
+  | "return-move"
+  | "return-descend";
 
 // Animated knight — uses refs only (no setState in useFrame)
 function AnimatedKnight({ startX, startZ, team }: { startX: number; startZ: number; team: Team }) {
   const groupRef = useRef<THREE.Group>(null);
-  const phaseRef = useRef<KnightPhase>('pause');
+  const phaseRef = useRef<KnightPhase>("pause");
   const timerRef = useRef(0);
 
   // Target: knight L-move (+1 right, -2 forward)
@@ -207,44 +215,71 @@ function AnimatedKnight({ startX, startZ, team }: { startX: number; startZ: numb
     const g = groupRef.current;
     const easeOut = (p: number) => 1 - Math.pow(1 - p, 3);
 
-    const advance = (next: KnightPhase) => { phaseRef.current = next; timerRef.current = 0; };
+    const advance = (next: KnightPhase) => {
+      phaseRef.current = next;
+      timerRef.current = 0;
+    };
 
     switch (phaseRef.current) {
-      case 'pause':
-        if (t >= 2) advance('rise');
+      case "pause":
+        if (t >= 2) advance("rise");
         break;
-      case 'rise':
-        if (t < 0.3) { g.position.y = (t / 0.3) * hopHeight; }
-        else { g.position.y = hopHeight; advance('move'); }
+      case "rise":
+        if (t < 0.3) {
+          g.position.y = (t / 0.3) * hopHeight;
+        } else {
+          g.position.y = hopHeight;
+          advance("move");
+        }
         break;
-      case 'move':
+      case "move":
         if (t < 0.5) {
           const p = easeOut(t / 0.5);
           g.position.x = startX + (endX - startX) * p;
           g.position.z = startZ + (endZ - startZ) * p;
-        } else { g.position.x = endX; g.position.z = endZ; advance('descend'); }
+        } else {
+          g.position.x = endX;
+          g.position.z = endZ;
+          advance("descend");
+        }
         break;
-      case 'descend':
-        if (t < 0.3) { g.position.y = hopHeight * (1 - t / 0.3); }
-        else { g.position.y = 0; advance('return-pause'); }
+      case "descend":
+        if (t < 0.3) {
+          g.position.y = hopHeight * (1 - t / 0.3);
+        } else {
+          g.position.y = 0;
+          advance("return-pause");
+        }
         break;
-      case 'return-pause':
-        if (t >= 2) advance('return-rise');
+      case "return-pause":
+        if (t >= 2) advance("return-rise");
         break;
-      case 'return-rise':
-        if (t < 0.3) { g.position.y = (t / 0.3) * hopHeight; }
-        else { g.position.y = hopHeight; advance('return-move'); }
+      case "return-rise":
+        if (t < 0.3) {
+          g.position.y = (t / 0.3) * hopHeight;
+        } else {
+          g.position.y = hopHeight;
+          advance("return-move");
+        }
         break;
-      case 'return-move':
+      case "return-move":
         if (t < 0.5) {
           const p = easeOut(t / 0.5);
           g.position.x = endX + (startX - endX) * p;
           g.position.z = endZ + (startZ - endZ) * p;
-        } else { g.position.x = startX; g.position.z = startZ; advance('return-descend'); }
+        } else {
+          g.position.x = startX;
+          g.position.z = startZ;
+          advance("return-descend");
+        }
         break;
-      case 'return-descend':
-        if (t < 0.3) { g.position.y = hopHeight * (1 - t / 0.3); }
-        else { g.position.y = 0; advance('pause'); }
+      case "return-descend":
+        if (t < 0.3) {
+          g.position.y = hopHeight * (1 - t / 0.3);
+        } else {
+          g.position.y = 0;
+          advance("pause");
+        }
         break;
     }
   });
@@ -261,7 +296,7 @@ function BoardSquare({ x, z, isDark }: { x: number; z: number; isDark: boolean }
   return (
     <mesh position={[x, -0.05, z]} receiveShadow>
       <boxGeometry args={[1, 0.1, 1]} />
-      <meshStandardMaterial color={isDark ? '#1e293b' : '#334155'} />
+      <meshStandardMaterial color={isDark ? "#1e293b" : "#334155"} />
     </mesh>
   );
 }
@@ -271,24 +306,24 @@ function ChessBoard() {
   // Mid-game piece positions
   const pieces: PiecePosition[] = [
     // Cyan team
-    { x: -3.5, z: -3.5, type: 'king', team: 'cyan' },
-    { x: 0.5, z: -3.5, type: 'queen', team: 'cyan' },
-    { x: 2.5, z: -2.5, type: 'rook', team: 'cyan' },
-    { x: -1.5, z: -1.5, type: 'knight', team: 'cyan', shouldAnimate: true },
-    { x: 1.5, z: -0.5, type: 'bishop', team: 'cyan' },
-    { x: -2.5, z: -2.5, type: 'pawn', team: 'cyan' },
-    { x: 0.5, z: -1.5, type: 'pawn', team: 'cyan' },
-    { x: 3.5, z: -1.5, type: 'pawn', team: 'cyan' },
+    { x: -3.5, z: -3.5, type: "king", team: "cyan" },
+    { x: 0.5, z: -3.5, type: "queen", team: "cyan" },
+    { x: 2.5, z: -2.5, type: "rook", team: "cyan" },
+    { x: -1.5, z: -1.5, type: "knight", team: "cyan", shouldAnimate: true },
+    { x: 1.5, z: -0.5, type: "bishop", team: "cyan" },
+    { x: -2.5, z: -2.5, type: "pawn", team: "cyan" },
+    { x: 0.5, z: -1.5, type: "pawn", team: "cyan" },
+    { x: 3.5, z: -1.5, type: "pawn", team: "cyan" },
 
     // Slate team
-    { x: 3.5, z: 3.5, type: 'king', team: 'slate' },
-    { x: -0.5, z: 3.5, type: 'queen', team: 'slate' },
-    { x: -2.5, z: 2.5, type: 'rook', team: 'slate' },
-    { x: 1.5, z: 1.5, type: 'knight', team: 'slate' },
-    { x: -1.5, z: 0.5, type: 'bishop', team: 'slate' },
-    { x: 2.5, z: 2.5, type: 'pawn', team: 'slate' },
-    { x: -0.5, z: 1.5, type: 'pawn', team: 'slate' },
-    { x: -3.5, z: 1.5, type: 'pawn', team: 'slate' },
+    { x: 3.5, z: 3.5, type: "king", team: "slate" },
+    { x: -0.5, z: 3.5, type: "queen", team: "slate" },
+    { x: -2.5, z: 2.5, type: "rook", team: "slate" },
+    { x: 1.5, z: 1.5, type: "knight", team: "slate" },
+    { x: -1.5, z: 0.5, type: "bishop", team: "slate" },
+    { x: 2.5, z: 2.5, type: "pawn", team: "slate" },
+    { x: -0.5, z: 1.5, type: "pawn", team: "slate" },
+    { x: -3.5, z: 1.5, type: "pawn", team: "slate" },
   ];
 
   return (
@@ -300,20 +335,13 @@ function ChessBoard() {
           const z = row - 3.5;
           const isDark = (row + col) % 2 === 0;
           return <BoardSquare key={`${row}-${col}`} x={x} z={z} isDark={isDark} />;
-        })
+        }),
       )}
 
       {/* Chess pieces */}
       {pieces.map((piece, idx) => {
         if (piece.shouldAnimate) {
-          return (
-            <AnimatedKnight
-              key={idx}
-              startX={piece.x}
-              startZ={piece.z}
-              team={piece.team}
-            />
-          );
+          return <AnimatedKnight key={idx} startX={piece.x} startZ={piece.z} team={piece.team} />;
         }
 
         return (
@@ -356,11 +384,7 @@ export default function ChessBoardDemo() {
       description="Un échiquier 3D interactif avec des pièces procédurales en Three.js. Observez le cavalier cyan effectuer ses déplacements caractéristiques en L. Utilisez la souris pour explorer la scène."
     >
       <div className="h-[400px] overflow-hidden rounded-2xl border border-slate-800 bg-slate-950">
-        <Canvas
-          camera={{ position: [8, 8, 8], fov: 45 }}
-          dpr={[1, 1.5]}
-          shadows
-        >
+        <Canvas camera={{ position: [8, 8, 8], fov: 45 }} dpr={[1, 1.5]} shadows>
           <ChessBoard />
         </Canvas>
       </div>

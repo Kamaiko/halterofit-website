@@ -141,17 +141,14 @@ function createBuildings(_canvasW: number, groundY: number): Building[] {
 function spawnObstacle(canvasW: number, elapsed: number): Obstacle {
   // Drones start appearing after 12 seconds of play
   const kinds: ObstacleKind[] =
-    elapsed > 12
-      ? ["dumbbell", "bug", "block404", "drone"]
-      : ["dumbbell", "bug", "block404"];
+    elapsed > 12 ? ["dumbbell", "bug", "block404", "drone"] : ["dumbbell", "bug", "block404"];
   const kind = kinds[Math.floor(Math.random() * kinds.length)];
-  const dims: Record<ObstacleKind, { w: number; h: number; flying: boolean }> =
-    {
-      dumbbell: { w: 32, h: 26, flying: false },
-      bug: { w: 36, h: 24, flying: false },
-      block404: { w: 38, h: 28, flying: false },
-      drone: { w: 40, h: 12, flying: true },
-    };
+  const dims: Record<ObstacleKind, { w: number; h: number; flying: boolean }> = {
+    dumbbell: { w: 32, h: 26, flying: false },
+    bug: { w: 36, h: 24, flying: false },
+    block404: { w: 38, h: 28, flying: false },
+    drone: { w: 40, h: 12, flying: true },
+  };
   return { x: canvasW + 20, kind, ...dims[kind] };
 }
 
@@ -243,8 +240,7 @@ function drawBuildings(
   totalWidth: number,
 ) {
   for (const b of buildings) {
-    const bx =
-      (((b.x - offset) % totalWidth) + totalWidth) % totalWidth - 40;
+    const bx = ((((b.x - offset) % totalWidth) + totalWidth) % totalWidth) - 40;
     ctx.fillStyle = b.dark ? COL_BUILDING_DARK : COL_BUILDING;
     ctx.fillRect(bx, groundY - b.h, b.w, b.h);
 
@@ -258,12 +254,7 @@ function drawBuildings(
   }
 }
 
-function drawGround(
-  ctx: CanvasRenderingContext2D,
-  w: number,
-  groundY: number,
-  offset: number,
-) {
+function drawGround(ctx: CanvasRenderingContext2D, w: number, groundY: number, offset: number) {
   // Main ground line
   ctx.strokeStyle = COL_CYAN;
   ctx.lineWidth = 1.5;
@@ -325,11 +316,7 @@ function drawPlayerStanding(
   }
 }
 
-function drawPlayerDucking(
-  ctx: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-) {
+function drawPlayerDucking(ctx: CanvasRenderingContext2D, x: number, y: number) {
   ctx.fillStyle = COL_CYAN;
   // Squished body
   ctx.fillRect(x, y, PLAYER_W, 12);
@@ -357,11 +344,7 @@ function drawPlayer(
   }
 }
 
-function drawObstacle(
-  ctx: CanvasRenderingContext2D,
-  obs: Obstacle,
-  groundY: number,
-) {
+function drawObstacle(ctx: CanvasRenderingContext2D, obs: Obstacle, groundY: number) {
   const y = obs.flying ? groundY - DRONE_TOP_OFFSET : groundY - obs.h;
 
   switch (obs.kind) {
@@ -405,12 +388,7 @@ function drawObstacle(
   }
 }
 
-function drawScore(
-  ctx: CanvasRenderingContext2D,
-  score: number,
-  highScore: number,
-  w: number,
-) {
+function drawScore(ctx: CanvasRenderingContext2D, score: number, highScore: number, w: number) {
   ctx.textAlign = "right";
 
   // High score (dimmed, above current)
@@ -547,10 +525,7 @@ export default function RunnerDemo() {
     const groundY = h * GROUND_Y_RATIO;
     const playerX = w * PLAYER_X_RATIO;
     const totalBuildingWidth =
-      gameRef.current.buildings.reduce(
-        (s, b) => Math.max(s, b.x + b.w),
-        0,
-      ) + 60;
+      gameRef.current.buildings.reduce((s, b) => Math.max(s, b.x + b.w), 0) + 60;
 
     const tick = (timestamp: number) => {
       const game = gameRef.current;
@@ -583,8 +558,7 @@ export default function RunnerDemo() {
       if (game.phase === "running") {
         game.elapsed += dt;
         game.score += dt * 10;
-        const speed =
-          OBSTACLE_SPEED_BASE + game.elapsed * OBSTACLE_SPEED_ACCEL;
+        const speed = OBSTACLE_SPEED_BASE + game.elapsed * OBSTACLE_SPEED_ACCEL;
 
         // Duck state (snap position on transition)
         const wasDucking = game.ducking;
@@ -648,9 +622,7 @@ export default function RunnerDemo() {
           }
 
           // AABB collision
-          const obsY = obs.flying
-            ? groundY - DRONE_TOP_OFFSET
-            : groundY - obs.h;
+          const obsY = obs.flying ? groundY - DRONE_TOP_OFFSET : groundY - obs.h;
           const playerTop = game.playerY;
           const playerBottom = game.playerY + currentH;
           const obsBottom = obsY + obs.h;
@@ -674,13 +646,7 @@ export default function RunnerDemo() {
 
       // ── Draw ──
       drawBackground(ctx, w, h, game.stars, game.elapsed || 0);
-      drawBuildings(
-        ctx,
-        game.buildings,
-        game.buildingOffset,
-        groundY,
-        totalBuildingWidth,
-      );
+      drawBuildings(ctx, game.buildings, game.buildingOffset, groundY, totalBuildingWidth);
       drawGround(ctx, w, groundY, game.groundOffset);
 
       // Obstacles
@@ -689,14 +655,7 @@ export default function RunnerDemo() {
       }
 
       // Player
-      drawPlayer(
-        ctx,
-        playerX,
-        game.playerY,
-        game.ducking,
-        game.animFrame,
-        !game.grounded,
-      );
+      drawPlayer(ctx, playerX, game.playerY, game.ducking, game.animFrame, !game.grounded);
 
       // Score
       if (game.phase === "running") {
@@ -707,15 +666,7 @@ export default function RunnerDemo() {
       if (game.phase === "idle") {
         drawOverlay(ctx, w, h, "idle", 0, game.highScore, false);
       } else if (game.phase === "dead") {
-        drawOverlay(
-          ctx,
-          w,
-          h,
-          "dead",
-          game.score,
-          game.highScore,
-          game.newHighScore,
-        );
+        drawOverlay(ctx, w, h, "dead", game.score, game.highScore, game.newHighScore);
       }
 
       rafRef.current = requestAnimationFrame(tick);

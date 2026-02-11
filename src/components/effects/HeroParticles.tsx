@@ -1,14 +1,7 @@
 /* eslint-disable react-hooks/purity -- intentional one-time random seed in useMemo */
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useRef, useMemo, useEffect, useState } from "react";
-import {
-  AdditiveBlending,
-  CanvasTexture,
-  Color,
-  Euler,
-  Matrix4,
-  Vector3,
-} from "three";
+import { AdditiveBlending, CanvasTexture, Color, Euler, Matrix4, Vector3 } from "three";
 import type { BufferAttribute, PerspectiveCamera, Points } from "three";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { REDUCED_MOTION } from "../../constants/accessibility";
@@ -43,8 +36,7 @@ const CYAN_PROBABILITY = 0.7; // 70% cyan, 30% white in constellation
 const FADE_IN_DELAY_MS = 100;
 const CAMERA_FOV = 60;
 const MOUSE_OFFSCREEN = { x: 100, y: 100 }; // sentinel: far outside NDC [-1,1]
-const VIGNETTE_MASK =
-  "radial-gradient(ellipse at center, black 50%, transparent 100%)";
+const VIGNETTE_MASK = "radial-gradient(ellipse at center, black 50%, transparent 100%)";
 
 /* ─── Per-frame drift/twinkle animation config ─── */
 
@@ -113,8 +105,12 @@ function useRadialTexture(stops: readonly (readonly [number, string])[]) {
     canvas.height = TEXTURE_SIZE;
     const ctx = canvas.getContext("2d")!;
     const gradient = ctx.createRadialGradient(
-      TEXTURE_HALF, TEXTURE_HALF, 0,
-      TEXTURE_HALF, TEXTURE_HALF, TEXTURE_HALF,
+      TEXTURE_HALF,
+      TEXTURE_HALF,
+      0,
+      TEXTURE_HALF,
+      TEXTURE_HALF,
+      TEXTURE_HALF,
     );
     for (const [offset, color] of stops) gradient.addColorStop(offset, color);
     ctx.fillStyle = gradient;
@@ -190,12 +186,7 @@ function projectMouseToLocal(
 }
 
 /** Shared repulsion logic for both particle layers */
-function computeRepulsion(
-  baseX: number,
-  baseY: number,
-  baseZ: number,
-  mouse: Vector3,
-) {
+function computeRepulsion(baseX: number, baseY: number, baseZ: number, mouse: Vector3) {
   const dx = baseX - mouse.x;
   const dy = baseY - mouse.y;
   const dz = baseZ - mouse.z;
@@ -235,13 +226,12 @@ function animateParticles(
 
     const dx = Math.sin(time * drift.x.freq + i * drift.x.phaseScale) * drift.x.amp;
     const dy = Math.cos(time * drift.y.freq + i * drift.y.phaseScale) * drift.y.amp;
-    const dz = drift.z
-      ? Math.sin(time * drift.z.freq + i * drift.z.phaseScale) * drift.z.amp
-      : 0;
-    const tw = Math.sin(
-      time * (twinkle.baseFreq + (i % twinkle.modCount) * twinkle.modFreq)
-        + i * twinkle.phaseScale,
-    ) * twinkle.amp;
+    const dz = drift.z ? Math.sin(time * drift.z.freq + i * drift.z.phaseScale) * drift.z.amp : 0;
+    const tw =
+      Math.sin(
+        time * (twinkle.baseFreq + (i % twinkle.modCount) * twinkle.modFreq) +
+          i * twinkle.phaseScale,
+      ) * twinkle.amp;
 
     const { rx, ry, rz } = computeRepulsion(bx, by, bz, mouse);
 
@@ -281,12 +271,18 @@ function ParticleConstellation({ mouseRef }: { mouseRef: MouseRef }) {
       } else {
         // Uniform scatter — sparse, deliberately dim
         const point = randomSpherePoint(randomRadius());
-        x = point.x; y = point.y; z = point.z;
+        x = point.x;
+        y = point.y;
+        z = point.z;
         brightnessFactor = SCATTER_BRIGHTNESS;
       }
 
-      pos[i3] = x; pos[i3 + 1] = y; pos[i3 + 2] = z;
-      base[i3] = x; base[i3 + 1] = y; base[i3 + 2] = z;
+      pos[i3] = x;
+      pos[i3 + 1] = y;
+      pos[i3 + 2] = z;
+      base[i3] = x;
+      base[i3 + 1] = y;
+      base[i3 + 2] = z;
 
       const color = Math.random() < CYAN_PROBABILITY ? cyan : white;
       col[i3] = Math.min(1, color.r * brightnessFactor);
@@ -306,7 +302,14 @@ function ParticleConstellation({ mouseRef }: { mouseRef: MouseRef }) {
     const rotY = pointsRef.current.rotation.y;
     const mouse = projectMouseToLocal(mouseRef, rotY, cam, aspect);
 
-    animateParticles(arr, basePositions, PARTICLE_COUNT, state.clock.elapsedTime, mouse, CONSTELLATION_ANIM);
+    animateParticles(
+      arr,
+      basePositions,
+      PARTICLE_COUNT,
+      state.clock.elapsedTime,
+      mouse,
+      CONSTELLATION_ANIM,
+    );
 
     positionsRef.current.needsUpdate = true;
     pointsRef.current.rotation.y += ROTATION_RAD_PER_S * Math.min(delta, DELTA_CAP_S);
@@ -315,11 +318,7 @@ function ParticleConstellation({ mouseRef }: { mouseRef: MouseRef }) {
   return (
     <points ref={pointsRef} rotation-x={TILT_X}>
       <bufferGeometry>
-        <bufferAttribute
-          ref={positionsRef}
-          attach="attributes-position"
-          args={[positions, 3]}
-        />
+        <bufferAttribute ref={positionsRef} attach="attributes-position" args={[positions, 3]} />
         <bufferAttribute attach="attributes-color" args={[colors, 3]} />
       </bufferGeometry>
       <pointsMaterial
@@ -369,7 +368,14 @@ function BrightStars({ mouseRef }: { mouseRef: MouseRef }) {
     const rotY = pointsRef.current.rotation.y;
     const mouse = projectMouseToLocal(mouseRef, rotY, cam, aspect);
 
-    animateParticles(arr, basePositions, STAR_COUNT, state.clock.elapsedTime, mouse, BRIGHT_STAR_ANIM);
+    animateParticles(
+      arr,
+      basePositions,
+      STAR_COUNT,
+      state.clock.elapsedTime,
+      mouse,
+      BRIGHT_STAR_ANIM,
+    );
 
     positionsRef.current.needsUpdate = true;
     pointsRef.current.rotation.y += ROTATION_RAD_PER_S * Math.min(delta, DELTA_CAP_S);
@@ -378,11 +384,7 @@ function BrightStars({ mouseRef }: { mouseRef: MouseRef }) {
   return (
     <points ref={pointsRef} rotation-x={TILT_X}>
       <bufferGeometry>
-        <bufferAttribute
-          ref={positionsRef}
-          attach="attributes-position"
-          args={[positions, 3]}
-        />
+        <bufferAttribute ref={positionsRef} attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
       <pointsMaterial
         map={texture}
@@ -441,7 +443,13 @@ function ConstellationScene({ scrollRef }: { scrollRef?: ScrollRef }) {
 
 /* ─── Wrapper: lazy-loadable, fade-in, radial mask ─── */
 
-export default function HeroParticles({ scrollRef, paused }: { scrollRef?: ScrollRef; paused?: boolean }) {
+export default function HeroParticles({
+  scrollRef,
+  paused,
+}: {
+  scrollRef?: ScrollRef;
+  paused?: boolean;
+}) {
   const [visible, setVisible] = useState(false);
   const isMobile = useIsMobile();
 

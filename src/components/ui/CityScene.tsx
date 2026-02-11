@@ -2,16 +2,36 @@ import { type ReactNode, useRef } from "react";
 import { useInView } from "framer-motion";
 import { cn } from "../../utils/cn";
 import {
-  type Bldg, type MidWin, type BackWin,
-  SKY, BACK_CLR, BACK_WIDE_CLR, MID_CLR, MID_GRADS, MID_EDGE_CLR,
-  FRONT_CLR, CYAN, STAR_CLR,
-  W, H, GROUND_Y,
-  SPEED_BACK, SPEED_MID, SPEED_FRONT,
-  HASH_A, HASH_B, HASH_C,
-  WIN, WIN_ANIM, MOON,
-  BACK_WIDE, BACK_THIN,
-  MID_BUILDINGS, ANTENNA_INDICES,
-  FRONT_PATHS, STARS,
+  type Bldg,
+  type MidWin,
+  type BackWin,
+  SKY,
+  BACK_CLR,
+  BACK_WIDE_CLR,
+  MID_CLR,
+  MID_GRADS,
+  MID_EDGE_CLR,
+  FRONT_CLR,
+  CYAN,
+  STAR_CLR,
+  W,
+  H,
+  GROUND_Y,
+  SPEED_BACK,
+  SPEED_MID,
+  SPEED_FRONT,
+  HASH_A,
+  HASH_B,
+  HASH_C,
+  WIN,
+  WIN_ANIM,
+  MOON,
+  BACK_WIDE,
+  BACK_THIN,
+  MID_BUILDINGS,
+  ANTENNA_INDICES,
+  FRONT_PATHS,
+  STARS,
 } from "../../data/city-scene";
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -60,8 +80,8 @@ function generateMidWindows(): MidWin[] {
         if (roll > WIN_ANIM.roll.skip) continue;
         // Generate varied opacity ranges and positive cycle delay
         const cycleDelay = ((seed % 1000) / 1000) * 2.0; // 0 to 2s max
-        const minOpacity = 0.10 + ((seed % 20) / 100); // 0.10 to 0.30
-        const maxOpacity = 0.75 + (((seed >> 8) % 20) / 100); // 0.75 to 0.95
+        const minOpacity = 0.1 + (seed % 20) / 100; // 0.10 to 0.30
+        const maxOpacity = 0.75 + ((seed >> 8) % 20) / 100; // 0.75 to 0.95
         wins.push({
           x: b.x + 6 + c * g.gap,
           y: H - b.h + topPad + r * g.rowGap,
@@ -86,8 +106,8 @@ function generateMidWindows(): MidWin[] {
           y: H - b.h + topPad + Math.floor((b.h - topPad) / 3),
           delay: baseDelay,
           cycleDelay: ((fallbackSeed1 % 1000) / 1000) * 2.0,
-          minOpacity: 0.10 + ((fallbackSeed1 % 20) / 100),
-          maxOpacity: 0.75 + (((fallbackSeed1 >> 8) % 20) / 100),
+          minOpacity: 0.1 + (fallbackSeed1 % 20) / 100,
+          maxOpacity: 0.75 + ((fallbackSeed1 >> 8) % 20) / 100,
         });
       }
       if (!hasOverlap(fallbackX2)) {
@@ -96,8 +116,8 @@ function generateMidWindows(): MidWin[] {
           y: H - b.h + topPad + Math.floor(((b.h - topPad) * 2) / 3),
           delay: baseDelay + 0.1,
           cycleDelay: ((fallbackSeed2 % 1000) / 1000) * 2.0,
-          minOpacity: 0.10 + ((fallbackSeed2 % 20) / 100),
-          maxOpacity: 0.75 + (((fallbackSeed2 >> 8) % 20) / 100),
+          minOpacity: 0.1 + (fallbackSeed2 % 20) / 100,
+          maxOpacity: 0.75 + ((fallbackSeed2 >> 8) % 20) / 100,
         });
       }
     }
@@ -170,9 +190,24 @@ function MidRoofEdges() {
     <>
       {MID_BUILDINGS.map((b, i) =>
         b.roofEdge ? (
-          <path key={i} d={b.roofEdge} stroke={MID_EDGE_CLR} strokeWidth={1} fill="none" opacity={0.6} />
+          <path
+            key={i}
+            d={b.roofEdge}
+            stroke={MID_EDGE_CLR}
+            strokeWidth={1}
+            fill="none"
+            opacity={0.6}
+          />
         ) : (
-          <rect key={i} x={b.x} y={H - b.h} width={b.w} height={1} fill={MID_EDGE_CLR} opacity={0.6} />
+          <rect
+            key={i}
+            x={b.x}
+            y={H - b.h}
+            width={b.w}
+            height={1}
+            fill={MID_EDGE_CLR}
+            opacity={0.6}
+          />
         ),
       )}
     </>
@@ -220,10 +255,7 @@ function BackWindows({ items }: { items: BackWin[] }) {
 
 function ScrollLayer({ speed, children }: { speed: number; children: ReactNode }) {
   return (
-    <g
-      className="city-scroll-layer"
-      style={{ animation: `city-scroll ${speed}s linear infinite` }}
-    >
+    <g className="city-scroll-layer" style={{ animation: `city-scroll ${speed}s linear infinite` }}>
       {children}
       <g transform={`translate(${W}, 0)`}>{children}</g>
     </g>
@@ -314,13 +346,16 @@ function MidWindowLayer() {
           rx={0.5}
           fill={CYAN}
           className="win-pulse"
-          style={{
-            '--min-opacity': win.minOpacity,
-            '--max-opacity': win.maxOpacity,
-            animation: `win-fade-in ${WIN_ANIM.fadeIn_S}s ease-out ${win.delay}s both, win-pulse ${
-              WIN_ANIM.pulse.baseCycle_S + (i % WIN_ANIM.pulse.variants) * WIN_ANIM.pulse.variantStep_S
-            }s ease-in-out ${win.delay + WIN_ANIM.fadeIn_S + win.cycleDelay}s infinite`,
-          } as React.CSSProperties}
+          style={
+            {
+              "--min-opacity": win.minOpacity,
+              "--max-opacity": win.maxOpacity,
+              animation: `win-fade-in ${WIN_ANIM.fadeIn_S}s ease-out ${win.delay}s both, win-pulse ${
+                WIN_ANIM.pulse.baseCycle_S +
+                (i % WIN_ANIM.pulse.variants) * WIN_ANIM.pulse.variantStep_S
+              }s ease-in-out ${win.delay + WIN_ANIM.fadeIn_S + win.cycleDelay}s infinite`,
+            } as React.CSSProperties
+          }
         />
       ))}
     </>

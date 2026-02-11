@@ -35,11 +35,14 @@ export default function CreativeZoneDemo() {
       return () => clearTimeout(timer);
     }
     // Line done — commit it and move to next
-    const timer = setTimeout(() => {
-      setLines((prev) => [...prev, fullText]);
-      setLineIdx((prev) => prev + 1);
-      setCharIdx(0);
-    }, currentLine.prompt ? 300 : 150);
+    const timer = setTimeout(
+      () => {
+        setLines((prev) => [...prev, fullText]);
+        setLineIdx((prev) => prev + 1);
+        setCharIdx(0);
+      },
+      currentLine.prompt ? 300 : 150,
+    );
     return () => clearTimeout(timer);
   }, [isInView, lineIdx, charIdx]);
 
@@ -64,9 +67,7 @@ export default function CreativeZoneDemo() {
           <div className="h-2.5 w-2.5 rounded-full bg-red-500/30" />
           <div className="h-2.5 w-2.5 rounded-full bg-yellow-500/30" />
           <div className="h-2.5 w-2.5 rounded-full bg-green-500/30" />
-          <span className="ml-2 text-xs text-slate-600 font-mono">
-            terminal
-          </span>
+          <span className="ml-2 text-xs text-slate-600 font-mono">terminal</span>
         </div>
         <div className="p-4 font-mono text-sm leading-relaxed min-h-[120px]">
           {/* Completed lines */}
@@ -87,12 +88,8 @@ export default function CreativeZoneDemo() {
             <div>
               {currentLine.prompt ? (
                 <>
-                  <span className="text-emerald-400">
-                    {partialText.slice(0, 2)}
-                  </span>
-                  <span className="text-slate-300">
-                    {partialText.slice(2)}
-                  </span>
+                  <span className="text-emerald-400">{partialText.slice(0, 2)}</span>
+                  <span className="text-slate-300">{partialText.slice(2)}</span>
                 </>
               ) : (
                 <span className="text-slate-400">{partialText}</span>

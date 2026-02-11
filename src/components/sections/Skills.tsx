@@ -13,8 +13,7 @@ const MARQUEE_ROW2_DURATION_S = 40;
 const MARQUEE_INVIEW_MARGIN = "200px";
 
 // ── Class strings ──
-const FADE_EDGE_BASE =
-  "pointer-events-none absolute top-0 z-10 h-full w-32 md:w-48";
+const FADE_EDGE_BASE = "pointer-events-none absolute top-0 z-10 h-full w-32 md:w-48";
 const SKILL_BADGE_CLASS =
   "inline-flex items-center whitespace-nowrap rounded-lg border border-slate-800 bg-slate-900/50 px-4 py-2.5 text-sm text-slate-300";
 
@@ -47,10 +46,7 @@ function MarqueeRow({
         }}
       >
         {doubled.map((skill, i) => (
-          <span
-            key={`${skill}-${i}`}
-            className={SKILL_BADGE_CLASS}
-          >
+          <span key={`${skill}-${i}`} className={SKILL_BADGE_CLASS}>
             {skill}
           </span>
         ))}

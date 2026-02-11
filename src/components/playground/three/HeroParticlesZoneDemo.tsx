@@ -64,8 +64,7 @@ function ParticleField() {
     const mouseY = state.pointer.y * halfH;
 
     // Apply cursor repulsion
-    const posArray = particlesRef.current.geometry.attributes.position
-      .array as Float32Array;
+    const posArray = particlesRef.current.geometry.attributes.position.array as Float32Array;
     const interactionRadius = 4;
     const repulsionStrength = 0.3;
 
@@ -98,14 +97,8 @@ function ParticleField() {
   return (
     <points ref={particlesRef}>
       <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          args={[positions, 3]}
-        />
-        <bufferAttribute
-          attach="attributes-color"
-          args={[colors, 3]}
-        />
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+        <bufferAttribute attach="attributes-color" args={[colors, 3]} />
       </bufferGeometry>
       <pointsMaterial
         size={0.06}
@@ -142,9 +135,7 @@ export default function HeroParticlesZoneDemo() {
 
         {/* Mock hero text on top */}
         <div className="relative z-10 flex h-full flex-col items-center justify-center pointer-events-none">
-          <h1 className="text-5xl font-bold text-slate-100 tracking-tight">
-            Patrick Patenaude
-          </h1>
+          <h1 className="text-5xl font-bold text-slate-100 tracking-tight">Patrick Patenaude</h1>
           <p className="mt-3 text-lg text-cyan-400">Développeur Full-Stack</p>
         </div>
       </div>

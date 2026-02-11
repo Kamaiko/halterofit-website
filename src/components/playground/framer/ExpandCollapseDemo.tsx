@@ -52,9 +52,7 @@ export default function ExpandCollapseDemo() {
             >
               <div className="flex items-center gap-3">
                 <Icon size={18} className="shrink-0 text-slate-400" />
-                <span className="text-sm font-medium text-slate-200">
-                  {label}
-                </span>
+                <span className="text-sm font-medium text-slate-200">{label}</span>
               </div>
               <AnimatePresence>
                 {hoveredKey === key && (
@@ -66,9 +64,7 @@ export default function ExpandCollapseDemo() {
                     transition={{ type: "spring", stiffness: 200, damping: 25 }}
                     className="overflow-hidden"
                   >
-                    <p className="mt-1 ml-[30px] text-xs text-slate-500">
-                      {fact}
-                    </p>
+                    <p className="mt-1 ml-[30px] text-xs text-slate-500">{fact}</p>
                   </motion.div>
                 )}
               </AnimatePresence>

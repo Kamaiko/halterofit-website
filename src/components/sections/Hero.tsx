@@ -1,6 +1,12 @@
 import { lazy, Suspense, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { motion, useScroll, useTransform, useReducedMotion, useMotionValueEvent } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useReducedMotion,
+  useMotionValueEvent,
+} from "framer-motion";
 import { useLenis } from "lenis/react";
 import { GRADIENT } from "../../constants/visual-effects";
 import { EASE_OUT_EXPO } from "../../constants/animation";
@@ -126,12 +132,17 @@ export default function Hero() {
   return (
     <div ref={wrapperRef} style={skip ? undefined : { height: HERO_SCROLL_HEIGHT }}>
       <section
-        className={cn("relative flex h-screen items-center justify-center px-6", !skip && "sticky top-0 overflow-hidden")}
+        className={cn(
+          "relative flex h-screen items-center justify-center px-6",
+          !skip && "sticky top-0 overflow-hidden",
+        )}
       >
         {/* Spotlight glow — radial gradients (performant replacement for blur filters) */}
         <motion.div
           className="pointer-events-none absolute inset-0"
-          style={skip ? undefined : { y: glowY, opacity: glowOpacity, willChange: "transform, opacity" }}
+          style={
+            skip ? undefined : { y: glowY, opacity: glowOpacity, willChange: "transform, opacity" }
+          }
         >
           {HERO_SPOTLIGHTS.map((spot, i) => (
             <div
@@ -149,9 +160,7 @@ export default function Hero() {
         </motion.div>
 
         {/* Particle constellation behind text */}
-        <motion.div
-          style={skip ? undefined : { opacity: particleOpacity, willChange: "opacity" }}
-        >
+        <motion.div style={skip ? undefined : { opacity: particleOpacity, willChange: "opacity" }}>
           <ErrorBoundary fallback={null}>
             <Suspense fallback={null}>
               <HeroParticles scrollRef={scrollRef} paused={canvasPaused} />
@@ -161,7 +170,17 @@ export default function Hero() {
 
         <motion.div
           className="relative max-w-4xl text-center"
-          style={skip ? undefined : { y: textY, opacity: textOpacity, scale: textScale, filter: textFilter, willChange: "transform, opacity, filter" }}
+          style={
+            skip
+              ? undefined
+              : {
+                  y: textY,
+                  opacity: textOpacity,
+                  scale: textScale,
+                  filter: textFilter,
+                  willChange: "transform, opacity, filter",
+                }
+          }
         >
           {/* Greeting */}
           <motion.p
@@ -239,12 +258,7 @@ export default function Hero() {
                     delay: i * CHEVRON_STAGGER_S,
                   }}
                 >
-                  <svg
-                    width="24"
-                    height="12"
-                    viewBox="0 0 24 12"
-                    fill="none"
-                  >
+                  <svg width="24" height="12" viewBox="0 0 24 12" fill="none">
                     <path
                       d="M1 1L12 10L23 1"
                       stroke={CHEVRON_STROKE}

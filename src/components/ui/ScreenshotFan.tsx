@@ -1,11 +1,5 @@
 import { useRef, useEffect } from "react";
-import {
-  motion,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-  type MotionValue,
-} from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { GRADIENT } from "../../constants/visual-effects";
 import { cn } from "../../utils/cn";
@@ -63,12 +57,10 @@ const FADE_TRANSITION_S = 0.3;
 // ── Device frame classes ──
 const DEVICE_SHELL_CLASS =
   "absolute inset-0 rounded-[1.6rem] border-2 border-slate-700/80 bg-slate-900";
-const SCREEN_CLASS =
-  "absolute inset-[2px] overflow-hidden rounded-[calc(1.6rem-2px)]";
+const SCREEN_CLASS = "absolute inset-[2px] overflow-hidden rounded-[calc(1.6rem-2px)]";
 const NOTCH_CLASS =
   "absolute left-1/2 top-[2px] h-4 w-20 -translate-x-1/2 rounded-b-xl bg-slate-900";
-const FADE_OVERLAY_CLASS =
-  "pointer-events-none absolute inset-0 rounded-[1.6rem]";
+const FADE_OVERLAY_CLASS = "pointer-events-none absolute inset-0 rounded-[1.6rem]";
 const GLOW_CLASS =
   "pointer-events-none absolute left-1/2 top-1/2 h-[90%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full";
 
@@ -234,10 +226,7 @@ export default function ScreenshotFan({ screenshots, projectName }: ScreenshotFa
           return (
             <motion.div
               key={screenshot}
-              className={cn(
-                "absolute",
-                isMobile ? PHONE_WIDTH_MOBILE : PHONE_WIDTH_DESKTOP,
-              )}
+              className={cn("absolute", isMobile ? PHONE_WIDTH_MOBILE : PHONE_WIDTH_DESKTOP)}
               style={{
                 transformStyle: "preserve-3d",
                 zIndex: config.zIndex,

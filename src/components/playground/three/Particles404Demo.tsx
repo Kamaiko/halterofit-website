@@ -32,10 +32,7 @@ function makeParticleTexture(): THREE.CanvasTexture {
   canvas.width = TEX_SIZE;
   canvas.height = TEX_SIZE;
   const ctx = canvas.getContext("2d")!;
-  const gradient = ctx.createRadialGradient(
-    TEX_HALF, TEX_HALF, 0,
-    TEX_HALF, TEX_HALF, TEX_HALF,
-  );
+  const gradient = ctx.createRadialGradient(TEX_HALF, TEX_HALF, 0, TEX_HALF, TEX_HALF, TEX_HALF);
   gradient.addColorStop(0, "rgba(255,255,255,1)");
   gradient.addColorStop(0.4, "rgba(255,255,255,0.4)");
   gradient.addColorStop(1, "rgba(255,255,255,0)");
@@ -64,11 +61,7 @@ function sampleTextPositions(): Float32Array {
     for (let x = 0; x < SAMPLE_W; x += PIXEL_STEP) {
       const alpha = imageData.data[(y * SAMPLE_W + x) * 4 + 3];
       if (alpha > 128) {
-        points.push(
-          (x - SAMPLE_W / 2) * WORLD_SCALE,
-          -(y - SAMPLE_H / 2) * WORLD_SCALE,
-          0,
-        );
+        points.push((x - SAMPLE_W / 2) * WORLD_SCALE, -(y - SAMPLE_H / 2) * WORLD_SCALE, 0);
       }
     }
   }
@@ -196,15 +189,8 @@ function Particles404Scene() {
       </mesh>
       <points ref={pointsRef}>
         <bufferGeometry>
-          <bufferAttribute
-            ref={posAttrRef}
-            attach="attributes-position"
-            args={[positions, 3]}
-          />
-          <bufferAttribute
-            attach="attributes-color"
-            args={[colors, 3]}
-          />
+          <bufferAttribute ref={posAttrRef} attach="attributes-position" args={[positions, 3]} />
+          <bufferAttribute attach="attributes-color" args={[colors, 3]} />
         </bufferGeometry>
         <pointsMaterial
           map={texture}
@@ -231,10 +217,7 @@ export default function Particles404Demo() {
       description="Des particules forment '404'. La souris les repousse, elles reviennent en spring. Cliquez pour une explosion — elles se reforment toutes seules."
     >
       <div className="h-[400px] overflow-hidden rounded-2xl border border-slate-800 bg-slate-950">
-        <Canvas
-          camera={{ position: [0, 0, 6], fov: 60 }}
-          dpr={[1, 1.5]}
-        >
+        <Canvas camera={{ position: [0, 0, 6], fov: 60 }} dpr={[1, 1.5]}>
           <Particles404Scene />
         </Canvas>
       </div>

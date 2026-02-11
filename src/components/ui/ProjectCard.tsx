@@ -8,7 +8,8 @@ import ScrollReveal from "./ScrollReveal";
 import { CARD_BASE, CARD_SHADOW } from "../../constants/styles";
 import { cn } from "../../utils/cn";
 
-const projectLinkClass = "flex items-center gap-1.5 text-sm text-slate-400 transition-colors hover:text-cyan-400";
+const projectLinkClass =
+  "flex items-center gap-1.5 text-sm text-slate-400 transition-colors hover:text-cyan-400";
 
 interface ProjectCardProps {
   project: Project;
@@ -57,9 +58,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           </span>
         )}
 
-        <h3 className="mb-2 text-xl font-semibold text-white">
-          {projectName}
-        </h3>
+        <h3 className="mb-2 text-xl font-semibold text-white">{projectName}</h3>
 
         <p className="mb-4 text-sm leading-relaxed text-slate-300">
           {t(`${project.translationKey}.description`)}
@@ -67,10 +66,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
 
         <div className="mb-5 flex flex-wrap gap-2">
           {project.tech.map((tech) => (
-            <span
-              key={tech}
-              className="rounded-full bg-slate-800 px-3 py-1 text-xs text-slate-300"
-            >
+            <span key={tech} className="rounded-full bg-slate-800 px-3 py-1 text-xs text-slate-300">
               {tech}
             </span>
           ))}

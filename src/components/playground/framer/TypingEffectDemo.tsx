@@ -20,14 +20,14 @@ const CODE_LINES: CodeToken[][] = [
     { text: " = {", color: "text-slate-500" },
   ],
   [
-    { text: '  background', color: "text-cyan-400" },
-    { text: ': ', color: "text-slate-500" },
+    { text: "  background", color: "text-cyan-400" },
+    { text: ": ", color: "text-slate-500" },
     { text: '"psycho → dev"', color: "text-emerald-400" },
     { text: ",", color: "text-slate-500" },
   ],
   [
-    { text: '  fuel', color: "text-cyan-400" },
-    { text: ': [', color: "text-slate-500" },
+    { text: "  fuel", color: "text-cyan-400" },
+    { text: ": [", color: "text-slate-500" },
     { text: '"code"', color: "text-emerald-400" },
     { text: ", ", color: "text-slate-500" },
     { text: '"lift"', color: "text-emerald-400" },
@@ -36,8 +36,8 @@ const CODE_LINES: CodeToken[][] = [
     { text: "],", color: "text-slate-500" },
   ],
   [
-    { text: '  status', color: "text-cyan-400" },
-    { text: ': ', color: "text-slate-500" },
+    { text: "  status", color: "text-cyan-400" },
+    { text: ": ", color: "text-slate-500" },
     { text: '"building cool stuff"', color: "text-emerald-400" },
     { text: ",", color: "text-slate-500" },
   ],
@@ -71,10 +71,7 @@ export default function TypingEffectDemo() {
   useEffect(() => {
     if (!isInView) return;
     if (charIndex >= allChars.length) return;
-    const timer = setTimeout(
-      () => setCharIndex((prev) => prev + 1),
-      35,
-    );
+    const timer = setTimeout(() => setCharIndex((prev) => prev + 1), 35);
     return () => clearTimeout(timer);
   }, [isInView, charIndex, allChars.length]);
 
@@ -89,18 +86,14 @@ export default function TypingEffectDemo() {
     >
       <div
         ref={ref}
-        className={cn(
-          "overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80",
-        )}
+        className={cn("overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80")}
       >
         {/* Terminal header */}
         <div className="flex items-center gap-1.5 border-b border-slate-800 px-4 py-2.5">
           <div className="h-2.5 w-2.5 rounded-full bg-red-500/30" />
           <div className="h-2.5 w-2.5 rounded-full bg-yellow-500/30" />
           <div className="h-2.5 w-2.5 rounded-full bg-green-500/30" />
-          <span className="ml-2 text-xs text-slate-600 font-mono">
-            patrick.ts
-          </span>
+          <span className="ml-2 text-xs text-slate-600 font-mono">patrick.ts</span>
         </div>
         {/* Code area */}
         <pre className="p-4 font-mono text-sm leading-relaxed">

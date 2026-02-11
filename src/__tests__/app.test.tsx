@@ -10,10 +10,18 @@ import { useIsMobile } from "../hooks/useIsMobile";
 vi.mock("three", () => {
   const noop = () => {};
   const MockObj = class {
-    r = 0; g = 0; b = 0;
-    set() { return this; }
-    applyMatrix4() { return this; }
-    makeRotationFromEuler() { return this; }
+    r = 0;
+    g = 0;
+    b = 0;
+    set() {
+      return this;
+    }
+    applyMatrix4() {
+      return this;
+    }
+    makeRotationFromEuler() {
+      return this;
+    }
     dispose = noop;
   };
   return {
@@ -21,7 +29,9 @@ vi.mock("three", () => {
     Matrix4: MockObj,
     Vector3: MockObj,
     Color: MockObj,
-    CanvasTexture: class { dispose = noop; },
+    CanvasTexture: class {
+      dispose = noop;
+    },
     AdditiveBlending: 1,
   };
 });

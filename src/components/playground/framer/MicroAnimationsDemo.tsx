@@ -15,12 +15,18 @@ export default function MicroAnimationsDemo() {
     {
       name: "Musculation",
       icon: Dumbbell,
-      hover: { y: [-2, 0, -1, 0], transition: { type: "spring" as const, stiffness: 300, damping: 10 } },
+      hover: {
+        y: [-2, 0, -1, 0],
+        transition: { type: "spring" as const, stiffness: 300, damping: 10 },
+      },
     },
     {
       name: "Echecs",
       icon: Swords,
-      hover: { rotate: [0, 8, -3, 0], transition: { type: "spring" as const, stiffness: 200, damping: 12 } },
+      hover: {
+        rotate: [0, 8, -3, 0],
+        transition: { type: "spring" as const, stiffness: 200, damping: 12 },
+      },
     },
     {
       name: "Gaming",
@@ -43,15 +49,10 @@ export default function MicroAnimationsDemo() {
               className="flex items-center gap-3 cursor-default"
               whileHover="hover"
             >
-              <motion.div
-                variants={{ hover }}
-                className="text-slate-400"
-              >
+              <motion.div variants={{ hover }} className="text-slate-400">
                 <Icon size={18} />
               </motion.div>
-              <span className="text-sm font-medium text-slate-200">
-                {name}
-              </span>
+              <span className="text-sm font-medium text-slate-200">{name}</span>
             </motion.div>
           ))}
         </div>
