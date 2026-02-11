@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/purity -- intentional one-time random seed in useMemo */
-import { Canvas, useFrame } from '@react-three/fiber';
-import { useRef, useMemo } from 'react';
-import * as THREE from 'three';
-import DemoSection from '../DemoSection';
+import { Canvas, useFrame } from "@react-three/fiber";
+import { useRef, useMemo } from "react";
+import * as THREE from "three";
+import DemoSection from "../DemoSection";
 
 function ParticleField() {
   const pointsRef = useRef<THREE.Points>(null);
@@ -16,8 +16,8 @@ function ParticleField() {
     const sizes = new Float32Array(count);
     const basePositions = new Float32Array(count * 3);
 
-    const cyanColor = new THREE.Color('#22d3ee');
-    const whiteColor = new THREE.Color('#f1f5f9');
+    const cyanColor = new THREE.Color("#22d3ee");
+    const whiteColor = new THREE.Color("#f1f5f9");
 
     for (let i = 0; i < count; i++) {
       // Random position in sphere
@@ -127,19 +127,9 @@ function ParticleField() {
   return (
     <points ref={pointsRef}>
       <bufferGeometry>
-        <bufferAttribute
-          ref={positionsRef}
-          attach="attributes-position"
-          args={[positions, 3]}
-        />
-        <bufferAttribute
-          attach="attributes-color"
-          args={[colors, 3]}
-        />
-        <bufferAttribute
-          attach="attributes-size"
-          args={[sizes, 1]}
-        />
+        <bufferAttribute ref={positionsRef} attach="attributes-position" args={[positions, 3]} />
+        <bufferAttribute attach="attributes-color" args={[colors, 3]} />
+        <bufferAttribute attach="attributes-size" args={[sizes, 1]} />
       </bufferGeometry>
       <pointsMaterial
         size={0.05}
@@ -161,10 +151,7 @@ export default function ParticleFieldDemo() {
       description="Champ de 2000 particules 3D réagissant au mouvement de la souris avec effet de répulsion et animation cosmique. Les particules dérivent doucement dans l'espace tout en s'écartant du curseur."
     >
       <div className="h-[400px] overflow-hidden rounded-2xl border border-slate-800 bg-slate-950">
-        <Canvas
-          camera={{ position: [0, 0, 8], fov: 60 }}
-          dpr={[1, 1.5]}
-        >
+        <Canvas camera={{ position: [0, 0, 8], fov: 60 }} dpr={[1, 1.5]}>
           <ParticleField />
         </Canvas>
       </div>

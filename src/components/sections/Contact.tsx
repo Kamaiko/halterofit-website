@@ -16,42 +16,45 @@ export default function Contact() {
   return (
     <Section id="contact" title={t("contact.title")}>
       <ScrollReveal>
-      <div className="max-w-lg rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
-        <p className="mb-8 text-slate-300">{t("contact.text")}</p>
+        <div className="max-w-lg rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
+          <p className="mb-8 text-slate-300">{t("contact.text")}</p>
 
-        <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap">
-          <a
-            href={`mailto:${CONTACT_EMAIL}`}
-            className={cn(BUTTON_BASE, "bg-cyan-500 text-slate-950 hover:bg-cyan-400")}
-          >
-            <Mail size={BUTTON_ICON_PX} />
-            {t("contact.email_btn")}
-          </a>
-          <a
-            href={CV_PATH}
-            download
-            className={cn(BUTTON_BASE, "border border-slate-700 text-slate-300 hover:border-slate-500 hover:text-white")}
-          >
-            <FileDown size={BUTTON_ICON_PX} />
-            {t("contact.cv_btn")}
-          </a>
-        </div>
-
-        <div className="mt-8 flex gap-5">
-          {socialLinks.map(({ href, icon: Icon, label }) => (
+          <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap">
             <a
-              key={label}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={label}
-              className="text-slate-400 transition-colors hover:text-white"
+              href={`mailto:${CONTACT_EMAIL}`}
+              className={cn(BUTTON_BASE, "bg-cyan-500 text-slate-950 hover:bg-cyan-400")}
             >
-              <Icon size={SOCIAL_ICON_PX} />
+              <Mail size={BUTTON_ICON_PX} />
+              {t("contact.email_btn")}
             </a>
-          ))}
+            <a
+              href={CV_PATH}
+              download
+              className={cn(
+                BUTTON_BASE,
+                "border border-slate-700 text-slate-300 hover:border-slate-500 hover:text-white",
+              )}
+            >
+              <FileDown size={BUTTON_ICON_PX} />
+              {t("contact.cv_btn")}
+            </a>
+          </div>
+
+          <div className="mt-8 flex gap-5">
+            {socialLinks.map(({ href, icon: Icon, label }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                className="text-slate-400 transition-colors hover:text-white"
+              >
+                <Icon size={SOCIAL_ICON_PX} />
+              </a>
+            ))}
+          </div>
         </div>
-      </div>
       </ScrollReveal>
     </Section>
   );

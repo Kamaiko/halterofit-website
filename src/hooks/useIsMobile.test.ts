@@ -55,9 +55,7 @@ describe("useIsMobile", () => {
   it("cleans up event listener on unmount", () => {
     const removeSpy = vi.fn();
 
-    window.matchMedia = vi.fn(() =>
-      createMockMql({ removeEventListener: removeSpy }),
-    );
+    window.matchMedia = vi.fn(() => createMockMql({ removeEventListener: removeSpy }));
 
     const { unmount } = renderHook(() => useIsMobile());
     unmount();

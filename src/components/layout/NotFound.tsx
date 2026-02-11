@@ -18,11 +18,7 @@ const ENTRANCE_Y_PX = 20;
 const SCENE_HEIGHT_CLASS = "h-[320px]";
 
 function Flat404() {
-  return (
-    <h1 className="text-[10rem] leading-none font-bold text-cyan-400/20">
-      404
-    </h1>
-  );
+  return <h1 className="text-[10rem] leading-none font-bold text-cyan-400/20">404</h1>;
 }
 
 export default function NotFound() {
@@ -69,9 +65,7 @@ export default function NotFound() {
         transition={{ duration: ENTRANCE_DURATION_S, delay: ENTRANCE_DELAY_S, ease: EASE_OUT_EXPO }}
         className="mt-8 px-6 text-center"
       >
-        <p className="mb-8 font-mono text-lg text-slate-400">
-          {t("notFound.message")}
-        </p>
+        <p className="mb-8 font-mono text-lg text-slate-400">{t("notFound.message")}</p>
         <a
           href="/"
           className="inline-flex items-center gap-2 rounded-lg bg-cyan-500 px-5 py-3 font-medium text-slate-950 transition-colors hover:bg-cyan-400"

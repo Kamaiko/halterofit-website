@@ -27,11 +27,7 @@ export default function Section({ id, title, children, className }: SectionProps
   });
 
   // Title floats: moves 20px slower than natural scroll
-  const titleY = useTransform(
-    scrollYProgress,
-    [0, 1],
-    [TITLE_PARALLAX_PX, -TITLE_PARALLAX_PX],
-  );
+  const titleY = useTransform(scrollYProgress, [0, 1], [TITLE_PARALLAX_PX, -TITLE_PARALLAX_PX]);
 
   return (
     <section ref={sectionRef} id={id} className={cn(SECTION_PADDING, className)}>

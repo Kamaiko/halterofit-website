@@ -60,15 +60,16 @@ export default function Navbar() {
     i18n.changeLanguage(i18n.language === "fr" ? "en" : "fr");
   };
 
-  const linkColor = (link: string) =>
-    activeSection === link ? "text-cyan-400" : "text-slate-400";
+  const linkColor = (link: string) => (activeSection === link ? "text-cyan-400" : "text-slate-400");
 
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
       setActiveSection(id);
       cooldownRef.current = true;
-      setTimeout(() => { cooldownRef.current = false; }, NAV_CLICK_COOLDOWN_MS);
+      setTimeout(() => {
+        cooldownRef.current = false;
+      }, NAV_CLICK_COOLDOWN_MS);
 
       if (lenis) {
         lenis.scrollTo(el, { offset: -NAV_HEIGHT });
@@ -84,7 +85,9 @@ export default function Navbar() {
     <nav className="fixed top-0 z-50 w-full border-b border-slate-800 bg-slate-950/80 backdrop-blur-md">
       <div className={cn(CONTAINER_WIDTH, "flex items-center justify-between px-6 py-4")}>
         <button
-          onClick={() => lenis ? lenis.scrollTo(0) : window.scrollTo({ top: 0, behavior: "smooth" })}
+          onClick={() =>
+            lenis ? lenis.scrollTo(0) : window.scrollTo({ top: 0, behavior: "smooth" })
+          }
           aria-label="Scroll to top"
           className="text-lg font-bold text-white"
         >
@@ -97,10 +100,7 @@ export default function Navbar() {
             <button
               key={link}
               onClick={() => scrollTo(link)}
-              className={cn(
-                "text-sm transition-colors hover:text-white",
-                linkColor(link),
-              )}
+              className={cn("text-sm transition-colors hover:text-white", linkColor(link))}
             >
               {t(`nav.${link}`)}
             </button>

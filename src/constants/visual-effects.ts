@@ -17,8 +17,7 @@ export const GRADIENT = {
     "radial-gradient(circle, rgba(34,211,238,0.04) 0%, rgba(34,211,238,0.012) 45%, transparent 70%)",
 
   // ScreenshotFan.tsx — glow behind phones
-  fanGlow:
-    "radial-gradient(ellipse at center, rgba(34,211,238,0.12) 0%, transparent 70%)",
+  fanGlow: "radial-gradient(ellipse at center, rgba(34,211,238,0.12) 0%, transparent 70%)",
 } as const;
 
 /** SVG noise texture (feTurbulence fractalNoise) encoded as a data URI */
