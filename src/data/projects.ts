@@ -29,9 +29,10 @@ export const projects: Project[] = [
     screenshots: ["/images/projects/PARTIE_IVH.webp"],
   },
   {
-    id: "portfolio",
-    translationKey: "projects.portfolio",
-    github: "https://github.com/Kamaiko/halterofit-website",
-    tech: ["React", "Vite", "TypeScript", "Tailwind CSS", "Framer Motion", "Three.js"],
+    id: "chainride",
+    translationKey: "projects.chainride",
+    github: "https://github.com/Kamaiko/chainride",
+    tech: ["Solidity", "Ethereum", "Hardhat", "React", "Wagmi", "Tailwind CSS"],
+    screenshots: ["/images/projects/ChainRide.webp"],
   },
 ];

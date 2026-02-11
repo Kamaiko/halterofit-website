@@ -42,9 +42,9 @@
       "name": "BlunderMate",
       "description": "Chess engine in Prolog with ASCII terminal interface. Position evaluation, legal move generation and minimax search."
     },
-    "portfolio": {
-      "name": "Portfolio",
-      "description": "This website — built with React, Vite and Tailwind CSS. Bilingual, responsive, with subtle animations."
+    "chainride": {
+      "name": "ChainRide",
+      "description": "Decentralized car rental DApp on Ethereum with UUPS upgradeable contracts."
     },
     "view_code": "View code",
     "view_demo": "Demo",
