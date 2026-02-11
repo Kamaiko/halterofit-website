@@ -42,9 +42,9 @@
       "name": "BlunderMate",
       "description": "Moteur d'échecs en Prolog avec interface ASCII en terminal. Évaluation de positions, génération de coups légaux et recherche minimax."
     },
-    "portfolio": {
-      "name": "Portfolio",
-      "description": "Ce site web — construit avec React, Vite et Tailwind CSS. Bilingue, responsive, avec animations subtiles."
+    "chainride": {
+      "name": "ChainRide",
+      "description": "DApp décentralisée de location de véhicules sur Ethereum avec contrats évolutifs UUPS."
     },
     "view_code": "Voir le code",
     "view_demo": "Démo",
